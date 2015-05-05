@@ -1,4 +1,15 @@
 var mongoose = require('mongoose');
+fake_date = Date.now();
+exports.fake_date = fake_date;
+exports.data = {
+  email: 'test@test.com',
+  password: 'test-pass',
+  type: 'test-type',
+  name: 'test-name',
+  phone: '123-123-1234',
+  address: ['test-address', 'test-address2'],
+  birth_date: fake_date
+};
 
 beforeEach(function (done) {
 
