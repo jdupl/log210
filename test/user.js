@@ -22,5 +22,23 @@ describe('User model', function() {
         done();
       });
     });
+    it('should hash the password when inserting', function(done) {
+      var fake_date = Date.now();
+      var data = {
+        email: 'test@test.com',
+        password: 'test-pass',
+        type: 'test-type',
+        name: 'test-name',
+        phone: '123-123-1234',
+        address: ['test-address', 'test-address2'],
+        birth_date: fake_date
+      };
+      User.create(data, function(err, created) {
+        created.verifyPassword(data.password, function(err, isMatch) {
+          assert(isMatch);
+          done();
+        });
+      });
+    });
   });
 });
