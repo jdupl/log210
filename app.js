@@ -2,6 +2,7 @@ var mongoose = require('mongoose');
 var express = require('express');
 var bodyParser = require('body-parser');
 var app = module.exports = express();
+var config = require('./backend/config/config');
 
 //Database
 mongoose.connect('mongodb://localhost/log210');
@@ -14,4 +15,4 @@ app.use(bodyParser.urlencoded({extended: true}));
 //Routing
 require('./backend/routes/routes')(app);
 
-app.listen(3000);
+app.listen(config.server.port);
