@@ -48,6 +48,32 @@ describe('User model', function() {
         done();
       });
     });
+    it('should mock the bcrypt hash method to return an error in the next callback', function(done) {
+      var fakeBcrypt = {
+        genSalt: function() {},
+        hash: function() {}
+      };
+      var mockBcrypt = sinon.mock(fakeBcrypt);
+      var fakeError = new Error('fake');
+      var fakeSalt = 'salt';
+      var fakeHash = 'hash';
+      var genSaltExpectation = mockBcrypt
+        .expects("genSalt").once().withArgs(10).callsArgWith(1, undefined, fakeSalt);
+      var hashExpectation = mockBcrypt
+        .expects("hash").once().withArgs(data.fake_user.password, fakeSalt).callsArgWith(2, fakeError, fakeHash);
+      var userModulePath = '../../backend/models/user';
+      mockery.registerAllowable(userModulePath);
+      mockery.registerMock('bcrypt', fakeBcrypt);
+      mockery.enable({useCleanCache: true, warnOnReplace: false, warnOnUnregistered: false});
+      var modifiedUser = require(userModulePath);
+      modifiedUser.create(data.fake_user, function(err, created) {
+        assert.equal(fakeError, err);
+        mockBcrypt.verify();
+        mockery.disable();
+        mockery.deregisterAll();
+        done();
+      });
+    });
   });
   describe('findOne', function() {
     it('should find one from username', function(done) {
