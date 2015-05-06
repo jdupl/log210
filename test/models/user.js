@@ -2,6 +2,8 @@ var database = require('../utils/database');
 var User = require('../../backend/models/user');
 var assert = require('assert');
 var data = require('../utils/data');
+var mockery = require('mockery');
+var sinon = require('sinon');
 
 describe('User model', function() {
   describe('insert', function() {
@@ -19,6 +21,31 @@ describe('User model', function() {
           assert(isMatch);
           done();
         });
+      });
+    });
+    it('should mock the bcrypt genSalt method to return an error in the next callback', function(done) {
+      var fakeBcrypt = {
+        genSalt: function() {},
+        hash: function() {}
+      };
+      var mockBcrypt = sinon.mock(fakeBcrypt);
+      var fakeError = new Error('fake');
+      var fakeSalt = 'salt';
+      var fakePassword = 'password';
+      var fakeHash = 'hash';
+      var genSaltExpectation = mockBcrypt
+        .expects("genSalt").once().withArgs(10).callsArgWith(1, fakeError, fakeSalt);
+      var userModulePath = '../../backend/models/user';
+      mockery.registerAllowable(userModulePath);
+      mockery.registerMock('bcrypt', fakeBcrypt);
+      mockery.enable({useCleanCache: true, warnOnReplace: false, warnOnUnregistered: false});
+      var modifiedUser = require(userModulePath);
+      modifiedUser.create(data.fake_user, function(err, created) {
+        assert.equal(fakeError, err);
+        mockBcrypt.verify();
+        mockery.disable();
+        mockery.deregisterAll();
+        done();
       });
     });
   });
