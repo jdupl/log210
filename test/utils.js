@@ -10,6 +10,7 @@ exports.data = {
   address: ['test-address', 'test-address2'],
   birth_date: fake_date
 };
+var config = require('../backend/config/config');
 
 beforeEach(function (done) {
 
@@ -21,7 +22,7 @@ beforeEach(function (done) {
  }
 
  if (mongoose.connection.readyState === 0) {
-   mongoose.connect('mongodb://localhost/test', function (err) {
+   mongoose.connect(config.db.url, function (err) {
      if (err) {
        throw err;
      }
