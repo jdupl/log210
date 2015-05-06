@@ -7,4 +7,9 @@ describe('Configuration', function() {
       assert.equal(config.server.port, 3000);
     });
   });
+  describe('Test', function() {
+    it('should contain the test configuration options', function() {
+      assert.equal(config.db.url, 'mongodb://localhost/test');
+    });
+  });
 });
