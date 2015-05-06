@@ -1,19 +1,20 @@
-var utils = require('./utils');
-var app = require('../app');
+var database = require('../utils/database');
+var app = require('../../app');
 var client = require('supertest');
 var assert = require('assert');
-var User = require('../backend/models/user');
+var User = require('../../backend/models/user');
 var jwt = require('jsonwebtoken');
 var fake_date = Date.now();
 var secret = 'secret'; //TODO Refactor in secret config
+var data = require('../utils/data');
 
 describe('/api/login', function() {
   describe('POST', function() {
     it('should get the JWT token', function(done) {
-      User.create(utils.data, function(err, created) {
+      User.create(data.fake_user, function(err, created) {
         client(app)
           .post('/api/login')
-          .send({email: utils.data.email, password: utils.data.password})
+          .send({email: data.fake_user.email, password: data.fake_user.password})
           .end(function(err, res) {
             assert.equal(res.status, 200);
             var token = res.body.token;
@@ -26,7 +27,7 @@ describe('/api/login', function() {
       });
     });
     it('should get a 400 because of wrong email', function(done) {
-      User.create(utils.data, function(err, created) {
+      User.create(data, function(err, created) {
         client(app)
           .post('/api/login')
           .send({email: 'wrong', password: 'wrong'})
@@ -37,10 +38,10 @@ describe('/api/login', function() {
       });
     });
     it('should get a 400 because of wrong password', function(done) {
-      User.create(utils.data, function(err, created) {
+      User.create(data, function(err, created) {
         client(app)
           .post('/api/login')
-          .send({email: utils.data.email, password: 'wrong'})
+          .send({email: data.fake_user.email, password: 'wrong'})
           .end(function(err, res) {
             assert.equal(res.status, 400);
             done();

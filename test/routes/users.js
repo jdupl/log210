@@ -1,7 +1,8 @@
-var utils = require('./utils');
-var app = require('../app');
+var database = require('../utils/database');
+var app = require('../../app');
 var client = require('supertest');
 var assert = require('assert');
+var data = require('../utils/data');
 
 
 describe('/api/users', function() {
@@ -9,7 +10,7 @@ describe('/api/users', function() {
     it('should create a user from the json payload', function(done) {
       client(app)
         .post('/api/users')
-        .send(utils.data)
+        .send(data.fake_user)
         .end(function(err, res) {
           assert.equal(res.status, 201);
           done();
