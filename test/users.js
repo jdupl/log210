@@ -1,7 +1,8 @@
+var utils = require('./utils');
 var app = require('../app');
 var client = require('supertest');
 var assert = require('assert');
-var utils = require('./utils');
+
 
 describe('/api/users', function() {
   describe('POST', function() {

@@ -1,3 +1,4 @@
+var utils = require('./utils');
 var app = require('../app');
 var client = require('supertest');
 var assert = require('assert');
@@ -5,7 +6,6 @@ var User = require('../backend/models/user');
 var jwt = require('jsonwebtoken');
 var fake_date = Date.now();
 var secret = 'secret'; //TODO Refactor in secret config
-var utils = require('./utils');
 
 describe('/api/login', function() {
   describe('POST', function() {

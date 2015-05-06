@@ -1,3 +1,5 @@
+var tungus = require('tungus');
+global.TUNGUS_DB_OPTIONS = { memStore: true };
 var mongoose = require('mongoose');
 fake_date = Date.now();
 exports.fake_date = fake_date;
