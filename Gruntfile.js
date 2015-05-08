@@ -12,6 +12,11 @@ module.exports = function(grunt) {
         NODE_ENV: 'prod'
       }
     },
+    nodemon: {
+      dev: {
+        script: 'app.js'
+      }
+    },
     mochaTest: {
       test: {
         src: ['test/**/*.js']
@@ -39,4 +44,5 @@ module.exports = function(grunt) {
   grunt.registerTask('coverage', ['env:test', 'mocha_istanbul:coverage']);
   grunt.registerTask('watch-test', ['watch:test']);
   grunt.registerTask('lint', ['jshint']);
+  grunt.registerTask('serve', ['env:dev', 'nodemon']);
 };
