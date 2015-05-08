@@ -32,3 +32,24 @@ describe('/api/users', function() {
     });
   });
 });
+describe('/api/users/id', function() {
+  describe('GET', function() {
+    it('should get informations about the user', function(done) {
+      User.create(data.fake_user, function(err, created) {
+        client(app)
+          .get('/api/users/' + created._id)
+          .end(function(err, res) {
+            assert.equal(res.status, 200);
+            assert.equal(created.email, res.body.email);
+            assert.equal(created.type, res.body.type);
+            assert.equal(created.name, res.body.name);
+            assert.equal(created.phone, res.body.phone);
+            assert.equal(new Date(created.birth_date).getTime(), new Date(res.body.birth_date).getTime());
+            assert.equal(created.address.length, res.body.address.length);
+            done();
+          });
+      });
+    });
+    //TODO No user found
+  });
+});

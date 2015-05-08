@@ -45,4 +45,5 @@ module.exports = function(grunt) {
   grunt.registerTask('watch-test', ['watch:test']);
   grunt.registerTask('lint', ['jshint']);
   grunt.registerTask('serve', ['env:dev', 'nodemon']);
+  //TODO coverage watch task
 };

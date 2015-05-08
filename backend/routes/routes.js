@@ -4,4 +4,5 @@ var loginController = require('../controllers/login');
 module.exports = function(app) {
   app.post('/api/users/', usersController.create);
   app.post('/api/login/', loginController.getToken);
+  app.get('/api/users/:id', usersController.getUser);
 };

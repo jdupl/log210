@@ -10,6 +10,17 @@ exports.create = function(req, res) {
   });
 };
 
+exports.getUser = function(req, res) {
+  User.findOne({_id: req.params.id}, function(err, user) {
+    res.status(200).json({email: user.email,
+      type: user.type,
+      name: user.name,
+      phone: user.phone,
+      birth_date: user.birth_date,
+      address: user.address});
+  });
+};
+
 function validateBody(body) {
   return body.email && body.password && body.type && body.name && body.phone &&
     body.address && body.birth_date;
