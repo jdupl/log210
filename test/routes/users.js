@@ -36,26 +36,34 @@ describe('/api/users/id', function() {
   describe('GET', function() {
     it('should get informations about the user', function(done) {
       User.create(data.fake_user, function(err, created) {
-        client(app)
-          .get('/api/users/' + created._id)
+        request = client(app);
+        request
+          .post('/api/login')
+          .send({email: created.email, password: data.fake_user.password})
           .end(function(err, res) {
-            assert.equal(res.status, 200);
-            assert.equal(created.email, res.body.email);
-            assert.equal(created.type, res.body.type);
-            assert.equal(created.name, res.body.name);
-            assert.equal(created.phone, res.body.phone);
-            assert.equal(new Date(created.birth_date).getTime(), new Date(res.body.birth_date).getTime());
-            assert.equal(created.address.length, res.body.address.length);
-            done();
+            var token = res.body.token;
+            request
+              .get('/api/users/' + created._id)
+              .set('Authorization', 'Bearer ' + token)
+              .end(function(err, res) {
+                assert.equal(res.status, 200);
+                assert.equal(res.body.email, data.fake_user.email);
+                assert.equal(res.body.type, data.fake_user.type);
+                assert.equal(res.body.name, data.fake_user.name);
+                assert.equal(res.body.phone, data.fake_user.phone);
+                assert.equal(res.body.password, undefined);
+                assert.equal(new Date(res.body.birth_date).getTime(), new Date(data.fake_user.birth_date).getTime());
+                assert.equal(res.body.address.length, 2);
+                done();
+              });
           });
       });
     });
-    it('should return 404 if no user is found', function(done) {
+    it('should return a 401 if not authenticated', function(done) {
       client(app)
         .get('/api/users/1')
         .end(function(err, res) {
-          assert.equal(res.status, 404);
-          assert.equal(res.body.message, 'user not found');
+          assert.equal(res.status, 401);
           done();
         });
     });

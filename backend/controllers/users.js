@@ -11,18 +11,7 @@ exports.create = function(req, res) {
 };
 
 exports.getUser = function(req, res) {
-  User.findOne({_id: req.params.id}, function(err, user) {
-    if (user) {
-      res.status(200).json({email: user.email,
-        type: user.type,
-        name: user.name,
-        phone: user.phone,
-        birth_date: user.birth_date,
-        address: user.address});
-    } else {
-      res.status(404).json({message: 'user not found'});
-    }
-  });
+  res.status(200).json(req.user);
 };
 
 function validateBody(body) {
