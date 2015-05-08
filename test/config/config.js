@@ -12,4 +12,9 @@ describe('Configuration', function() {
       assert.equal(config.db.url, 'tingodb://test');
     });
   });
+  describe('Private', function() {
+    it('should contain the private config options', function(){
+      assert.notEqual(0, config.jwt.secret);
+    });
+  });
 });
