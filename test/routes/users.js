@@ -3,6 +3,7 @@ var app = require('../../app');
 var client = require('supertest');
 var assert = require('assert');
 var data = require('../utils/data');
+var User = require('../../backend/models/user');
 
 
 describe('/api/users', function() {
@@ -13,7 +14,10 @@ describe('/api/users', function() {
         .send(data.fake_user)
         .end(function(err, res) {
           assert.equal(res.status, 201);
-          done();
+          User.findOne({email: 'test@test.com'}, function(err, user) {
+            assert.equal(user._id, res.body.user._id);
+            done();
+          });
         });
     });
     it('should return 400 Bad Request if bad payload', function(done) {

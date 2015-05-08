@@ -3,7 +3,7 @@ var User = require('../models/user');
 exports.create = function(req, res) {
   User.create(req.body, function(err, created) {
     if (validateBody(created)) {
-      res.status(201).json({});
+      res.status(201).json({user: {_id: created._id}});
     } else {
       res.status(400).json({'message': 'Invalid payload'});
     }
