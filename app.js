@@ -5,7 +5,7 @@ var app = module.exports = express();
 var config = require('./backend/config/config');
 
 //Database
-mongoose.connect('mongodb://localhost/log210');//TODO dev config
+mongoose.connect(config.db.url);
 
 //Middleware
 app.use(express.static(__dirname + '/public'));
