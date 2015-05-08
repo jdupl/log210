@@ -36,7 +36,7 @@ describe('/api/users/id', function() {
   describe('GET', function() {
     it('should get informations about the user', function(done) {
       User.create(data.fake_user, function(err, created) {
-        request = client(app);
+        var request = client(app);
         request
           .post('/api/login')
           .send({email: created.email, password: data.fake_user.password})
@@ -59,13 +59,25 @@ describe('/api/users/id', function() {
           });
       });
     });
-    it('should return a 401 if not authenticated', function(done) {
-      client(app)
-        .get('/api/users/1')
-        .end(function(err, res) {
-          assert.equal(res.status, 401);
-          done();
-        });
+    it('should return a 401 if the token is invalid', function(done) {
+      User.create(data.fake_user, function(err, created) {
+        var request = client(app);
+        request
+          .post('/api/login')
+          .send({email: created.email, password: data.fake_user.password})
+          .end(function(err, res) {
+            var token = res.body.token;
+            User.remove({_id: created._id}, function(err, removed) {
+              request
+                .get('/api/users/' + created._id)
+                .set('Authorization', 'Bearer ' + token)
+                .end(function(err, res) {
+                  assert.equal(res.status, 401);
+                  done();
+                });
+            });
+          });
+      });
     });
   });
 });
