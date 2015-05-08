@@ -38,10 +38,10 @@ describe('/api/login', function() {
       });
     });
     it('should get a 400 because of wrong password', function(done) {
-      User.create(data, function(err, created) {
+      User.create(data.fake_user, function(err, created) {
         client(app)
           .post('/api/login')
-          .send({email: data.fake_user.email, password: 'wrong'})
+          .send({email: created.email, password: 'wrong'})
           .end(function(err, res) {
             assert.equal(res.status, 400);
             done();

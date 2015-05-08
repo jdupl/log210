@@ -10,7 +10,6 @@ exports.getToken = function(req, res) {
           var token = jwt.sign(user._id, config.jwt.secret);
           res.status(200).json({token: token});
         } else {
-          //TODO Coverage
           res.status(400).json({message: 'invalid password'});
         }
       });
