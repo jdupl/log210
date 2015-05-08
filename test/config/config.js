@@ -14,7 +14,7 @@ describe('Configuration', function() {
   });
   describe('Private', function() {
     it('should contain the private config options', function(){
-      assert.notEqual(0, config.jwt.secret);
+      assert.equal(config.jwt.secret, 'test');
     });
   });
 });

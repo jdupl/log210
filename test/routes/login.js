@@ -5,8 +5,8 @@ var assert = require('assert');
 var User = require('../../backend/models/user');
 var jwt = require('jsonwebtoken');
 var fake_date = Date.now();
-var secret = 'secret'; //TODO Refactor in secret config
 var data = require('../utils/data');
+var config = require('../../backend/config/config');
 
 describe('/api/login', function() {
   describe('POST', function() {
@@ -18,7 +18,7 @@ describe('/api/login', function() {
           .end(function(err, res) {
             assert.equal(res.status, 200);
             var token = res.body.token;
-            jwt.verify(token, secret, function(err, decoded) {
+            jwt.verify(token, config.jwt.secret, function(err, decoded) {
               assert.notEqual(decoded, undefined);
               assert.equal(decoded, created._id);
               done();
