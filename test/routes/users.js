@@ -50,6 +50,14 @@ describe('/api/users/id', function() {
           });
       });
     });
-    //TODO No user found
+    it('should return 404 if no user is found', function(done) {
+      client(app)
+        .get('/api/users/1')
+        .end(function(err, res) {
+          assert.equal(res.status, 404);
+          assert.equal(res.body.message, 'user not found');
+          done();
+        });
+    });
   });
 });
