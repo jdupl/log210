@@ -119,6 +119,34 @@ describe('/api/users/id', function() {
           });
       });
     });
-    //TODO 404 when the user doesn't exist
+    it('should return 401 if you try to modify the informations of another user', function(done) {
+      User.create(data.fake_user, function(err, created) {
+        var updatedDate = Date.now();
+        var updated = {
+          email: 'new@test.com',
+          type: 'new-type',
+          name: 'new-name',
+          phone: 'new-phone',
+          password: 'new-password',
+          birth_date: updatedDate,
+          address: ['new-address1', 'new-address2', 'new-address3']
+        };
+        request = client(app);
+        request
+          .post('/api/login')
+          .send({email: created.email, password: data.fake_user.password})
+          .end(function(err, res) {
+            token = res.body.token;
+            request
+              .put('/api/users/1')
+              .set('Authorization', 'Bearer ' + token)
+              .send(updated)
+              .end(function(err, res) {
+                assert.equal(res.status, 401);
+                done();
+              });
+          });
+      });
+    });
   });
 });
