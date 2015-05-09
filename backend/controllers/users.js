@@ -14,6 +14,12 @@ exports.getUser = function(req, res) {
   res.status(200).json(req.user);
 };
 
+exports.updateUser = function(req, res) {
+  User.update({_id: req.params.id}, req.body, function(err, updated) {
+    res.status(200).json({message: 'User updated'});
+  });
+};
+
 function validateBody(body) {
   return body.email && body.password && body.type && body.name && body.phone &&
     body.address && body.birth_date;

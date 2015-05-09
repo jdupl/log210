@@ -80,4 +80,45 @@ describe('/api/users/id', function() {
       });
     });
   });
+  describe('PUT', function() {
+    it('should modify the user', function(done) {
+      User.create(data.fake_user, function(err, created) {
+        var updatedDate = Date.now();
+        var updated = {
+          email: 'new@test.com',
+          type: 'new-type',
+          name: 'new-name',
+          phone: 'new-phone',
+          password: 'new-password',
+          birth_date: updatedDate,
+          address: ['new-address1', 'new-address2', 'new-address3']
+        };
+        request = client(app);
+        request
+          .post('/api/login')
+          .send({email: created.email, password: data.fake_user.password})
+          .end(function(err, res) {
+            token = res.body.token;
+            request
+              .put('/api/users/' + created._id)
+              .set('Authorization', 'Bearer ' + token)
+              .send(updated)
+              .end(function(err, res) {
+                assert.equal(res.status, 200);
+                User.findOne({_id: created._id}, function(err, user) {
+                  assert.equal(user.email, updated.email);
+                  assert.equal(user.type, updated.type);
+                  assert.equal(user.name, updated.name);
+                  assert.equal(user.phone, updated.phone);
+                  assert.equal(user.password, updated.password);
+                  assert.equal(new Date(user.birth_date).getTime(), new Date(updated.birth_date).getTime());
+                  assert.equal(user.address.length, 3);
+                  done();
+                });
+              });
+          });
+      });
+    });
+    //TODO 404 when the user doesn't exist
+  });
 });

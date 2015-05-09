@@ -6,4 +6,5 @@ module.exports = function(app) {
   app.post('/api/users/', usersController.create);
   app.post('/api/login/', loginController.getToken);
   app.get('/api/users/:id', passport.authenticate('jwt', {session: false}), usersController.getUser);
+  app.put('/api/users/:id', passport.authenticate('jwt', {session: false}), usersController.updateUser);
 };
