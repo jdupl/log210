@@ -3,7 +3,7 @@ module.exports = {
     port: 3000
   },
   db: {
-    url: 'mongodb://localhost/log210'
+    url: 'mongodb://localhost/dev'
   },
   jwt: {
     secret: 'secret'
