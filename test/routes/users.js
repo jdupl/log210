@@ -3,7 +3,7 @@ var app = require('../../app');
 var client = require('supertest');
 var assert = require('assert');
 var data = require('../utils/data');
-var User = require('../../backend/models/user');
+var User = require('../../models/user');
 
 
 describe('/api/users', function() {

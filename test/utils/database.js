@@ -1,7 +1,7 @@
 var tungus = require('tungus');
 global.TUNGUS_DB_OPTIONS = { memStore: true };
 var mongoose = require('mongoose');
-var config = require('../../backend/config/config');
+var config = require('../../config/config');
 
 beforeEach(function (done) {
 

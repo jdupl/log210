@@ -1,4 +1,4 @@
-var config = require('../../backend/config/config');
+var config = require('../../config/config');
 var assert = require('assert');
 
 describe('Configuration', function() {

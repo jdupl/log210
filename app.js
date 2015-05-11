@@ -4,8 +4,8 @@ var passport = require('passport');
 var JwtStrategy = require('passport-jwt').Strategy;
 var bodyParser = require('body-parser');
 var app = module.exports = express();
-var config = require('./backend/config/config');
-var User = require('./backend/models/user');
+var config = require('./config/config');
+var User = require('./models/user');
 
 //Database
 mongoose.connect(config.db.url);
@@ -31,6 +31,6 @@ passport.use(new JwtStrategy(opts, function(jwt_payload, done) {
 }));
 
 //Routing
-require('./backend/routes/routes')(app);
+require('./routes/routes')(app);
 
 app.listen(config.server.port);

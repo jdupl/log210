@@ -2,11 +2,11 @@ var database = require('../utils/database');
 var app = require('../../app');
 var client = require('supertest');
 var assert = require('assert');
-var User = require('../../backend/models/user');
+var User = require('../../models/user');
 var jwt = require('jsonwebtoken');
 var fake_date = Date.now();
 var data = require('../utils/data');
-var config = require('../../backend/config/config');
+var config = require('../../config/config');
 
 describe('/api/login', function() {
   describe('POST', function() {

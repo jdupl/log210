@@ -1,5 +1,5 @@
 var database = require('../utils/database');
-var User = require('../../backend/models/user');
+var User = require('../../models/user');
 var assert = require('assert');
 var data = require('../utils/data');
 var mockery = require('mockery');
@@ -35,7 +35,7 @@ describe('User model', function() {
       var fakeHash = 'hash';
       var genSaltExpectation = mockBcrypt
         .expects("genSalt").once().withArgs(10).callsArgWith(1, fakeError, fakeSalt);
-      var userModulePath = '../../backend/models/user';
+      var userModulePath = '../../models/user';
       mockery.registerAllowable(userModulePath);
       mockery.registerMock('bcrypt', fakeBcrypt);
       mockery.enable({useCleanCache: true, warnOnReplace: false, warnOnUnregistered: false});
@@ -61,7 +61,7 @@ describe('User model', function() {
         .expects("genSalt").once().withArgs(10).callsArgWith(1, undefined, fakeSalt);
       var hashExpectation = mockBcrypt
         .expects("hash").once().withArgs(data.fake_user.password, fakeSalt).callsArgWith(2, fakeError, fakeHash);
-      var userModulePath = '../../backend/models/user';
+      var userModulePath = '../../models/user';
       mockery.registerAllowable(userModulePath);
       mockery.registerMock('bcrypt', fakeBcrypt);
       mockery.enable({useCleanCache: true, warnOnReplace: false, warnOnUnregistered: false});
