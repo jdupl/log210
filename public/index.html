@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="fr">
+<html lang="fr" ng-app="app">
   <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -9,7 +9,7 @@
     <link href="assets/main.css" rel="stylesheet">
   </head>
 
-  <body ng-app="app">
+  <body>
     <div class="wrapper">
       <header>
         <nav class="navbar navbar-default navbar-fixed-top">
@@ -26,6 +26,9 @@
             <div class="collapse navbar-collapse" id="navbar" ng-controller="navbarController">
               <ul class="nav navbar-nav">
                 <li ng-class="{ active: isActive('/') }"><a href="#/">Accueil</a></li>
+              </ul>
+              <ul class="nav navbar-nav navbar-right">
+                <li ng-class="{ active: isActive('/connexion') }"><a href="#/connexion">Connexion</a></li>
               </ul>
               <ul class="nav navbar-nav navbar-right">
                 <li ng-class="{ active: isActive('/inscrire') }"><a href="#/inscrire">Inscription</a></li>
@@ -47,5 +50,6 @@
     <script src="controllers/index.js"></script>
     <script src="controllers/navbar.js"></script>
     <script src="controllers/inscrire.js"></script>
+    <script src="controllers/connexion.js"></script>
   </body>
 </html>
