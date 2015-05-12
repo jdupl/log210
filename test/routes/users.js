@@ -32,7 +32,7 @@ describe('/api/users', function() {
     });
   });
 });
-describe('/api/users/id', function() {
+describe('/api/users', function() {
   describe('GET', function() {
     it('should get informations about the user', function(done) {
       User.create(data.fake_user, function(err, created) {
@@ -43,7 +43,7 @@ describe('/api/users/id', function() {
           .end(function(err, res) {
             var token = res.body.token;
             request
-              .get('/api/users/' + created._id)
+              .get('/api/users/')
               .set('Authorization', 'Bearer ' + token)
               .end(function(err, res) {
                 assert.equal(res.status, 200);
@@ -69,7 +69,7 @@ describe('/api/users/id', function() {
             var token = res.body.token;
             User.remove({_id: created._id}, function(err, removed) {
               request
-                .get('/api/users/' + created._id)
+                .get('/api/users/')
                 .set('Authorization', 'Bearer ' + token)
                 .end(function(err, res) {
                   assert.equal(res.status, 401);

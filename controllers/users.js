@@ -10,7 +10,7 @@ exports.create = function(req, res) {
   });
 };
 
-exports.getUser = function(req, res) {
+exports.getUsers = function(req, res) {
   res.status(200).json(req.user);
 };
 
