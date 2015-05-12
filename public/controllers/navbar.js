@@ -1,4 +1,4 @@
-var controllers = angular.module('app.controllers.navbar', []);
+var controllers = angular.module('app.controllers.navbar', ['ui.date']);
 
 controllers.controller('navbarController', function($scope, $location) {
   $scope.isActive = function(url) {
