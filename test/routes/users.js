@@ -77,6 +77,25 @@ describe('/api/users', function() {
           });
       });
     });
+    it('should return all the users if the user is logged in as admin', function(done) {
+      User.create(data.fake_user, function(err, createdUser) {
+        User.create(data.admin_user, function(err, createdAdmin) {
+          var request = client(app);
+          request.post('/api/login')
+            .send({email: createdAdmin.email, password: data.admin_user.password})
+            .end(function(err, res) {
+              request
+                .get('/api/users/')
+                .set('Authorization', 'Bearer ' + res.body.token)
+                .end(function(err, res) {
+                  assert.equal(res.status, 200);
+                  assert.equal(res.body.length, 2);
+                  done();
+                });
+            });
+        });
+      });
+    });
   });
 });
 describe('/api/users/:id', function() {
