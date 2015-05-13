@@ -9,3 +9,12 @@ exports.fake_user = {
   address: ['test-address', 'test-address2'],
   birth_date: fake_date
 };
+exports.admin_user = {
+  email: 'admin@test.com',
+  password: 'admin-pass',
+  type: 'admin',
+  name: 'admin-name',
+  phone: '123-123-1234',
+  address: ['test-address', 'test-address2'],
+  birth_date: fake_date
+};
