@@ -1,10 +1,21 @@
-var config = require('../../config/config');
 var assert = require('assert');
+var config = require('../../config/config');
+var mockery = require('mockery');
 
 describe('Configuration', function() {
   describe('Default', function() {
     it('should contain the default configuration options', function() {
       assert.equal(config.server.port, 3000);
+    });
+    it('should load the default config if the env is not specified', function() {
+      process.env.NODE_ENV = '';
+      var moduleUnderTest = '../../config/config';
+      mockery.registerAllowable(moduleUnderTest);
+      mockery.enable({useCleanCache: true, warnOnReplace: false, warnOnUnregistered: false});
+      var reloadConfig = require(moduleUnderTest);
+      assert.equal(reloadConfig.db.url, 'mongodb://localhost/dev');
+      mockery.disable();
+      mockery.deregisterAll();
     });
   });
   describe('Test', function() {
