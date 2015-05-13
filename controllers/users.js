@@ -1,4 +1,5 @@
 var User = require('../models/user');
+const ADMIN = 'admin';
 
 exports.create = function(req, res) {
   User.create(req.body, function(err, created) {
@@ -11,7 +12,13 @@ exports.create = function(req, res) {
 };
 
 exports.getUsers = function(req, res) {
-  res.status(200).json(req.user);
+  if(req.user.type === ADMIN) {
+    User.find(function(err, users) {
+      res.status(200).json(users);
+    });
+  } else {
+      res.status(200).json(req.user);
+  }
 };
 
 exports.updateUser = function(req, res) {
