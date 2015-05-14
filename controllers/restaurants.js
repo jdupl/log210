@@ -10,3 +10,9 @@ exports.createRestaurant = function(req, res) {
       res.status(401).json({message: 'You cannot create a restaurant, you are not a contractor'});
     }
 };
+
+exports.deleteRestaurant = function(req, res) {
+  Restaurant.remove({_id: req.params.id}, function(err, count) {
+    res.status(200).json({});
+  });
+};

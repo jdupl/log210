@@ -62,3 +62,32 @@ describe('/api/restaurants/', function() {
     });
   });
 });
+describe('/api/restaurants/:id', function() {
+  describe('DELETE', function() {
+    it('should delete a restaurant', function(done) {
+      User.create(data.contractor_user, function(err, createdContractor) {
+        User.create(data.restaurateur_user, function(err, createdRestaurateur) {
+          var test_restaurant = {
+            name: 'test-restaurant',
+            restaurateur: createdRestaurateur._id
+          };
+          Restaurant.create(test_restaurant, function(err, createdRestaurant) {
+            var request = client(app);
+            request
+            .post('/api/login')
+            .send({email: data.client_user.email, password: data.client_user.password})
+            .end(function(err, res) {
+              request
+              .delete('/api/restaurants/' + createdRestaurant._id)
+              .set('Authorization', 'Bearer ' + res.body.token)
+              .end(function(err, res) {
+                assert.equal(res.status, 200);
+                done();
+              });
+            });
+          });
+        });
+      });
+    });
+  });
+});
