@@ -21,6 +21,7 @@ describe('/api/restaurants/', function() {
               };
               request
                 .post('/api/restaurants')
+                .set('Authorization', 'Bearer ' + res.body.token)
                 .send(test_restaurant)
                 .end(function(err, res) {
                   assert.equal(res.status, 201);
@@ -29,6 +30,31 @@ describe('/api/restaurants/', function() {
                     assert.equal(restaurant.restaurateur.toString(), createdRestaurateur._id);
                     done();
                   });
+                });
+            });
+        });
+      });
+    });
+    it('should not be able to create a restaurateur if the user is not logged as a contractor', function(done) {
+      User.create(data.client_user, function(err, createdClient) {
+        User.create(data.restaurateur_user, function(err, createdRestaurateur) {
+          var request = client(app);
+          request
+            .post('/api/login')
+            .send({email: data.client_user.email, password: data.client_user.password})
+            .end(function(err, res) {
+              var test_restaurant = {
+                name: 'test-restaurant',
+                restaurateur: createdRestaurateur._id
+              };
+              request
+                .post('/api/restaurants')
+                .set('Authorization', 'Bearer ' + res.body.token)
+                .send(test_restaurant)
+                .end(function(err, res) {
+                  assert.equal(res.status, 401);
+                  assert.equal(res.body.message, 'You cannot create a restaurant, you are not a contractor');
+                  done();
                 });
             });
         });

@@ -8,5 +8,5 @@ module.exports = function(app) {
   app.post('/api/login/', loginController.getToken);
   app.get('/api/users/', loginMiddleware.verify, usersController.getUsers);
   app.put('/api/users/:id', loginMiddleware.verify, usersController.updateUser);
-  app.post('/api/restaurants', restaurantsController.createRestaurant);
+  app.post('/api/restaurants', loginMiddleware.verify, restaurantsController.createRestaurant);
 };
