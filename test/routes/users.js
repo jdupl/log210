@@ -31,8 +31,6 @@ describe('/api/users', function() {
         });
     });
   });
-});
-describe('/api/users', function() {
   describe('GET', function() {
     it('should get informations about the user', function(done) {
       User.create(data.fake_user, function(err, created) {
@@ -80,6 +78,8 @@ describe('/api/users', function() {
       });
     });
   });
+});
+describe('/api/users/:id', function() {
   describe('PUT', function() {
     it('should modify the user', function(done) {
       User.create(data.fake_user, function(err, created) {
