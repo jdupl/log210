@@ -74,17 +74,43 @@ describe('/api/restaurants/:id', function() {
           Restaurant.create(test_restaurant, function(err, createdRestaurant) {
             var request = client(app);
             request
-            .post('/api/login')
-            .send({email: data.client_user.email, password: data.client_user.password})
-            .end(function(err, res) {
-              request
-              .delete('/api/restaurants/' + createdRestaurant._id)
-              .set('Authorization', 'Bearer ' + res.body.token)
+              .post('/api/login')
+              .send({email: data.contractor_user.email, password: data.contractor_user.password})
               .end(function(err, res) {
-                assert.equal(res.status, 200);
-                done();
+                request
+                .delete('/api/restaurants/' + createdRestaurant._id)
+                .set('Authorization', 'Bearer ' + res.body.token)
+                .end(function(err, res) {
+                  assert.equal(res.status, 200);
+                  done();
+                });
               });
-            });
+          });
+        });
+      });
+    });
+    it('should not delete a restaurant if the user is not a contractor', function(done) {
+      User.create(data.client_user, function(err, createdContractor) {
+        User.create(data.restaurateur_user, function(err, createdRestaurateur) {
+          var test_restaurant = {
+            name: 'test-restaurant',
+            restaurateur: createdRestaurateur._id
+          };
+          Restaurant.create(test_restaurant, function(err, createdRestaurant) {
+            var request = client(app);
+            request
+              .post('/api/login')
+              .send({email: data.client_user.email, password: data.client_user.password})
+              .end(function(err, res) {
+                request
+                  .delete('/api/restaurants/' + createdRestaurant._id)
+                  .set('Authorization', 'Bearer ' + res.body.token)
+                  .end(function(err, res) {
+                    assert.equal(res.status, 401);
+                    assert.equal(res.body.message, 'You cannot create a restaurant, you are not a contractor');
+                    done();
+                  });
+              });
           });
         });
       });

@@ -9,5 +9,5 @@ module.exports = function(app) {
   app.get('/api/users/', loginMiddleware.verify, usersController.getUsers);
   app.put('/api/users/:id', loginMiddleware.verify, usersController.updateUser);
   app.post('/api/restaurants', loginMiddleware.verify, restaurantsController.createRestaurant);
-  app.delete('/api/restaurants/:id', restaurantsController.deleteRestaurant);
+  app.delete('/api/restaurants/:id', loginMiddleware.verify, restaurantsController.deleteRestaurant);
 };
