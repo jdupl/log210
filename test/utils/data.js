@@ -18,3 +18,12 @@ exports.admin_user = {
   address: ['test-address', 'test-address2'],
   birth_date: fake_date
 };
+exports.client_user = {
+  email: 'test@test.com',
+  password: 'test-pass',
+  type: 'client',
+  name: 'test-name',
+  phone: '123-123-1234',
+  address: ['test-address', 'test-address2'],
+  birth_date: fake_date
+};
