@@ -19,9 +19,18 @@ exports.admin_user = {
   birth_date: fake_date
 };
 exports.client_user = {
-  email: 'test@test.com',
+  email: 'client@test.com',
   password: 'test-pass',
   type: 'client',
+  name: 'test-name',
+  phone: '123-123-1234',
+  address: ['test-address', 'test-address2'],
+  birth_date: fake_date
+};
+exports.contractor_user = {
+  email: 'contractor@test.com',
+  password: 'test-pass',
+  type: 'contractor',
   name: 'test-name',
   phone: '123-123-1234',
   address: ['test-address', 'test-address2'],

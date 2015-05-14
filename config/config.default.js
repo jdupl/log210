@@ -11,6 +11,8 @@ module.exports = {
   types: {
     ADMIN: 'admin',
     CLIENT: 'client',
-    ANONYMOUS: 'anonymous'
+    ANONYMOUS: 'anonymous',
+    CONTRACTOR: 'contractor',
+    RESTAURATEUR: 'restaurateur'
   }
 };

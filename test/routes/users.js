@@ -14,7 +14,7 @@ describe('/api/users', function() {
         .send(data.client_user)
         .end(function(err, res) {
           assert.equal(res.status, 201);
-          User.findOne({email: 'test@test.com'}, function(err, user) {
+          User.findOne({email: 'client@test.com'}, function(err, user) {
             assert.equal(user._id, res.body.user._id);
             done();
           });
