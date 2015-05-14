@@ -7,5 +7,10 @@ module.exports = {
   },
   jwt: {
     secret: 'secret'
+  },
+  types: {
+    ADMIN: 'admin',
+    CLIENT: 'client',
+    ANONYMOUS: 'anonymous'
   }
 };

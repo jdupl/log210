@@ -1,9 +1,9 @@
 var User = require('../models/user');
-const ADMIN = 'admin';
+var config = require('../config/config');
 
 exports.create = function(req, res) {
   if (validateBody(req.body)) {
-    if (req.user.type == 'anonymous' && req.body.type != 'client') {
+    if (req.user.type == config.types.ANONYMOUS && req.body.type != config.types.CLIENT) {
       res.status(401).json({message: 'You cannot create a user of type ' + req.body.type + ', you are a visitor'});
     } else {
       User.create(req.body, function(err, created) {
@@ -16,7 +16,7 @@ exports.create = function(req, res) {
 };
 
 exports.getUsers = function(req, res) {
-  if(req.user.type === ADMIN) {
+  if(req.user.type === config.types.ADMIN) {
     User.find(function(err, users) {
       res.status(200).json(users);
     });

@@ -1,4 +1,3 @@
-const ANONYMOUS = 'anonymous';
 var jwt = require('jsonwebtoken');
 var User = require('../models/user');
 var config = require('../config/config');
@@ -19,7 +18,7 @@ exports.verify = function(req, res, next) {
     });
   } else {
     req.user = {
-      type: ANONYMOUS
+      type: config.types.ANONYMOUS
     };
     next();
   }
