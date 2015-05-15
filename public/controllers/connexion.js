@@ -17,14 +17,12 @@ angular.module('app.controllers.connexion', [])
 
         $http.post('/api/login', data)
           .success(function(data){
-            if (res.type === false) {
-
-              $scope.token = '';
-            } else {
-
-              $localStorage.token = res.data.token;
+            if (data.token) {
+              $localStorage.token = data.token;
               $scope.token = $localStorage.token;
               window.location = "/";
+            } else {
+              $scope.token = '';
             }
           })
           .error(function(data, status){
