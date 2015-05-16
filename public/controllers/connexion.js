@@ -14,18 +14,17 @@ angular.module('app.controllers.connexion', [])
                 password: $scope.user.password
             }
     		$http.post('/api/login', data).success(function(data){
-		        if (res.type == false) {
-		            alert(res.data) 
-		            $scope.token = '';   
+		        if (typeof data.token !== 'undefined') {
+		            $rootScope.error = data.message;
+		            $scope.logout();
 		        } else {
-		            $localStorage.token = res.data.token;
+		            $localStorage.token = data.token;
 		            $scope.token = $localStorage.token;
-		            window.location = "/";    
+		            window.location = "/";
 		        }
 		      	}).error(function(data, status){
-		        
-		                $rootScope.error = 'Failed to signin';
-		                $scope.token = '';
+		            $rootScope.error = 'Failed to signin';
+		            $scope.token = '';
 		      	});
         };
 
