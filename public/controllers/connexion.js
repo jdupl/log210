@@ -1,31 +1,30 @@
 angular.module('app.controllers.connexion', [])
 //Controller
 .controller('ConnexionCtrl', [
-  '$http',
+    '$http',
     '$scope',
     '$rootScope',
     '$localStorage',
     '$sessionStorage',
     function ($http, $scope, $rootScope, $localStorage, $sessionStorage) {
-
       $scope.connexion = function() {
-
         var data = {
           email: $scope.user.email,
           password: $scope.user.password
-        };
+        }
 
         $http.post('/api/login', data)
-          .success(function(data){
+          .success(function(data) {
             if (data.token) {
               $localStorage.token = data.token;
               $scope.token = $localStorage.token;
               window.location = "/";
             } else {
               $scope.token = '';
+              $scope.logout();
             }
           })
-          .error(function(data, status){
+          .error(function(data, status) {
             $rootScope.error = 'Failed to signin';
             $scope.token = '';
           });
@@ -48,7 +47,7 @@ angular.module('app.controllers.connexion', [])
       };
 
       $scope.token = $localStorage.token;
-      if($scope.token) {
+      if ($scope.token) {
         $scope.tokenValide();
       }
     }]);
