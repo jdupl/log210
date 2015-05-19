@@ -60,6 +60,33 @@ describe('/api/restaurants/', function() {
         });
       });
     });
+    it('should create a restaurant with no restaurateur and notify the user', function(done) {
+      User.create(data.contractor_user, function(err, createdContractor) {
+        User.create(data.restaurateur_user, function(err, createdRestaurateur) {
+          var request = client(app);
+          request
+          .post('/api/login')
+          .send({email: data.contractor_user.email, password: data.contractor_user.password})
+          .end(function(err, res) {
+            var test_restaurant = {
+              name: 'test-restaurant'
+            };
+            request
+            .post('/api/restaurants')
+            .set('Authorization', 'Bearer ' + res.body.token)
+            .send(test_restaurant)
+            .end(function(err, res) {
+              assert.equal(res.status, 201);
+              assert.equal(res.body.message, 'Restaurant created with no restaurateur.');
+              Restaurant.findOne({_id: res.body.id}, function(err, restaurant) {
+                assert.equal(restaurant.name, 'test-restaurant');
+                done();
+              });
+            });
+          });
+        });
+      });
+    });
   });
 });
 describe('/api/restaurants/:id', function() {
