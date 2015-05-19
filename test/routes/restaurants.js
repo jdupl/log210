@@ -116,4 +116,37 @@ describe('/api/restaurants/:id', function() {
       });
     });
   });
+  describe('PUT', function() {
+    it('should modify the informations of the restaurant', function(done) {
+      User.create(data.contractor_user, function(err, createdContractor) {
+        User.create(data.restaurateur_user, function(err, createdRestaurateur) {
+          var test_restaurant = {
+            name: 'test-restaurant',
+            restaurateur: createdRestaurateur._id
+          };
+          Restaurant.create(test_restaurant, function(err, createdRestaurant) {
+            var request = client(app);
+            var updated_restaurant = {
+              name: 'updated-restaurant',
+              restaurateur: '7'
+            };
+            request
+            .post('/api/login')
+            .send({email: data.contractor_user.email, password: data.contractor_user.password})
+            .end(function(err, res) {
+              request
+              .put('/api/restaurants/' + createdRestaurant._id)
+              .send(updated_restaurant)
+              .set('Authorization', 'Bearer ' + res.body.token)
+              .end(function(err, res) {
+                assert.equal(res.status, 200);
+                assert.equal(res.body.message, 'The restaurant is updated');
+                done();
+              });
+            });
+          });
+        });
+      });
+    });
+  });
 });

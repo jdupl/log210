@@ -10,4 +10,5 @@ module.exports = function(app) {
   app.put('/api/users/:id', loginMiddleware.verify, usersController.updateUser);
   app.post('/api/restaurants', loginMiddleware.verify, restaurantsController.createRestaurant);
   app.delete('/api/restaurants/:id', loginMiddleware.verify, restaurantsController.deleteRestaurant);
+  app.put('/api/restaurants/:id', loginMiddleware.verify, restaurantsController.updateRestaurant);
 };
