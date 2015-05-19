@@ -22,7 +22,11 @@ exports.deleteRestaurant = function(req, res) {
 };
 
 exports.updateRestaurant = function(req, res) {
-  Restaurant.update({_id: req.params.id}, req.body, function(err, count) {
-    res.status(200).json({message: 'The restaurant is updated'});
-  });
+  if(req.user.type === config.types.CONTRACTOR) {
+    Restaurant.update({_id: req.params.id}, req.body, function(err, count) {
+      res.status(200).json({message: 'The restaurant is updated'});
+    });
+  } else {
+    res.status(401).json({message:'You cannot modify a restaurant, you are not a contractor'});
+  }
 };

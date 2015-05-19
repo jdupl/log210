@@ -148,5 +148,36 @@ describe('/api/restaurants/:id', function() {
         });
       });
     });
+    it('should not modify the informations of the restaurant if the user is not a contractor', function(done) {
+      User.create(data.client_user, function(err, createdContractor) {
+        User.create(data.restaurateur_user, function(err, createdRestaurateur) {
+          var test_restaurant = {
+            name: 'test-restaurant',
+            restaurateur: createdRestaurateur._id
+          };
+          Restaurant.create(test_restaurant, function(err, createdRestaurant) {
+            var request = client(app);
+            var updated_restaurant = {
+              name: 'updated-restaurant',
+              restaurateur: '7'
+            };
+            request
+            .post('/api/login')
+            .send({email: data.client_user.email, password: data.client_user.password})
+            .end(function(err, res) {
+              request
+              .put('/api/restaurants/' + createdRestaurant._id)
+              .send(updated_restaurant)
+              .set('Authorization', 'Bearer ' + res.body.token)
+              .end(function(err, res) {
+                assert.equal(res.status, 401);
+                assert.equal(res.body.message, 'You cannot modify a restaurant, you are not a contractor');
+                done();
+              });
+            });
+          });
+        });
+      });
+    });
   });
 });
