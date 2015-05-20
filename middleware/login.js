@@ -22,7 +22,7 @@ verifyToken = function(req, res, next, authorizationHeader) {
         req.user = user;
         next();
       } else {
-        res.status(401).json({message: 'The user isn\'t registered'});
+        res.status(401).json({message: "The user isn't registered"});
       }
     });
   });
