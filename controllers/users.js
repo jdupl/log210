@@ -4,12 +4,13 @@ exports.create = function(req, res) {
   payload = req.body;
 
   if (!payload.type) {
-    payload.type = User.USER_TYPE;
+    // TODO change this to a constant when the codestyle branch is merged in master
+    payload.type = 'user';
   }
   // TODO reminder: check for admin if type is not user
 
   if (validateBody(payload)) {
-    User.model.create(payload, function(err, created) {
+    User.create(payload, function(err, created) {
       res.status(201).json({user: {_id: created._id}});
     });
   } else {
@@ -23,7 +24,7 @@ exports.getUsers = function(req, res) {
 
 exports.updateUser = function(req, res) {
   if (req.user._id == req.params.id) {
-    User.model.update({_id: req.params.id}, req.body, function(err, updated) {
+    User.update({_id: req.params.id}, req.body, function(err, updated) {
       res.status(200).json({message: 'User updated'});
     });
   } else {

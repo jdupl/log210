@@ -3,8 +3,6 @@ var Schema = mongoose.Schema;
 var bcrypt = require('bcrypt');
 SALT_WORK_FACTOR = 10;
 
-exports.USER_TYPE = 'user';
-
 var userSchema = new Schema({
   email: {type: String},
   password: {type: String},
@@ -38,4 +36,4 @@ userSchema.methods.verifyPassword = function(password, cb) {
   });
 };
 
-exports.model = mongoose.model('User', userSchema);
+module.exports = mongoose.model('User', userSchema);

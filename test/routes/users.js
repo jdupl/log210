@@ -14,7 +14,7 @@ describe('/api/users', function() {
         .send(data.fake_user)
         .end(function(err, res) {
           assert.equal(res.status, 201);
-          User.model.findOne({email: 'test@test.com'}, function(err, user) {
+          User.findOne({email: 'test@test.com'}, function(err, user) {
             assert.equal(user._id, res.body.user._id);
             done();
           });
@@ -33,7 +33,7 @@ describe('/api/users', function() {
   });
   describe('GET', function() {
     it('should get informations about the user', function(done) {
-      User.model.create(data.fake_user, function(err, created) {
+      User.create(data.fake_user, function(err, created) {
         var request = client(app);
         request
           .post('/api/login')
@@ -58,14 +58,14 @@ describe('/api/users', function() {
       });
     });
     it('should return a 401 if the token is invalid', function(done) {
-      User.model.create(data.fake_user, function(err, created) {
+      User.create(data.fake_user, function(err, created) {
         var request = client(app);
         request
           .post('/api/login')
           .send({email: created.email, password: data.fake_user.password})
           .end(function(err, res) {
             var token = res.body.token;
-            User.model.remove({_id: created._id}, function(err, removed) {
+            User.remove({_id: created._id}, function(err, removed) {
               request
                 .get('/api/users/')
                 .set('Authorization', 'Bearer ' + token)
@@ -82,7 +82,7 @@ describe('/api/users', function() {
 describe('/api/users/:id', function() {
   describe('PUT', function() {
     it('should modify the user', function(done) {
-      User.model.create(data.fake_user, function(err, created) {
+      User.create(data.fake_user, function(err, created) {
         var updatedDate = Date.now();
         var updated = {
           email: 'new@test.com',
@@ -105,7 +105,7 @@ describe('/api/users/:id', function() {
               .send(updated)
               .end(function(err, res) {
                 assert.equal(res.status, 200);
-                User.model.findOne({_id: created._id}, function(err, user) {
+                User.findOne({_id: created._id}, function(err, user) {
                   assert.equal(user.email, updated.email);
                   assert.equal(user.type, updated.type);
                   assert.equal(user.name, updated.name);
@@ -120,7 +120,7 @@ describe('/api/users/:id', function() {
       });
     });
     it('should return 401 if you try to modify the informations of another user', function(done) {
-      User.model.create(data.fake_user, function(err, created) {
+      User.create(data.fake_user, function(err, created) {
         var updatedDate = Date.now();
         var updated = {
           email: 'new@test.com',

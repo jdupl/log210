@@ -11,7 +11,7 @@ var config = require('../../config/config');
 describe('/api/login', function() {
   describe('POST', function() {
     it('should get the JWT token', function(done) {
-      User.model.create(data.fake_user, function(err, created) {
+      User.create(data.fake_user, function(err, created) {
         client(app)
           .post('/api/login')
           .send({email: data.fake_user.email, password: data.fake_user.password})
@@ -27,7 +27,7 @@ describe('/api/login', function() {
       });
     });
     it('should get a 400 because of wrong email', function(done) {
-      User.model.create(data, function(err, created) {
+      User.create(data, function(err, created) {
         client(app)
           .post('/api/login')
           .send({email: 'wrong', password: 'wrong'})
@@ -38,7 +38,7 @@ describe('/api/login', function() {
       });
     });
     it('should get a 400 because of wrong password', function(done) {
-      User.model.create(data.fake_user, function(err, created) {
+      User.create(data.fake_user, function(err, created) {
         client(app)
           .post('/api/login')
           .send({email: created.email, password: 'wrong'})

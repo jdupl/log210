@@ -28,7 +28,7 @@ opts.secretOrKey = config.jwt.secret;
 opts.authScheme = 'Bearer';
 
 passport.use(new JwtStrategy(opts, function(jwt_payload, done) {
-  User.model.findOne({_id: jwt_payload}).select('-password -__v').exec(function(err, user) {
+  User.findOne({_id: jwt_payload}).select('-password -__v').exec(function(err, user) {
     if (user) {
       done(null, user);
     } else {
