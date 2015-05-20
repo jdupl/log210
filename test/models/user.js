@@ -8,7 +8,7 @@ var sinon = require('sinon');
 describe('User model', function() {
   describe('insert', function() {
     it('should insert a user in the database', function(done) {
-      User.create(data.fake_user, function(err, created) {
+      User.model.create(data.fake_user, function(err, created) {
         assert.notEqual(undefined, created);
         assert.equal(data.fake_date, created.birth_date.getTime());
         assert.equal(2, created.address.length);
@@ -16,7 +16,7 @@ describe('User model', function() {
       });
     });
     it('should hash the password when inserting', function(done) {
-      User.create(data.fake_user, function(err, created) {
+      User.model.create(data.fake_user, function(err, created) {
         created.verifyPassword(data.fake_user.password, function(err, isMatch) {
           assert(isMatch);
           done();
@@ -40,7 +40,7 @@ describe('User model', function() {
       mockery.registerMock('bcrypt', fakeBcrypt);
       mockery.enable({useCleanCache: true, warnOnReplace: false, warnOnUnregistered: false});
       var modifiedUser = require(userModulePath);
-      modifiedUser.create(data.fake_user, function(err, created) {
+      modifiedUser.model.create(data.fake_user, function(err, created) {
         assert.equal(fakeError, err);
         mockBcrypt.verify();
         mockery.disable();
@@ -66,7 +66,7 @@ describe('User model', function() {
       mockery.registerMock('bcrypt', fakeBcrypt);
       mockery.enable({useCleanCache: true, warnOnReplace: false, warnOnUnregistered: false});
       var modifiedUser = require(userModulePath);
-      modifiedUser.create(data.fake_user, function(err, created) {
+      modifiedUser.model.create(data.fake_user, function(err, created) {
         assert.equal(fakeError, err);
         mockBcrypt.verify();
         mockery.disable();
@@ -77,8 +77,8 @@ describe('User model', function() {
   });
   describe('findOne', function() {
     it('should find one from username', function(done) {
-      User.create(data.fake_user, function(err, created) {
-        User.findOne({email: data.fake_user.email}, function(err, user) {
+      User.model.create(data.fake_user, function(err, created) {
+        User.model.findOne({email: data.fake_user.email}, function(err, user) {
           assert.notEqual(undefined, user);
           assert.equal(data.fake_date, user.birth_date.getTime());
           assert.equal(2, user.address.length);

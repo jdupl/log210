@@ -3,7 +3,7 @@ var jwt = require('jsonwebtoken');
 var config = require('../config/config');
 
 exports.getToken = function(req, res) {
-  User.findOne({email: req.body.email}, function(err, user) {
+  User.model.findOne({email: req.body.email}, function(err, user) {
     if (user) {
       user.verifyPassword(req.body.password, function(err, isMatch) {
         if (isMatch) {
