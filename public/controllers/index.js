@@ -1,5 +1,5 @@
-var controllers = angular.module('app.controllers.index', []);
+var controllers = angular.module('app.controllers.Index', []);
 
-controllers.controller('index', function($scope) {
+controllers.controller('Index', function($scope) {
   $scope.hello = "Bienvenue sur restaurant log210";
 });

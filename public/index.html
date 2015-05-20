@@ -23,7 +23,7 @@
               </button>
               <a class="navbar-brand" href="#/">Restauration LOG210</a>
             </div>
-            <div class="collapse navbar-collapse" id="navbar" ng-controller="navbarController">
+            <div class="collapse navbar-collapse" id="navbar" ng-controller="Navbar">
               <ul class="nav navbar-nav">
                 <li ng-class="{ active: isActive('/') }"><a href="#/">Accueil</a></li>
               </ul>
@@ -31,7 +31,7 @@
                 <li ng-class="{ active: isActive('/connexion') }"><a href="#/connexion">Connexion</a></li>
               </ul>
               <ul class="nav navbar-nav navbar-right">
-                <li ng-class="{ active: isActive('/gestion_compte') }"><a href="#/gestion_compte">Gestion du compte</a></li>
+                <li ng-class="{ active: isActive('/modifier_compte') }"><a href="#/modifier_compte">Gestion du compte</a></li>
               </ul>
               <ul class="nav navbar-nav navbar-right">
                 <li ng-class="{ active: isActive('/inscrire') }"><a href="#/inscrire">Inscription</a></li>
@@ -55,5 +55,6 @@
     <script src="controllers/navbar.js"></script>
     <script src="controllers/inscrire.js"></script>
     <script src="controllers/connexion.js"></script>
+    <script src="controllers/modifier_compte.js"></script>
   </body>
 </html>

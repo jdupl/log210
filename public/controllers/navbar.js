@@ -1,6 +1,6 @@
-var controllers = angular.module('app.controllers.navbar', ['ui.date']);
+var controllers = angular.module('app.controllers.Navbar', ['ui.date']);
 
-controllers.controller('navbarController', function($scope, $location) {
+controllers.controller('Navbar', function($scope, $location) {
   $scope.isActive = function(url) {
     return $location.path() === url;
   };

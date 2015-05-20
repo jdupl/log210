@@ -1,6 +1,6 @@
-angular.module('app.controllers.connexion', [])
+angular.module('app.controllers.Connexion', [])
 //Controller
-.controller('ConnexionCtrl', [
+.controller('Connexion', [
     '$http',
     '$scope',
     '$rootScope',

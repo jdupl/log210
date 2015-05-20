@@ -1,6 +1,6 @@
-var controllers = angular.module('app.controllers.inscrire', ['ui.date']);
+var controllers = angular.module('app.controllers.Inscrire', ['ui.date']);
 
-controllers.controller('inscrire', function($scope) {
+controllers.controller('Inscrire', function($scope) {
 
   $scope.submitForm = function() {
     // formulaire is submitted at least once
