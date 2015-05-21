@@ -2,11 +2,18 @@ var User = require('../models/user');
 var config = require('../config/config');
 
 exports.create = function(req, res) {
-  if (validateBody(req.body)) {
-    if (req.user.type == config.types.ANONYMOUS && req.body.type != config.types.CLIENT) {
-      res.status(401).json({message: 'You cannot create a user of type ' + req.body.type + ', you are a visitor'});
+  payload = req.body;
+
+  if (!payload.type) {
+    payload.type = config.types.CLIENT;
+  }
+  console.log(payload)
+
+  if (validateBody(payload)) {
+    if (req.user.type == config.types.ANONYMOUS && payload.type != config.types.CLIENT) {
+      res.status(401).json({message: 'You cannot create a user of type ' + payload.type + ', you are a visitor'});
     } else {
-      User.create(req.body, function(err, created) {
+      User.create(payload, function(err, created) {
         res.status(201).json({user: {_id: created._id}});
       });
     }

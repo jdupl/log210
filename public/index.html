@@ -12,33 +12,9 @@
   <body>
     <div class="wrapper">
       <header>
-        <nav class="navbar navbar-default navbar-fixed-top">
-          <div class="container">
-            <div class="navbar-header">
-              <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-              </button>
-              <a class="navbar-brand" href="#/">Restauration LOG210</a>
-            </div>
-            <div class="collapse navbar-collapse" id="navbar" ng-controller="Navbar">
-              <ul class="nav navbar-nav">
-                <li ng-class="{ active: isActive('/') }"><a href="#/">Accueil</a></li>
-              </ul>
-              <ul class="nav navbar-nav navbar-right">
-                <li ng-class="{ active: isActive('/connexion') }"><a href="#/connexion">Connexion</a></li>
-              </ul>
-              <ul class="nav navbar-nav navbar-right">
-                <li ng-class="{ active: isActive('/modifier_compte') }"><a href="#/modifier_compte">Gestion du compte</a></li>
-              </ul>
-              <ul class="nav navbar-nav navbar-right">
-                <li ng-class="{ active: isActive('/inscrire') }"><a href="#/inscrire">Inscription</a></li>
-              </ul>
-            </div>
-          </div>
-        </nav>
+        <div class="navbar navbar-default navbar-fixed-top" ng-controller="Navbar">
+          <div ng-include="url"></div>
+        </div>
       </header>
       <div class="body" ng-view autoscroll="true"></div>
     </div>
