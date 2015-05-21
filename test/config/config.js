@@ -6,6 +6,11 @@ describe('Configuration', function() {
   describe('Default', function() {
     it('should contain the default configuration options', function() {
       assert.equal(config.server.port, 3000);
+      assert.equal(config.types.ADMIN, 'admin');
+      assert.equal(config.types.CLIENT, 'client');
+      assert.equal(config.types.ANONYMOUS, 'anonymous');
+      assert.equal(config.types.CONTRACTOR, 'contractor');
+      assert.equal(config.types.RESTAURATEUR, 'restaurateur');
     });
     it('should load the default config if the env is not specified', function() {
       process.env.NODE_ENV = '';

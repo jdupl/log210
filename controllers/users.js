@@ -1,25 +1,28 @@
 var User = require('../models/user');
+var config = require('../config/config');
 
 exports.create = function(req, res) {
-  payload = req.body;
-
-  if (!payload.type) {
-    // TODO change this to a constant when the codestyle branch is merged in master
-    payload.type = 'user';
-  }
-  // TODO reminder: check for admin if type is not user
-
-  if (validateBody(payload)) {
-    User.create(payload, function(err, created) {
-      res.status(201).json({user: {_id: created._id}});
-    });
+  if (validateBody(req.body)) {
+    if (req.user.type == config.types.ANONYMOUS && req.body.type != config.types.CLIENT) {
+      res.status(401).json({message: 'You cannot create a user of type ' + req.body.type + ', you are a visitor'});
+    } else {
+      User.create(req.body, function(err, created) {
+        res.status(201).json({user: {_id: created._id}});
+      });
+    }
   } else {
     res.status(400).json({'message': 'Invalid payload'});
   }
 };
 
 exports.getUsers = function(req, res) {
-  res.status(200).json(req.user);
+  if(req.user.type === config.types.ADMIN) {
+    User.find(function(err, users) {
+      res.status(200).json(users);
+    });
+  } else {
+      res.status(200).json(req.user);
+  }
 };
 
 exports.updateUser = function(req, res) {

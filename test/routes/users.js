@@ -8,13 +8,13 @@ var User = require('../../models/user');
 
 describe('/api/users', function() {
   describe('POST', function() {
-    it('should create a user from the json payload', function(done) {
+    it('should create a user of type client from the json payload', function(done) {
       client(app)
         .post('/api/users')
-        .send(data.fake_user)
+        .send(data.client_user)
         .end(function(err, res) {
           assert.equal(res.status, 201);
-          User.findOne({email: 'test@test.com'}, function(err, user) {
+          User.findOne({email: 'client@test.com'}, function(err, user) {
             assert.equal(user._id, res.body.user._id);
             done();
           });
@@ -27,6 +27,16 @@ describe('/api/users', function() {
         .send(data)
         .end(function(err, res) {
           assert.equal(res.status, 400);
+          done();
+        });
+    });
+    it('should return a 401 if the user is anonymous and tries to create an account with a type other than client', function(done) {
+      client(app)
+        .post('/api/users')
+        .send(data.fake_user)
+        .end(function(err, res) {
+          assert.equal(res.status, 401);
+          assert.equal(res.body.message, 'You cannot create a user of type test-type, you are a visitor');
           done();
         });
     });
@@ -75,6 +85,25 @@ describe('/api/users', function() {
                 });
             });
           });
+      });
+    });
+    it('should return all the users if the user is logged in as admin', function(done) {
+      User.create(data.fake_user, function(err, createdUser) {
+        User.create(data.admin_user, function(err, createdAdmin) {
+          var request = client(app);
+          request.post('/api/login')
+            .send({email: createdAdmin.email, password: data.admin_user.password})
+            .end(function(err, res) {
+              request
+                .get('/api/users/')
+                .set('Authorization', 'Bearer ' + res.body.token)
+                .end(function(err, res) {
+                  assert.equal(res.status, 200);
+                  assert.equal(res.body.length, 2);
+                  done();
+                });
+            });
+        });
       });
     });
   });
