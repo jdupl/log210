@@ -2,17 +2,20 @@ var controllers = angular.module('app.controllers.Inscrire', ['ui.date']);
 
 controllers.controller('Inscrire', function($scope, $http) {
 
-  $scope.inscrire = function() {
-    var data = $scope.user;
-    $scope.submitted = true;
+  $scope.inscrire = function(valid) {
+    if (valid) {
+      var data = $scope.user;
 
-    $http.post('/api/users', data)
-      .success(function(data) {
-        // TODO message succès
-      })
-      .error(function(data, status) {
-        // TODO message erreur
-      });
+      $http.post('/api/users', data)
+        .success(function(data) {
+          $scope.sent = true;
+          $scope.succes = true;
+        })
+        .error(function(data, status) {
+          $scope.sent = true;
+          $scope.errors = "Malheuresement, une erreur est survenue lors de l'inscription."
+        });
+    }
   };
 });
 
