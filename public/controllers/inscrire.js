@@ -5,13 +5,20 @@ controllers.controller('Inscrire', function($scope, $http) {
   $scope.inscrire = function() {
     var data = $scope.user;
     $scope.submitted = true;
+	
+  if(inscrireForm) {
+    $scope.inscrireForm.date.$dirty = true;
+    $scope.inscrireForm.date.$pristine = false;
+  }
 
     $http.post('/api/users', data)
       .success(function(data) {
         // TODO message succès
+		window.alert("Success");
       })
       .error(function(data, status) {
         // TODO message erreur
+		window.alert("error");
       });
   };
 });

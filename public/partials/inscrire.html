@@ -28,9 +28,10 @@
     <div class="form-group" ng-class="{ 'has-error' : inscrireForm.phone.$invalid && !inscrireForm.phone.$pristine && submitted}">
       <label for="user.phone" class="col-sm-2 control-label">Téléphone</label>
       <div class="col-sm-10">
-        <input type="text" name="phone" id="user.phone" ng-model="user.phone" class="form-control" placeholder="Téléphone" required>
+        <input type="text" name="phone" id="user.phone" ng-model="user.phone" class="form-control" placeholder="Téléphone" 
+		ng-pattern="/\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/" required>
         <p ng-show="inscrireForm.phone.$invalid && !inscrireForm.phone.$pristine && submitted" class="help-block">
-          *Vous devez fournir un numéro de téléphone pour vous inscrire.
+          *Vous devez fournir un numéro de téléphone valide pour vous inscrire.
         </p>
       </div>
     </div>
@@ -47,9 +48,9 @@
       <label for="user.date" class="col-sm-2 control-label">Date de naissance</label>
       <div class="col-sm-10">
         <div style="display:inline-block; min-height:290px;">
-          <datepicker name="date" ng-model="user.birth_date" show-weeks="true" class="well well-sm" required></datepicker>
+          <datepicker name="date" ng-model="user.birth_date" show-weeks="true" class="well well-sm" data-provide="datepicker" required></datepicker>
           <p ng-show="inscrireForm.date.$invalid && !inscrireForm.date.$pristine && submitted" class="help-block">
-            *Vous devez fournir une date valide pour vous inscrire.
+            *Vous devez fournir une date de naissance valide pour vous inscrire.
           </p>
         </div>
       </div>
