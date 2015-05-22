@@ -25,7 +25,7 @@ angular.module('app.controllers.Connexion', [])
             }
           })
           .error(function(data, status) {
-            $rootScope.error = 'Failed to signin';
+            $rootScope.error = data.message;
             $scope.token = '';
           });
       };
