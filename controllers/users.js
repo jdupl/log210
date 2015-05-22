@@ -7,7 +7,6 @@ exports.create = function(req, res) {
   if (!payload.type) {
     payload.type = config.types.CLIENT;
   }
-  console.log(payload)
 
   if (validateBody(payload)) {
     if (req.user.type == config.types.ANONYMOUS && payload.type != config.types.CLIENT) {
