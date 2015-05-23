@@ -15,84 +15,84 @@
   <div class="page-header">
     <h1>Inscription</h1>
   </div>
-  <form name="inscrireForm" class="form-horizontal" ng-submit="inscrire()" novalidate>
-    <div class="form-group" ng-class="{ 'has-error' : inscrireForm.name.$invalid && !inscrireForm.name.$pristine && submitted}">
+  <form ng-show="!sent" name="inscrireForm" class="form-horizontal" ng-submit="inscrire(!inscrireForm.$invalid)" novalidate>
+    <div class="form-group" ng-class="{ 'has-error' : inscrireForm.name.$invalid && submitted}">
       <label for="user.name" class="col-sm-2 control-label">Nom</label>
       <div class="col-sm-10">
         <input type="text" name="name" id="user.name" ng-model="user.name" class="form-control" placeholder="Nom" required>
-        <p ng-show="inscrireForm.name.$invalid && !inscrireForm.name.$pristine && submitted" class="help-block">
+        <p ng-show="inscrireForm.name.$invalid && submitted" class="help-block">
           *Vous devez fournir un nom valide pour vous inscrire.
         </p>
       </div>
     </div>
-    <div class="form-group" ng-class="{ 'has-error' : inscrireForm.phone.$invalid && !inscrireForm.phone.$pristine && submitted}">
+    <div class="form-group" ng-class="{ 'has-error' : inscrireForm.phone.$invalid && submitted}">
       <label for="user.phone" class="col-sm-2 control-label">Téléphone</label>
       <div class="col-sm-10">
         <input type="text" name="phone" id="user.phone" ng-model="user.phone" class="form-control" placeholder="Téléphone" 
 		ng-pattern="/\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/" required>
-        <p ng-show="inscrireForm.phone.$invalid && !inscrireForm.phone.$pristine && submitted" class="help-block">
+        <p ng-show="inscrireForm.phone.$invalid && submitted" class="help-block">
           *Vous devez fournir un numéro de téléphone valide pour vous inscrire.
         </p>
       </div>
     </div>
-    <div class="form-group" ng-class="{ 'has-error' : inscrireForm.address.$invalid && !inscrireForm.address.$pristine && submitted}">
+    <div class="form-group" ng-class="{ 'has-error' : inscrireForm.address.$invalid && submitted}">
       <label for="user.address" class="col-sm-2 control-label">Adresse</label>
       <div class="col-sm-10">
         <input type="text" name="address" id="user.address" ng-model="user.address" class="form-control" placeholder="Adresse" required>
-        <p ng-show="inscrireForm.address.$invalid && !inscrireForm.address.$pristine && submitted" class="help-block">
+        <p ng-show="inscrireForm.address.$invalid && submitted" class="help-block">
           *Vous devez fournir une adresse pour vous inscrire.
         </p>
       </div>
     </div>
-    <div class="form-group" ng-class="{ 'has-error' : inscrireForm.date.$invalid && !inscrireForm.date.$pristine && submitted}">
+    <div class="form-group" ng-class="{ 'has-error' : inscrireForm.date.$invalid && submitted}">
       <label for="user.date" class="col-sm-2 control-label">Date de naissance</label>
       <div class="col-sm-10">
         <div style="display:inline-block; min-height:290px;">
-          <datepicker name="date" ng-model="user.birth_date" show-weeks="true" class="well well-sm" data-provide="datepicker" required></datepicker>
-          <p ng-show="inscrireForm.date.$invalid && !inscrireForm.date.$pristine && submitted" class="help-block">
+          <datepicker name="date" ng-model="user.birth_date" show-weeks="true" class="well well-sm"
+		  data-provide="datepicker" required></datepicker>
+          <p ng-show="inscrireForm.date.$invalid && submitted" class="help-block">
             *Vous devez fournir une date de naissance valide pour vous inscrire.
           </p>
         </div>
       </div>
     </div>
-    <div class="form-group" ng-class="{ 'has-error' : inscrireForm.email.$invalid && !inscrireForm.email.$pristine && submitted}">
+    <div class="form-group" ng-class="{ 'has-error' : inscrireForm.email.$invalid && submitted}">
       <label for="user.email" class="col-sm-2 control-label">Courriel</label>
       <div class="col-sm-10">
         <input type="email" name="email" id="user.email" ng-model="user.email" class="form-control" placeholder="Courriel"
           ng-pattern="/^[a-z]+[a-z0-9._]+@[a-z]+\.[a-z.]{2,5}$/" required>
-        <p ng-show="inscrireForm.email.$invalid && !inscrireForm.email.$pristine && submitted" class="help-block">
+        <p ng-show="inscrireForm.email.$invalid && submitted" class="help-block">
           *Vous devez fournir une adresse courriel valide pour vous inscrire.
         </p>
       </div>
     </div>
-    <div class="form-group" ng-class="{ 'has-error' : inscrireForm.password.$invalid && !inscrireForm.password.$pristine && submitted}">
+    <div class="form-group" ng-class="{ 'has-error' : inscrireForm.password.$invalid && submitted}">
       <label for="user.password" class="col-sm-2 control-label" required>Mot de passe</label>
       <div class="col-sm-10">
         <input type="password" name="password" ng-model="user.password" class="form-control" ng-minlength="6" ng-maxlength="25"
           placeholder="Mot de passe" required>
-        <p ng-show="inscrireForm.password.$invalid && !inscrireForm.password.$pristine && submitted" class="help-block">
+        <p ng-show="inscrireForm.password.$invalid && submitted" class="help-block">
           *Vous devez fournir un mot de passe valide de 6 à 25 charactères pour vous inscrire.
         </p>
       </div>
     </div>
-    <div class="form-group" ng-class="{ 'has-error' : inscrireForm.passwordConfirm.$invalid && !inscrireForm.passwordConfirm.$pristine && submitted}">
-      <label for="user.passwordConfirm" class="col-sm-2 control-label" required>Comfirmer le mot de passe</label>
+    <div class="form-group" ng-class="{ 'has-error' : inscrireForm.passwordConfirm.$invalid && submitted}">
+      <label for="user.passwordConfirm" class="col-sm-2 control-label" required>Comfirmation du mot de passe</label>
       <div class="col-sm-10">
-        <input type="password" name="passwordConfirm" ng-model="user.passwordConfirm" class="form-control" ng-minlength="6"
-          ng-maxlength="25" placeholder="Mot de passe" password-check="user.password" required>
-        <p ng-show="inscrireForm.passwordConfirm.$invalid && !inscrireForm.passwordConfirm.$pristine && submitted &&
-          (inscrireForm.passwordConfirm.$error.minlength || inscrireForm.passwordConfirm.$error.maxlength)" class="help-block">
-          *Vous devez fournir un mot de passe de confirmation valide de 6 à 25 charactères pour vous inscrire .
-        </p>
-        <p ng-show="inscrireForm.passwordConfirm.$invalid && !inscrireForm.passwordConfirm.$pristine && submitted" class="help-block">
+        <input type="password" name="passwordConfirm" ng-model="user.passwordConfirm" class="form-control"
+          placeholder="Mot de passe" password-check="user.password" required>
+        <p ng-show="inscrireForm.passwordConfirm.$invalid && submitted" class="help-block">
           *Vous devez fournir un mot de passe de confirmation identique au premier mot de passe.
         </p>
       </div>
     </div>
     <div class="form-group">
       <div class="col-sm-offset-2 col-sm-10">
-        <button type="submit" value="inscription" class="btn btn-default">S'inscrire</button>
+        <button type="submit" value="inscription" ng-click="submitted=true" class="btn btn-default">S'inscrire</button>
       </div>
     </div>
   </form>
+  <!-- TODO ajouter les messages d'erreurs/confirmation de l'inscription (avec les infos utilisateur)-->
+  <div ng-show="succes"></div>
+
 <div>
