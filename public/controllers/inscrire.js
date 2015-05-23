@@ -13,7 +13,7 @@ controllers.controller('Inscrire', function($scope, $http) {
         })
         .error(function(data, status) {
           $scope.sent = true;
-          $scope.errors = "Malheuresement, une erreur est survenue lors de l'inscription."
+          $scope.errors = "Malheuresement, une erreur est survenue lors de l'inscription et l'utilisateur n'a pas pu être enregistré."
         });
     }
   };

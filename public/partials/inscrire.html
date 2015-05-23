@@ -67,7 +67,7 @@
       </div>
     </div>
     <div class="form-group" ng-class="{ 'has-error' : inscrireForm.password.$invalid && submitted}">
-      <label for="user.password" class="col-sm-2 control-label" required>Mot de passe</label>
+      <label for="user.password" class="col-sm-2 control-label" >Mot de passe</label>
       <div class="col-sm-10">
         <input type="password" name="password" ng-model="user.password" class="form-control" ng-minlength="6" ng-maxlength="25"
           placeholder="Mot de passe" required>
@@ -77,7 +77,7 @@
       </div>
     </div>
     <div class="form-group" ng-class="{ 'has-error' : inscrireForm.passwordConfirm.$invalid && submitted}">
-      <label for="user.passwordConfirm" class="col-sm-2 control-label" required>Comfirmation du mot de passe</label>
+      <label for="user.passwordConfirm" class="col-sm-2 control-label" >Comfirmation du mot de passe</label>
       <div class="col-sm-10">
         <input type="password" name="passwordConfirm" ng-model="user.passwordConfirm" class="form-control"
           placeholder="Mot de passe" password-check="user.password" required>
@@ -92,7 +92,29 @@
       </div>
     </div>
   </form>
-  <!-- TODO ajouter les messages d'erreurs/confirmation de l'inscription (avec les infos utilisateur)-->
-  <div ng-show="succes"></div>
+  <div ng-show="succes">
+    <p>
+      Bonjours, <b><span ng-bind="user.name" id="savedname"></span></b>.
+    </p>
+	<p>
+	  Vous pouvez maintenant vous connecter avec vote email: <br>
+	  <b><span ng-bind="user.email" id="savedmail"></span><br></b>
+	  et votre mot de passe.
+	</p>
+	<p>
+	  Autres informations de compte fournies:<br>
+	  Téléphone: <b><span ng-bind="user.phone" id="savedPhone"></span></b><br>
+	  Adresse: <b><span ng-bind="user.address" id="savedAddress"></span></b><br>
+	  Date de naissance: <b><span ng-bind="user.birth_date" id="savedDateBirth"></span></b>
+	</p>
+	<p>
+	  Ces informations ne sont pas les bonnes? <br>
+	  <b><a href="#/modifier_compte">Gestion du compte</a></b>
+	</p>
+  </div>
+  <div ng-show="errors">
+    <!-- i'm not sure how to access a vraiable from controller.(errors) plus that wouldn't be really mvc. wouldn,t it be better to change errors to a bool var?-->
+    <span id="submitErrorMessage">"Malheuresement, une erreur est survenue lors de l'inscription et l'utilisateur n'a pas pu être enregistré."</span>
+  </div>
 
 <div>
