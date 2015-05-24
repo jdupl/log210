@@ -10,15 +10,26 @@ controllers.controller('ModifierCompte', function($scope, $http) {
 
       $http.put('/api/users', data)
         .success(function(data) {
-          $scope.sent = true;
-          $scope.succes = true;
+          $scope.success = true;
         })
         .error(function(data, status) {
-          $scope.sent = true;
           $scope.errors = "Malheuresement, une erreur est survenue lors de l'enregistrement de l'utilisateur."
         });
     }
   };
+
+  $scope.retry = function() {
+    $scope.success = false;
+    $http.get('/api/users', {headers: {'Authorization' : 'Bearer ' + $scope.token}})
+      .success(function(data) {
+        $scope.user = data;
+      })
+      .error(function(data, status) {
+        $scope.errors = "Malheuresement, une erreur est survenue lors de la recherche de l'utilisateur."
+      });
+  };
+
+  $scope.retry();
 });
 
 controllers.directive('passwordCheck', [function () {

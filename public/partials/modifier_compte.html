@@ -1,49 +1,32 @@
-<style>
-  .full button span {
-    background-color: limegreen;
-    border-radius: 32px;
-    color: black;
-  }
-  .partially button span {
-    background-color: orange;
-    border-radius: 32px;
-    color: black;
-  }
-</style>
-
 <div class="container">
   <div class="page-header">
     <h1>Modification des informations du compte</h1>
   </div>
-  <form class="form-horizontal" name="modificationForm" ng-submit="saveUser(!modificationForm.$invalid)" novalidate>
+  <form class="form-horizontal" name="modificationForm" ng-show="!success" ng-submit="saveUser(!modificationForm.$invalid)" novalidate>
     <div class="form-group">
       <label for="user.name" class="col-sm-4 col-md-2 control-label">Name</label>
       <div class="col-sm-4">
         <input type="text" name="name" id="user.name" ng-model="user.name" class="form-control" placeholder="Nom">
-		<p></p>
       </div>
-	</div>
+	  </div>
 	<div class="form-group">
 	  <label for="user.phone" class="col-sm-4 col-md-2 control-label">Téléphone</label>
 	  <div class="col-md-4">
 	    <input type="text" name="phone" id="user.phone" ng-model="user.phone" class="form-control" placeholder="Téléphone"
-		ng-pattern="/\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/">
-		<p></p>
+		    ng-pattern="/\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/">
 	  </div>
 	</div>
 	<div class="form-group">
 	  <label for="user.address" class="col-sm-2 control-label">Adresse</label>
 	  <div class="col-md-4">
 	    <input type="text" name="address" id="user.address" ng-model="user.address" class="form-control" placeholder="Adresse">
-		<p></p>
 	  </div>
 	</div>
 	<div class="form-group">
 	  <label for="user.date" class="col-sm-2 control-label">Date de naissance</label>
 	  <div class="col-md-4">
 	    <datepicker name="date" ng-model="user.birth_date" show-weeks="true" class="well well-sm"
-		data-provide="datepicker"></datepicker>
-		<p></p>
+		    data-provide="datepicker"></datepicker>
 	  </div>
 	</div>
 	<div class="form-group">
@@ -51,50 +34,48 @@
 	  <div class="col-md-4">
 	    <input type="email" name="email" id="user.email" ng-model="user.email" class="form-control" placeholder="Courriel"
           ng-pattern="/^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/">
-		  <p></p>
 	  </div>
 	</div>
 	<div class="form-group">
 	  <label for="user.password" class="col-sm-2 control-label" >Mot de passe</label>
 	  <div class="col-md-4">
 	    <input type="password" name="password" ng-model="user.password" class="form-control" ng-minlength="6"
-		ng-maxlength="25" placeholder="Mot de passe">
+		    ng-maxlength="25" placeholder="Mot de passe">
 		<p></p>
 	  </div>
 	</div>
 	<div class="form-group">
 	  <label for="user.passwordConfirm" class="col-sm-2 control-label" >Confirmation du mot de passe</label>
-      <div class="col-sm-4">
-        <input type="password" name="passwordConfirm" ng-model="user.passwordConfirm" class="form-control"
+    <div class="col-sm-4">
+      <input type="password" name="passwordConfirm" ng-model="user.passwordConfirm" class="form-control"
         placeholder="Mot de passe" password-check="user.password">
-		<p></p>
-      </div>
+    </div>
 	</div>
 	<div class="form-group">
-      <div class="col-sm-offset-2 col-sm-10">
-          <button type="submit" value="Modification" ng-click="submitted=true" class="btn btn-default">Modifier les informations</button>
-      </div>
+    <div class="col-sm-offset-2 col-sm-10">
+      <button type="submit" value="Modification" ng-click="submitted=true" class="btn btn-default">Modifier les informations</button>
     </div>
+  </div>
   </form>
-  <div ng-show="succes">
+  <div ng-show="success">
     <p>
       Bonjour, <b><span ng-bind="user.name" id="savedname"></span></b>.
     </p>
-  <p>
-    Vous pouvez vous connecter avec votre email: <br>
-    <b><span ng-bind="user.email" id="savedmail"></span><br></b>
-    et votre mot de passe.
-  </p>
-  <p>
-    Autres informations de compte fournies:<br>
-    Téléphone: <b><span ng-bind="user.phone" id="savedPhone"></span></b><br>
-    Adresse: <b><span ng-bind="user.address" id="savedAddress"></span></b><br>
-    Date de naissance: <b><span ng-bind="user.birth_date" id="savedDateBirth"></span></b>
-  </p>
-  <p>
-    Ces informations ne sont pas les bonnes? <br>
-    <b><a href="#/modifier_compte">Gestion du compte</a></b>
-  </p>
+    <p>
+      Vous pouvez vous connecter avec votre email: <br>
+      <b><span ng-bind="user.email" id="savedmail"></span><br></b>
+      et votre mot de passe.
+    </p>
+    <p>
+      Autres informations de compte fournies:<br>
+      Téléphone: <b><span ng-bind="user.phone" id="savedPhone"></span></b><br>
+      Adresse: <b><span ng-bind="user.address" id="savedAddress"></span></b><br>
+      Date de naissance: <b><span ng-bind="user.birth_date" id="savedDateBirth"></span></b>
+    </p>
+    <p>
+      Ces informations ne sont pas les bonnes? <br>
+      <b><a ng-click="retry()">Recommencer</a></b>
+    </p>
   </div>
   <div ng-show="errors">
     <span>{{errors}}</span>

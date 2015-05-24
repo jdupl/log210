@@ -1,16 +1,3 @@
-<style>
-  .full button span {
-    background-color: limegreen;
-    border-radius: 32px;
-    color: black;
-  }
-  .partially button span {
-    background-color: orange;
-    border-radius: 32px;
-    color: black;
-  }
-</style>
-
 <div class="container" ng-controller="Inscrire">
   <div class="page-header">
     <h1>Inscription</h1>
@@ -92,7 +79,7 @@
       </div>
     </div>
   </form>
-  <div ng-show="succes">
+  <div ng-show="success">
     <p>
       Bonjour, <b><span ng-bind="user.name" id="savedname"></span></b>.
     </p>
@@ -108,8 +95,7 @@
 	  Date de naissance: <b><span ng-bind="user.birth_date" id="savedDateBirth"></span></b>
 	</p>
 	<p>
-	  Ces informations ne sont pas les bonnes? <br>
-	  <b><a href="#/modifier_compte">Gestion du compte</a></b>
+	  <b><a href="#/connexion">Se connecter</a></b>
 	</p>
   </div>
   <div ng-show="errors">

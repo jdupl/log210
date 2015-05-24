@@ -32,7 +32,10 @@ exports.getUsers = function(req, res) {
 };
 
 exports.updateUser = function(req, res) {
-  User.update({_id: req.user._id}, req.body, function(err, updated) {
+  user = req.body;
+  delete user._id;
+
+  User.update({_id: req.user._id}, user, function(err, updated) {
     res.status(200).json({message: 'User updated'});
   });
 };

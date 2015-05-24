@@ -9,7 +9,7 @@ controllers.controller('Inscrire', function($scope, $http) {
       $http.post('/api/users', data)
         .success(function(data) {
           $scope.sent = true;
-          $scope.succes = true;
+          $scope.success = true;
         })
         .error(function(data, status) {
           $scope.sent = true;
