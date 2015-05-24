@@ -28,8 +28,8 @@
     <div class="form-group" ng-class="{ 'has-error' : inscrireForm.phone.$invalid && submitted}">
       <label for="user.phone" class="col-sm-2 control-label">Téléphone</label>
       <div class="col-sm-10">
-        <input type="text" name="phone" id="user.phone" ng-model="user.phone" class="form-control" placeholder="Téléphone" 
-		ng-pattern="/\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/" required>
+        <input type="text" name="phone" id="user.phone" ng-model="user.phone" class="form-control" placeholder="Téléphone"
+		      ng-pattern="/\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/" required>
         <p ng-show="inscrireForm.phone.$invalid && submitted" class="help-block">
           *Vous devez fournir un numéro de téléphone valide pour vous inscrire.
         </p>
@@ -60,7 +60,7 @@
       <label for="user.email" class="col-sm-2 control-label">Courriel</label>
       <div class="col-sm-10">
         <input type="email" name="email" id="user.email" ng-model="user.email" class="form-control" placeholder="Courriel"
-          ng-pattern="^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$" required>
+          ng-pattern="/^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/" required>
         <p ng-show="inscrireForm.email.$invalid && submitted" class="help-block">
           *Vous devez fournir une adresse courriel valide pour vous inscrire.
         </p>
@@ -94,10 +94,10 @@
   </form>
   <div ng-show="succes">
     <p>
-      Bonjours, <b><span ng-bind="user.name" id="savedname"></span></b>.
+      Bonjour, <b><span ng-bind="user.name" id="savedname"></span></b>.
     </p>
 	<p>
-	  Vous pouvez maintenant vous connecter avec vote email: <br>
+	  Vous pouvez maintenant vous connecter avec votre email: <br>
 	  <b><span ng-bind="user.email" id="savedmail"></span><br></b>
 	  et votre mot de passe.
 	</p>
