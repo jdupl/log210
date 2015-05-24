@@ -7,8 +7,10 @@ controllers.controller('ModifierCompte', function($scope, $http) {
   $scope.saveUser = function(valid) {
     if (valid) {
       var data = $scope.user;
+      id = data._id;
+      delete data._id;
 
-      $http.put('/api/users', data)
+      $http.put('/api/users/' + id  , data)
         .success(function(data) {
           $scope.success = true;
         })
