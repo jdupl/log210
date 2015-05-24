@@ -1,9 +1,19 @@
 var controllers = angular.module('app.controllers.Navbar', ['ui.date']);
 
-controllers.controller('Navbar', function($scope, $location, $localStorage) {
+controllers.controller('Navbar', function($scope, $rootScope, Auth, $location) {
   $scope.isActive = function(url) {
     return $location.path() === url;
   };
+
+  $scope.refresh = function() {
+    $scope.loggedin = Auth.isLoggedIn();
+    $scope.url = "partials/navbar.html";
+    $rootScope.token = $scope.loggedin;
+  }
+
+  $scope.$on("login", function() {
+    $scope.refresh();
+  });
 
   $('.navbar-nav li a').click(function() {
     if ($('.navbar-collapse.collapse').hasClass('in')) {
@@ -11,10 +21,5 @@ controllers.controller('Navbar', function($scope, $location, $localStorage) {
     }
   });
 
-  $scope.url = "partials/navbar.html";
-
-  $scope.token = $localStorage.token;
-  if ($scope.token) { // checks for blank string or undefined
-    $scope.loggedin = true;
-  }
+  $scope.refresh();
 });

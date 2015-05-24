@@ -1,16 +1,3 @@
-<style>
-  .full button span {
-    background-color: limegreen;
-    border-radius: 32px;
-    color: black;
-  }
-  .partially button span {
-    background-color: orange;
-    border-radius: 32px;
-    color: black;
-  }
-</style>
-
 <div class="container" ng-controller="Inscrire">
   <div class="page-header">
     <h1>Inscription</h1>
@@ -28,8 +15,8 @@
     <div class="form-group" ng-class="{ 'has-error' : inscrireForm.phone.$invalid && submitted}">
       <label for="user.phone" class="col-sm-2 control-label">Téléphone</label>
       <div class="col-sm-10">
-        <input type="text" name="phone" id="user.phone" ng-model="user.phone" class="form-control" placeholder="Téléphone" 
-		ng-pattern="/\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/" required>
+        <input type="text" name="phone" id="user.phone" ng-model="user.phone" class="form-control" placeholder="Téléphone"
+		      ng-pattern="/\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/" required>
         <p ng-show="inscrireForm.phone.$invalid && submitted" class="help-block">
           *Vous devez fournir un numéro de téléphone valide pour vous inscrire.
         </p>
@@ -60,7 +47,7 @@
       <label for="user.email" class="col-sm-2 control-label">Courriel</label>
       <div class="col-sm-10">
         <input type="email" name="email" id="user.email" ng-model="user.email" class="form-control" placeholder="Courriel"
-          ng-pattern="^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$" required>
+          ng-pattern="/^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/" required>
         <p ng-show="inscrireForm.email.$invalid && submitted" class="help-block">
           *Vous devez fournir une adresse courriel valide pour vous inscrire.
         </p>
@@ -92,12 +79,12 @@
       </div>
     </div>
   </form>
-  <div ng-show="succes">
+  <div ng-show="success">
     <p>
-      Bonjours, <b><span ng-bind="user.name" id="savedname"></span></b>.
+      Bonjour, <b><span ng-bind="user.name" id="savedname"></span></b>.
     </p>
 	<p>
-	  Vous pouvez maintenant vous connecter avec vote email: <br>
+	  Vous pouvez maintenant vous connecter avec votre email: <br>
 	  <b><span ng-bind="user.email" id="savedmail"></span><br></b>
 	  et votre mot de passe.
 	</p>
@@ -108,8 +95,7 @@
 	  Date de naissance: <b><span ng-bind="user.birth_date" id="savedDateBirth"></span></b>
 	</p>
 	<p>
-	  Ces informations ne sont pas les bonnes? <br>
-	  <b><a href="#/modifier_compte">Gestion du compte</a></b>
+	  <b><a href="#/connexion">Se connecter</a></b>
 	</p>
   </div>
   <div ng-show="errors">

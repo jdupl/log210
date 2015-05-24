@@ -32,12 +32,12 @@ exports.getUsers = function(req, res) {
 };
 
 exports.updateUser = function(req, res) {
-  if (req.user._id == req.params.id) {
+  if (req.params.id == req.user._id) {
     User.update({_id: req.params.id}, req.body, function(err, updated) {
       res.status(200).json({message: 'User updated'});
     });
   } else {
-    res.status(401).json({message: 'You cannot modify another user\'s information'});
+    res.status(401).json({message: 'Unauthorized'});
   }
 };
 
