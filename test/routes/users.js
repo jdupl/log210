@@ -227,7 +227,7 @@ describe('/api/users/:id', function() {
           email: 'new@test.com',
           type: 'new-type',
           name: 'new-name',
-          phone: 'new-phone',
+          phone: '123-123-1234',
           password: 'new-password',
           birth_date: updatedDate,
           address: 'new-address'
@@ -265,10 +265,10 @@ describe('/api/users/:id', function() {
           email: 'new@test.com',
           type: 'new-type',
           name: 'new-name',
-          phone: 'new-phone',
+          phone: '123-123-1234',
           password: 'new-password',
           birth_date: updatedDate,
-          address: ['new-address1', 'new-address2', 'new-address3']
+          address: 'new-address'
         };
         request = client(app);
         request
@@ -283,6 +283,45 @@ describe('/api/users/:id', function() {
               .end(function(err, res) {
                 assert.equal(res.status, 401);
                 done();
+              });
+          });
+      });
+    });
+    it('should remove the unknown fields in the payload', function(done) {
+      User.create(data.client_user, function(err, created) {
+        var updatedDate = Date.now();
+        var updated = {
+          _id: 'unknown',
+          email: 'new@test.com',
+          type: 'new-type',
+          name: 'new-name',
+          phone: '123-123-1234',
+          password: 'new-password',
+          birth_date: updatedDate,
+          address: 'new-address'
+        };
+        request = client(app);
+        request
+          .post('/api/login')
+          .send({email: created.email, password: data.client_user.password})
+          .end(function(err, res) {
+            token = res.body.token;
+            request
+              .put('/api/users/' + created._id)
+              .set('Authorization', 'Bearer ' + token)
+              .send(updated)
+              .end(function(err, res) {
+                assert.equal(res.status, 200);
+                User.findOne({_id: created._id}, function(err, user) {
+                  assert.equal(user.email, updated.email);
+                  assert.equal(user.type, updated.type);
+                  assert.equal(user.name, updated.name);
+                  assert.equal(user.phone, updated.phone);
+                  assert.equal(user.password, updated.password);
+                  assert.equal(new Date(user.birth_date).getTime(), new Date(updated.birth_date).getTime());
+                  assert.equal(user.address, updated.address);
+                  done();
+                });
               });
           });
       });

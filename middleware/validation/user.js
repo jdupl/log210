@@ -17,6 +17,7 @@ module.exports = function(req, res, next) {
     if (err) {
       res.status(400).json(err);
     } else {
+      req.body = value;
       next();
     }
   });

@@ -12,9 +12,8 @@ module.exports = function(app) {
   app.post('/api/login/', loginController.getToken);
   app.get('/api/profile/', loginMiddleware.verify, loginController.getProfile);
 
-  app.post('/api/users/', loginMiddleware.verify, usersController.create);
   app.get('/api/users/', loginMiddleware.verify, usersController.getUsers);
-  app.put('/api/users/:id', loginMiddleware.verify, usersController.updateUser);
+  app.put('/api/users/:id', loginMiddleware.verify, userPayloadValidation, usersController.updateUser);
   app.get('/api/users/:id/restaurants/', loginMiddleware.verify, usersController.getRestaurants);
 
   app.get('/api/restaurants/', loginMiddleware.verify, restaurantsController.getRestaurants);
