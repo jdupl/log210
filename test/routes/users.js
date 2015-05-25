@@ -5,6 +5,7 @@ var assert = require('assert');
 var data = require('../utils/data');
 var User = require('../../models/user');
 var Restaurant = require('../../models/restaurant');
+var extend = require('extend');
 
 
 describe('/api/users', function() {
@@ -21,7 +22,7 @@ describe('/api/users', function() {
           });
         });
     });
-    it('should return 400 Bad Request if bad payload', function(done) {
+    it('should return 400 Bad Request if empty payload', function(done) {
       var data = {};
       client(app)
         .post('/api/users')
@@ -30,6 +31,98 @@ describe('/api/users', function() {
           assert.equal(res.status, 400);
           done();
         });
+    });
+    it('should return 400 Bad request if empty name', function(done) {
+      var payload = extend(true, payload, data.client_user);
+      payload.name = '';
+      client(app)
+      .post('/api/users')
+      .send(payload)
+      .end(function(err, res) {
+        assert.equal(res.status, 400);
+        var message = JSON.parse(res.error.text);
+        assert.equal(message.details[0].path, 'name');
+        done();
+      });
+    });
+    it('should return 400 Bad request if bad email', function(done) {
+      var payload = extend(true, payload, data.client_user);
+      payload.email = 'bad email';
+      client(app)
+      .post('/api/users')
+      .send(payload)
+      .end(function(err, res) {
+        assert.equal(res.status, 400);
+        var message = JSON.parse(res.error.text);
+        assert.equal(message.details[0].path, 'email');
+        done();
+      });
+    });
+    it('should return 400 Bad request if empty password', function(done) {
+      var payload = extend(true, payload, data.client_user);
+      payload.password = '';
+      client(app)
+      .post('/api/users')
+      .send(payload)
+      .end(function(err, res) {
+        assert.equal(res.status, 400);
+        var message = JSON.parse(res.error.text);
+        assert.equal(message.details[0].path, 'password');
+        done();
+      });
+    });
+    it('should set type to client if empty type', function(done) {
+      var payload = extend(true, payload, data.client_user);
+      delete payload.type;
+      client(app)
+      .post('/api/users')
+      .send(payload)
+      .end(function(err, res) {
+        assert.equal(res.status, 201);
+        User.findOne(res.body.user._id, function(err, user) {
+          assert.equal(user.type, 'client');
+          done();
+        });
+      });
+    });
+    it('should return 400 Bad request if wrong date format', function(done) {
+      var payload = extend(true, payload, data.client_user);
+      payload.birth_date = 'wrong';
+      client(app)
+      .post('/api/users')
+      .send(payload)
+      .end(function(err, res) {
+        assert.equal(res.status, 400);
+        var message = JSON.parse(res.error.text);
+        assert.equal(message.details[0].path, 'birth_date');
+        done();
+      });
+    });
+    it('should return 400 Bad request if empty address array', function(done) {
+      var payload = extend(true, payload, data.client_user);
+      payload.address = [];
+      client(app)
+      .post('/api/users')
+      .send(payload)
+      .end(function(err, res) {
+        assert.equal(res.status, 400);
+        var message = JSON.parse(res.error.text);
+        assert.equal(message.details[0].path, 'address');
+        done();
+      });
+    });
+    it('should return 400 Bad request if bad phone number', function(done) {
+      var payload = extend(true, payload, data.client_user);
+      payload.phone = '123-------';
+      client(app)
+      .post('/api/users')
+      .send(payload)
+      .end(function(err, res) {
+        assert.equal(res.status, 400);
+        var message = JSON.parse(res.error.text);
+        assert.equal(message.details[0].path, 'phone');
+        done();
+      });
     });
     it('should return a 401 if the user is anonymous and tries to create an account with a type other than client', function(done) {
       client(app)

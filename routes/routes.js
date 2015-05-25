@@ -1,9 +1,14 @@
 var loginMiddleware = require('../middleware/login');
+
+var Joi = require('joi');
+var userPayloadValidation = require('../middleware/validation/user');
+
 var usersController = require('../controllers/users');
 var loginController = require('../controllers/login');
 var restaurantsController = require('../controllers/restaurants');
 
 module.exports = function(app) {
+  app.post('/api/users/', loginMiddleware.verify, userPayloadValidation, usersController.create);
   app.post('/api/login/', loginController.getToken);
   app.get('/api/profile/', loginMiddleware.verify, loginController.getProfile);
 
