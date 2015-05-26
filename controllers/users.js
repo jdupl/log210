@@ -27,7 +27,7 @@ exports.getUsers = function(req, res) {
       res.status(200).json(users);
     });
   } else {
-      res.status(200).json(req.user);
+      res.status(401).json({message: 'Only the administrator can list the users'});
   }
 };
 

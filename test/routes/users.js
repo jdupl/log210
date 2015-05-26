@@ -42,7 +42,7 @@ describe('/api/users', function() {
     });
   });
   describe('GET', function() {
-    it('should get informations about the user', function(done) {
+    it('should return a 401 if the user is not admin', function(done) {
       User.create(data.fake_user, function(err, created) {
         var request = client(app);
         request
@@ -54,14 +54,8 @@ describe('/api/users', function() {
               .get('/api/users/')
               .set('Authorization', 'Bearer ' + token)
               .end(function(err, res) {
-                assert.equal(res.status, 200);
-                assert.equal(res.body.email, data.fake_user.email);
-                assert.equal(res.body.type, data.fake_user.type);
-                assert.equal(res.body.name, data.fake_user.name);
-                assert.equal(res.body.phone, data.fake_user.phone);
-                assert.equal(res.body.password, undefined);
-                assert.equal(new Date(res.body.birth_date).getTime(), new Date(data.fake_user.birth_date).getTime());
-                assert.equal(res.body.address.length, 2);
+                assert.equal(res.status, 401);
+                assert.equal(JSON.parse(res.error.text).message, 'Only the administrator can list the users');
                 done();
               });
           });

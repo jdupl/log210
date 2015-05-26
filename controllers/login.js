@@ -18,3 +18,7 @@ exports.getToken = function(req, res) {
     }
   });
 };
+
+exports.getProfile = function(req, res) {
+  res.status(200).json(req.user);
+};
