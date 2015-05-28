@@ -34,3 +34,9 @@ exports.updateRestaurant = function(req, res) {
     res.status(401).json({message:'You cannot modify a restaurant, you are not a admin'});
   }
 };
+
+exports.getRestaurants = function(req, res) {
+  Restaurant.find(function(err, restaurants) {
+    res.status(200).json(restaurants);
+  });
+};

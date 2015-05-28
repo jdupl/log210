@@ -5,6 +5,7 @@ var data = require('../utils/data');
 var mockery = require('mockery');
 var sinon = require('sinon');
 
+//TODO Remove unecessary tests
 describe('User model', function() {
   describe('insert', function() {
     it('should insert a user in the database', function(done) {
