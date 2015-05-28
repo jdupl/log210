@@ -254,3 +254,27 @@ describe('/api/restaurants', function() {
     });
   });
 });
+describe('/api/restaurants/:id', function() {
+  describe('GET', function() {
+    it('should get the restaurant', function(done) {
+      User.create(data.admin_user, function(err, createdAdmin) {
+        Restaurant.create({name: 'test-restaurant'}, function(err, createdRestaurant) {
+          var request = client(app);
+          request
+          .post('/api/login')
+          .send({email: data.admin_user.email, password: data.admin_user.password})
+          .end(function(err, res) {
+            request
+            .get('/api/restaurants/' + createdRestaurant._id)
+            .set('Authorization', 'Bearer ' + res.body.token)
+            .end(function(err, res) {
+              assert.equal(res.status, 200);
+              assert.equal(res.body.name, 'test-restaurant');
+              done();
+            });
+          });
+        });
+      });
+    });
+  });
+});

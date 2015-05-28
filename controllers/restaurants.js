@@ -44,3 +44,9 @@ exports.getRestaurants = function(req, res) {
     res.status(401).json({message: 'Unauthorized. You are not an admin user'});
   }
 };
+
+exports.getRestaurant = function(req, res) {
+  Restaurant.findOne({_id: req.params.id}, function(err, restaurant) {
+    res.status(200).json(restaurant);
+  });
+};
