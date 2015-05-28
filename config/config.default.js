@@ -12,7 +12,6 @@ module.exports = {
     ADMIN: 'admin',
     CLIENT: 'client',
     ANONYMOUS: 'anonymous',
-    CONTRACTOR: 'contractor',
     RESTAURATEUR: 'restaurateur'
   }
 };
