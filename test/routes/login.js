@@ -71,7 +71,7 @@ describe('/api/profile/', function() {
                 assert.equal(res.body.phone, data.fake_user.phone);
                 assert.equal(res.body.password, undefined);
                 assert.equal(new Date(res.body.birth_date).getTime(), new Date(data.fake_user.birth_date).getTime());
-                assert.equal(res.body.address.length, 2);
+                assert.equal(res.body.address, 'test-address');
                 done();
               });
           });

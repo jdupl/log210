@@ -136,7 +136,7 @@ describe('/api/users/:id', function() {
           phone: 'new-phone',
           password: 'new-password',
           birth_date: updatedDate,
-          address: ['new-address1', 'new-address2', 'new-address3']
+          address: 'new-address'
         };
         request = client(app);
         request
@@ -157,7 +157,7 @@ describe('/api/users/:id', function() {
                   assert.equal(user.phone, updated.phone);
                   assert.equal(user.password, updated.password);
                   assert.equal(new Date(user.birth_date).getTime(), new Date(updated.birth_date).getTime());
-                  assert.equal(user.address.length, 3);
+                  assert.equal(user.address, 'new-address');
                   done();
                 });
               });
