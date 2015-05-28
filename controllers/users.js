@@ -22,10 +22,17 @@ exports.create = function(req, res) {
 };
 
 exports.getUsers = function(req, res) {
+  var type = req.query.type;
   if(req.user.type === config.types.ADMIN) {
-    User.find(function(err, users) {
-      res.status(200).json(users);
-    });
+    if (type) {
+      User.find({type: type}, function(err, users) {
+        res.status(200).json(users);
+      });
+    } else {
+      User.find(function(err, users) {
+        res.status(200).json(users);
+      });
+    }
   } else {
       res.status(401).json({message: 'Only the administrator can list the users'});
   }

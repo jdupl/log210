@@ -36,3 +36,13 @@ exports.contractor_user = {
   address: ['test-address', 'test-address2'],
   birth_date: fake_date
 };
+exports.restaurateur_user = {
+  email: 'contractor@test.com',
+  password: 'test-pass',
+  type: 'restaurateur',
+  name: 'test-name',
+  phone: '123-123-1234',
+  address: ['test-address', 'test-address2'],
+  birth_date: fake_date
+};
+//TODO Refactor with extend library

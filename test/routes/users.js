@@ -100,6 +100,28 @@ describe('/api/users', function() {
         });
       });
     });
+    it('should return all the users with the restaurateur type', function(done) {
+      User.create(data.fake_user, function(err, createdUser) {
+        User.create(data.admin_user, function(err, createdAdmin) {
+          User.create(data.restaurateur_user, function(err, createdRestaurateur) {
+            var request = client(app);
+            request.post('/api/login')
+              .send({email: createdAdmin.email, password: data.admin_user.password})
+              .end(function(err, res) {
+                request
+                  .get('/api/users?type=restaurateur')
+                  .set('Authorization', 'Bearer ' + res.body.token)
+                  .end(function(err, res) {
+                    assert.equal(res.status, 200);
+                    assert.equal(res.body.length, 1);
+                    assert.equal(res.body[0].type, 'restaurateur');
+                    done();
+                  });
+              });
+          });
+        });
+      });
+    });
   });
 });
 describe('/api/users/:id', function() {
