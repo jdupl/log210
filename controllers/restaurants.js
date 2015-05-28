@@ -36,7 +36,11 @@ exports.updateRestaurant = function(req, res) {
 };
 
 exports.getRestaurants = function(req, res) {
-  Restaurant.find(function(err, restaurants) {
-    res.status(200).json(restaurants);
-  });
+  if (req.user.type == config.types.ADMIN) {
+    Restaurant.find(function(err, restaurants) {
+      res.status(200).json(restaurants);
+    });
+  } else {
+    res.status(401).json({message: 'Unauthorized. You are not an admin user'});
+  }
 };

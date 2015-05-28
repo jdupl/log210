@@ -232,5 +232,25 @@ describe('/api/restaurants', function() {
         });
       });
     });
+    it('should get a 401 if the loggged user is not an admin', function(done) {
+      User.create(data.client_user, function(err, createdClient) {
+        Restaurant.create({name: 'test-restaurant'}, function(err, createdRestaurant) {
+          var request = client(app);
+          request
+          .post('/api/login')
+          .send({email: data.client_user.email, password: data.client_user.password})
+          .end(function(err, res) {
+            request
+            .get('/api/restaurants/')
+            .set('Authorization', 'Bearer ' + res.body.token)
+            .end(function(err, res) {
+              assert.equal(res.status, 401);
+              assert.equal(res.body.message, 'Unauthorized. You are not an admin user');
+              done();
+            });
+          });
+        });
+      });
+    });
   });
 });
