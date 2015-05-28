@@ -8,12 +8,12 @@ var Restaurant = require('../../models/restaurant');
 describe('/api/restaurants/', function() {
   describe('POST', function() {
     it('should create a restaurant', function(done) {
-      User.create(data.contractor_user, function(err, createdContractor) {
+      User.create(data.admin_user, function(err, createdAdmin) {
         User.create(data.restaurateur_user, function(err, createdRestaurateur) {
           var request = client(app);
           request
             .post('/api/login')
-            .send({email: data.contractor_user.email, password: data.contractor_user.password})
+            .send({email: data.admin_user.email, password: data.admin_user.password})
             .end(function(err, res) {
               var test_restaurant = {
                 name: 'test-restaurant',
@@ -35,7 +35,7 @@ describe('/api/restaurants/', function() {
         });
       });
     });
-    it('should not be able to create a restaurateur if the user is not logged as a contractor', function(done) {
+    it('should not be able to create a restaurateur if the user is not logged as a admin', function(done) {
       User.create(data.client_user, function(err, createdClient) {
         User.create(data.restaurateur_user, function(err, createdRestaurateur) {
           var request = client(app);
@@ -53,7 +53,7 @@ describe('/api/restaurants/', function() {
                 .send(test_restaurant)
                 .end(function(err, res) {
                   assert.equal(res.status, 401);
-                  assert.equal(res.body.message, 'You cannot create a restaurant, you are not a contractor');
+                  assert.equal(res.body.message, 'You cannot create a restaurant, you are not a admin');
                   done();
                 });
             });
@@ -61,12 +61,12 @@ describe('/api/restaurants/', function() {
       });
     });
     it('should create a restaurant with no restaurateur and notify the user', function(done) {
-      User.create(data.contractor_user, function(err, createdContractor) {
+      User.create(data.admin_user, function(err, createdAdmin) {
         User.create(data.restaurateur_user, function(err, createdRestaurateur) {
           var request = client(app);
           request
           .post('/api/login')
-          .send({email: data.contractor_user.email, password: data.contractor_user.password})
+          .send({email: data.admin_user.email, password: data.admin_user.password})
           .end(function(err, res) {
             var test_restaurant = {
               name: 'test-restaurant'
@@ -92,7 +92,7 @@ describe('/api/restaurants/', function() {
 describe('/api/restaurants/:id', function() {
   describe('DELETE', function() {
     it('should delete a restaurant', function(done) {
-      User.create(data.contractor_user, function(err, createdContractor) {
+      User.create(data.admin_user, function(err, createdAdmin) {
         User.create(data.restaurateur_user, function(err, createdRestaurateur) {
           var test_restaurant = {
             name: 'test-restaurant',
@@ -102,7 +102,7 @@ describe('/api/restaurants/:id', function() {
             var request = client(app);
             request
               .post('/api/login')
-              .send({email: data.contractor_user.email, password: data.contractor_user.password})
+              .send({email: data.admin_user.email, password: data.admin_user.password})
               .end(function(err, res) {
                 request
                 .delete('/api/restaurants/' + createdRestaurant._id)
@@ -116,8 +116,8 @@ describe('/api/restaurants/:id', function() {
         });
       });
     });
-    it('should not delete a restaurant if the user is not a contractor', function(done) {
-      User.create(data.client_user, function(err, createdContractor) {
+    it('should not delete a restaurant if the user is not a admin', function(done) {
+      User.create(data.client_user, function(err, createdAdmin) {
         User.create(data.restaurateur_user, function(err, createdRestaurateur) {
           var test_restaurant = {
             name: 'test-restaurant',
@@ -125,6 +125,7 @@ describe('/api/restaurants/:id', function() {
           };
           Restaurant.create(test_restaurant, function(err, createdRestaurant) {
             var request = client(app);
+            //TODO Create a login method in the utils
             request
               .post('/api/login')
               .send({email: data.client_user.email, password: data.client_user.password})
@@ -134,7 +135,7 @@ describe('/api/restaurants/:id', function() {
                   .set('Authorization', 'Bearer ' + res.body.token)
                   .end(function(err, res) {
                     assert.equal(res.status, 401);
-                    assert.equal(res.body.message, 'You cannot create a restaurant, you are not a contractor');
+                    assert.equal(res.body.message, 'You cannot create a restaurant, you are not a admin');
                     done();
                   });
               });
@@ -145,7 +146,7 @@ describe('/api/restaurants/:id', function() {
   });
   describe('PUT', function() {
     it('should modify the informations of the restaurant', function(done) {
-      User.create(data.contractor_user, function(err, createdContractor) {
+      User.create(data.admin_user, function(err, createdAdmin) {
         User.create(data.restaurateur_user, function(err, createdRestaurateur) {
           var test_restaurant = {
             name: 'test-restaurant',
@@ -159,7 +160,7 @@ describe('/api/restaurants/:id', function() {
             };
             request
             .post('/api/login')
-            .send({email: data.contractor_user.email, password: data.contractor_user.password})
+            .send({email: data.admin_user.email, password: data.admin_user.password})
             .end(function(err, res) {
               request
               .put('/api/restaurants/' + createdRestaurant._id)
@@ -175,8 +176,8 @@ describe('/api/restaurants/:id', function() {
         });
       });
     });
-    it('should not modify the informations of the restaurant if the user is not a contractor', function(done) {
-      User.create(data.client_user, function(err, createdContractor) {
+    it('should not modify the informations of the restaurant if the user is not a admin', function(done) {
+      User.create(data.client_user, function(err, createdAdmin) {
         User.create(data.restaurateur_user, function(err, createdRestaurateur) {
           var test_restaurant = {
             name: 'test-restaurant',
@@ -198,9 +199,78 @@ describe('/api/restaurants/:id', function() {
               .set('Authorization', 'Bearer ' + res.body.token)
               .end(function(err, res) {
                 assert.equal(res.status, 401);
-                assert.equal(res.body.message, 'You cannot modify a restaurant, you are not a contractor');
+                assert.equal(res.body.message, 'You cannot modify a restaurant, you are not a admin');
                 done();
               });
+            });
+          });
+        });
+      });
+    });
+  });
+});
+describe('/api/restaurants', function() {
+  describe('GET', function() {
+    it('should return all the restaurants', function(done) {
+      User.create(data.admin_user, function(err, createdAdmin) {
+        Restaurant.create({name: 'test-restaurant'}, function(err, createdRestaurant) {
+          var request = client(app);
+          request
+          .post('/api/login')
+          .send({email: data.admin_user.email, password: data.admin_user.password})
+          .end(function(err, res) {
+            request
+            .get('/api/restaurants/')
+            .set('Authorization', 'Bearer ' + res.body.token)
+            .end(function(err, res) {
+              assert.equal(res.status, 200);
+              assert.equal(res.body.length, 1);
+              assert.equal(res.body[0].name, 'test-restaurant');
+              done();
+            });
+          });
+        });
+      });
+    });
+    it('should get a 401 if the loggged user is not an admin', function(done) {
+      User.create(data.client_user, function(err, createdClient) {
+        Restaurant.create({name: 'test-restaurant'}, function(err, createdRestaurant) {
+          var request = client(app);
+          request
+          .post('/api/login')
+          .send({email: data.client_user.email, password: data.client_user.password})
+          .end(function(err, res) {
+            request
+            .get('/api/restaurants/')
+            .set('Authorization', 'Bearer ' + res.body.token)
+            .end(function(err, res) {
+              assert.equal(res.status, 401);
+              assert.equal(res.body.message, 'Unauthorized. You are not an admin user');
+              done();
+            });
+          });
+        });
+      });
+    });
+  });
+});
+describe('/api/restaurants/:id', function() {
+  describe('GET', function() {
+    it('should get the restaurant', function(done) {
+      User.create(data.admin_user, function(err, createdAdmin) {
+        Restaurant.create({name: 'test-restaurant'}, function(err, createdRestaurant) {
+          var request = client(app);
+          request
+          .post('/api/login')
+          .send({email: data.admin_user.email, password: data.admin_user.password})
+          .end(function(err, res) {
+            request
+            .get('/api/restaurants/' + createdRestaurant._id)
+            .set('Authorization', 'Bearer ' + res.body.token)
+            .end(function(err, res) {
+              assert.equal(res.status, 200);
+              assert.equal(res.body.name, 'test-restaurant');
+              done();
             });
           });
         });

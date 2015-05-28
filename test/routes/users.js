@@ -4,6 +4,7 @@ var client = require('supertest');
 var assert = require('assert');
 var data = require('../utils/data');
 var User = require('../../models/user');
+var Restaurant = require('../../models/restaurant');
 
 
 describe('/api/users', function() {
@@ -42,7 +43,7 @@ describe('/api/users', function() {
     });
   });
   describe('GET', function() {
-    it('should get informations about the user', function(done) {
+    it('should return a 401 if the user is not admin', function(done) {
       User.create(data.fake_user, function(err, created) {
         var request = client(app);
         request
@@ -54,14 +55,8 @@ describe('/api/users', function() {
               .get('/api/users/')
               .set('Authorization', 'Bearer ' + token)
               .end(function(err, res) {
-                assert.equal(res.status, 200);
-                assert.equal(res.body.email, data.fake_user.email);
-                assert.equal(res.body.type, data.fake_user.type);
-                assert.equal(res.body.name, data.fake_user.name);
-                assert.equal(res.body.phone, data.fake_user.phone);
-                assert.equal(res.body.password, undefined);
-                assert.equal(new Date(res.body.birth_date).getTime(), new Date(data.fake_user.birth_date).getTime());
-                assert.equal(res.body.address.length, 2);
+                assert.equal(res.status, 401);
+                assert.equal(JSON.parse(res.error.text).message, 'Only the administrator can list the users');
                 done();
               });
           });
@@ -106,6 +101,28 @@ describe('/api/users', function() {
         });
       });
     });
+    it('should return all the users with the restaurateur type', function(done) {
+      User.create(data.fake_user, function(err, createdUser) {
+        User.create(data.admin_user, function(err, createdAdmin) {
+          User.create(data.restaurateur_user, function(err, createdRestaurateur) {
+            var request = client(app);
+            request.post('/api/login')
+              .send({email: createdAdmin.email, password: data.admin_user.password})
+              .end(function(err, res) {
+                request
+                  .get('/api/users?type=restaurateur')
+                  .set('Authorization', 'Bearer ' + res.body.token)
+                  .end(function(err, res) {
+                    assert.equal(res.status, 200);
+                    assert.equal(res.body.length, 1);
+                    assert.equal(res.body[0].type, 'restaurateur');
+                    done();
+                  });
+              });
+          });
+        });
+      });
+    });
   });
 });
 describe('/api/users/:id', function() {
@@ -120,7 +137,7 @@ describe('/api/users/:id', function() {
           phone: 'new-phone',
           password: 'new-password',
           birth_date: updatedDate,
-          address: ['new-address1', 'new-address2', 'new-address3']
+          address: 'new-address'
         };
         request = client(app);
         request
@@ -141,7 +158,7 @@ describe('/api/users/:id', function() {
                   assert.equal(user.phone, updated.phone);
                   assert.equal(user.password, updated.password);
                   assert.equal(new Date(user.birth_date).getTime(), new Date(updated.birth_date).getTime());
-                  assert.equal(user.address.length, 3);
+                  assert.equal(user.address, 'new-address');
                   done();
                 });
               });
@@ -175,6 +192,34 @@ describe('/api/users/:id', function() {
                 done();
               });
           });
+      });
+    });
+  });
+});
+describe('/api/users/:id/restaurants', function() {
+  describe('GET', function(done) {
+    it('should return the restaurants corresponding to the owner of this restaurant', function(done) {
+      User.create(data.restaurateur_user, function(err, createdRestaurateur) {
+        var test_restaurant = {
+          name: 'test-restaurant',
+          restaurateur: createdRestaurateur._id
+        };
+        Restaurant.create(test_restaurant, function(err, createdRestaurant) {
+          var request = client(app);
+          request
+            .post('/api/login')
+            .send({email: createdRestaurateur.email, password: data.restaurateur_user.password})
+            .end(function(err, res) {
+              var token = res.body.token;
+              request
+                .get('/api/users/' + createdRestaurateur._id + '/restaurants')
+                .set('Authorization', 'Bearer ' + token)
+                .end(function(err, res) {
+                  assert.equal(res.status, 200);
+                  done();
+                });
+            });
+        });
       });
     });
   });

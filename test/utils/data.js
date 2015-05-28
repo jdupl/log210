@@ -6,7 +6,7 @@ exports.fake_user = {
   type: 'test-type',
   name: 'test-name',
   phone: '123-123-1234',
-  address: ['test-address', 'test-address2'],
+  address: 'test-address',
   birth_date: fake_date
 };
 exports.admin_user = {
@@ -15,7 +15,7 @@ exports.admin_user = {
   type: 'admin',
   name: 'admin-name',
   phone: '123-123-1234',
-  address: ['test-address', 'test-address2'],
+  address: 'test-address',
   birth_date: fake_date
 };
 exports.client_user = {
@@ -24,15 +24,16 @@ exports.client_user = {
   type: 'client',
   name: 'test-name',
   phone: '123-123-1234',
-  address: ['test-address', 'test-address2'],
+  address: 'test-address',
   birth_date: fake_date
 };
-exports.contractor_user = {
-  email: 'contractor@test.com',
+exports.restaurateur_user = {
+  email: 'restaurateur@test.com',
   password: 'test-pass',
-  type: 'contractor',
+  type: 'restaurateur',
   name: 'test-name',
   phone: '123-123-1234',
-  address: ['test-address', 'test-address2'],
+  address: 'test-address',
   birth_date: fake_date
 };
+//TODO Refactor with extend library

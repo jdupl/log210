@@ -1,4 +1,5 @@
 var User = require('../models/user');
+var Restaurant = require('../models/restaurant');
 var config = require('../config/config');
 
 exports.create = function(req, res) {
@@ -22,12 +23,19 @@ exports.create = function(req, res) {
 };
 
 exports.getUsers = function(req, res) {
+  var type = req.query.type;
   if(req.user.type === config.types.ADMIN) {
-    User.find(function(err, users) {
-      res.status(200).json(users);
-    });
+    if (type) {
+      User.find({type: type}, function(err, users) {
+        res.status(200).json(users);
+      });
+    } else {
+      User.find(function(err, users) {
+        res.status(200).json(users);
+      });
+    }
   } else {
-      res.status(200).json(req.user);
+      res.status(401).json({message: 'Only the administrator can list the users'});
   }
 };
 
@@ -39,6 +47,12 @@ exports.updateUser = function(req, res) {
   } else {
     res.status(401).json({message: 'Unauthorized'});
   }
+};
+
+exports.getRestaurants = function(req, res) {
+  Restaurant.find({restaurateur: req.params.id}, function(err, restaurant) {
+    res.status(200).json(restaurant);
+  });
 };
 
 function validateBody(body) {

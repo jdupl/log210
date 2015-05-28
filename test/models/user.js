@@ -5,13 +5,14 @@ var data = require('../utils/data');
 var mockery = require('mockery');
 var sinon = require('sinon');
 
+//TODO Remove unecessary tests
 describe('User model', function() {
   describe('insert', function() {
     it('should insert a user in the database', function(done) {
       User.create(data.fake_user, function(err, created) {
         assert.notEqual(undefined, created);
         assert.equal(data.fake_date, created.birth_date.getTime());
-        assert.equal(2, created.address.length);
+        assert.equal(created.address, 'test-address');
         done();
       });
     });
@@ -81,7 +82,7 @@ describe('User model', function() {
         User.findOne({email: data.fake_user.email}, function(err, user) {
           assert.notEqual(undefined, user);
           assert.equal(data.fake_date, user.birth_date.getTime());
-          assert.equal(2, user.address.length);
+          assert.equal(user.address, 'test-address');
           done();
         });
       });

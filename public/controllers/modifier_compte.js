@@ -22,7 +22,7 @@ controllers.controller('ModifierCompte', function($scope, $http) {
 
   $scope.retry = function() {
     $scope.success = false;
-    $http.get('/api/users', {headers: {'Authorization' : 'Bearer ' + $scope.token}})
+    $http.get('/api/profile', {headers: {'Authorization' : 'Bearer ' + $scope.token}})
       .success(function(data) {
         $scope.user = data;
       })

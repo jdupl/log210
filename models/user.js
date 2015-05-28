@@ -9,7 +9,7 @@ var userSchema = new Schema({
   type: {type: String},
   name: {type: String},
   phone: {type: String},
-  address: [String],
+  address: String,
   birth_date: { type: Date, default: Date.now }
 });
 
