@@ -4,6 +4,7 @@ var client = require('supertest');
 var assert = require('assert');
 var data = require('../utils/data');
 var User = require('../../models/user');
+var Restaurant = require('../../models/restaurant');
 
 
 describe('/api/users', function() {
@@ -191,6 +192,34 @@ describe('/api/users/:id', function() {
                 done();
               });
           });
+      });
+    });
+  });
+});
+describe('/api/users/:id/restaurants', function() {
+  describe('GET', function(done) {
+    it('should return the restaurants corresponding to the owner of this restaurant', function(done) {
+      User.create(data.restaurateur_user, function(err, createdRestaurateur) {
+        var test_restaurant = {
+          name: 'test-restaurant',
+          restaurateur: createdRestaurateur._id
+        };
+        Restaurant.create(test_restaurant, function(err, createdRestaurant) {
+          var request = client(app);
+          request
+            .post('/api/login')
+            .send({email: createdRestaurateur.email, password: data.restaurateur_user.password})
+            .end(function(err, res) {
+              var token = res.body.token;
+              request
+                .get('/api/users/' + createdRestaurateur._id + '/restaurants')
+                .set('Authorization', 'Bearer ' + token)
+                .end(function(err, res) {
+                  assert.equal(res.status, 200);
+                  done();
+                });
+            });
+        });
       });
     });
   });

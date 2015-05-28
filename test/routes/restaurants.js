@@ -125,6 +125,7 @@ describe('/api/restaurants/:id', function() {
           };
           Restaurant.create(test_restaurant, function(err, createdRestaurant) {
             var request = client(app);
+            //TODO Create a login method in the utils
             request
               .post('/api/login')
               .send({email: data.client_user.email, password: data.client_user.password})

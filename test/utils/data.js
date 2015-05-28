@@ -28,7 +28,7 @@ exports.client_user = {
   birth_date: fake_date
 };
 exports.restaurateur_user = {
-  email: 'contractor@test.com',
+  email: 'restaurateur@test.com',
   password: 'test-pass',
   type: 'restaurateur',
   name: 'test-name',

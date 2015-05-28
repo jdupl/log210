@@ -1,4 +1,5 @@
 var User = require('../models/user');
+var Restaurant = require('../models/restaurant');
 var config = require('../config/config');
 
 exports.create = function(req, res) {
@@ -46,6 +47,12 @@ exports.updateUser = function(req, res) {
   } else {
     res.status(401).json({message: 'Unauthorized'});
   }
+};
+
+exports.getRestaurants = function(req, res) {
+  Restaurant.find({restaurateur: req.params.id}, function(err, restaurant) {
+    res.status(200).json(restaurant);
+  });
 };
 
 function validateBody(body) {
