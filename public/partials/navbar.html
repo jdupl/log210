@@ -21,6 +21,12 @@
     <ul ng-if="loggedin" class="nav navbar-nav navbar-right">
       <li ng-class="{ active: isActive('/modifier_compte') }"><a href="#/modifier_compte">Gestion du compte</a></li>
     </ul>
+    <ul ng-if="showModifierRestaurants" class="nav navbar-nav navbar-right">
+      <li ng-class="{ active: isActive('/modifier_restaurants') }"><a href="#/modifier_restaurants">Modifier les restaurants</a></li>
+    </ul>
+    <ul ng-if="showModifierRestaurateurs" class="nav navbar-nav navbar-right">
+      <li ng-class="{ active: isActive('/modifier_restaurateurs') }"><a href="#/modifier_restaurateurs">Modifier les restaurateurs</a></li>
+    </ul>
     <ul ng-if="loggedin" class="nav navbar-nav navbar-right">
       <li><a href="#/logout">Se déconnecter</a></li>
     </ul>
