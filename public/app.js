@@ -7,13 +7,20 @@ angular.module('app', [
   'app.controllers.Navbar',
   'app.controllers.Inscrire',
   'app.controllers.ModifierCompte',
+  'app.controllers.ModifierRestaurants',
+  'app.controllers.ModifierRestaurateurs',
   'app.controllers.Logout',
 ]).config(['$routeProvider', '$httpProvider', function($routeProvider) {
     $routeProvider.when('/', {templateUrl: 'partials/index.html', controller: 'Index'});
+
     $routeProvider.when('/inscrire', {templateUrl: 'partials/inscrire.html', controller: 'Inscrire'});
     $routeProvider.when('/connexion', {templateUrl: 'partials/connexion.html', controller: 'Connexion'});
-    $routeProvider.when('/modifier_compte', {templateUrl: 'partials/modifier_compte.html', controller: 'ModifierCompte'});
     $routeProvider.when('/logout', {templateUrl: 'partials/logout.html', controller: 'Logout'});
+
+    $routeProvider.when('/modifier_compte', {templateUrl: 'partials/modifier_compte.html', controller: 'ModifierCompte'});
+    $routeProvider.when('/modifier_restaurants', {templateUrl: 'partials/modifier_restaurants.html', controller: 'ModifierRestaurants'});
+    $routeProvider.when('/modifier_restaurateurs', {templateUrl: 'partials/modifier_restaurateurs.html', controller: 'ModifierRestaurateurs'});
+
     $routeProvider.otherwise({redirectTo: '/'});
   }]).factory('Auth', function($localStorage, $rootScope, $http) {
       return {

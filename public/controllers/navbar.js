@@ -1,13 +1,30 @@
 var controllers = angular.module('app.controllers.Navbar', ['ui.date']);
 
 controllers.controller('Navbar', function($scope, $rootScope, Auth, $location) {
+
+  var types = {
+    ADMIN: 'admin',
+    CLIENT: 'client',
+    ANONYMOUS: 'anonymous',
+    RESTAURATEUR: 'restaurateur'
+  };
+
   $scope.isActive = function(url) {
     return $location.path() === url;
   };
 
   $scope.refresh = function() {
-    $scope.loggedin = Auth.isLoggedIn();
     $scope.url = "partials/navbar.html";
+
+    $scope.loggedin = Auth.isLoggedIn();
+    var userType = Auth.getUserType();
+
+    var permsModifierRestaurants = [types.ADMIN, types.RESTAURATEUR];
+    var permsModifierRestaurateurs = [types.ADMIN];
+
+    $scope.showModifierRestaurants = permsModifierRestaurants.indexOf(userType) !== -1;
+    $scope.showModifierRestaurateurs = permsModifierRestaurateurs.indexOf(userType) !== -1;
+
     $rootScope.token = $scope.loggedin;
   }
 
