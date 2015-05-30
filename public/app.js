@@ -15,20 +15,26 @@ angular.module('app', [
     $routeProvider.when('/modifier_compte', {templateUrl: 'partials/modifier_compte.html', controller: 'ModifierCompte'});
     $routeProvider.when('/logout', {templateUrl: 'partials/logout.html', controller: 'Logout'});
     $routeProvider.otherwise({redirectTo: '/'});
-  }]).factory('Auth', function($localStorage, $rootScope) {
-    var token;
+  }]).factory('Auth', function($localStorage, $rootScope, $http) {
       return {
-        setToken : function(aToken) {
-            $localStorage.token = aToken;
-            $rootScope.$broadcast('login');
+        setToken : function(token) {
+            $http.get('/api/profile', {headers: {'Authorization' : 'Bearer ' + token}})
+              .success(function(data) {
+                $localStorage.token = token;
+                $localStorage.userType = data.type;
+                $rootScope.$broadcast('login');
+              })
         },
         isLoggedIn : function() {
-          token = $localStorage.token;
+          var token = $localStorage.token;
           return (token) ? token : false;
         },
         logout : function() {
           $localStorage.$reset();
           $rootScope.$broadcast('login');
+        },
+        getUserType : function() {
+          return $localStorage.userType;
         }
       }
     });
