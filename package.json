@@ -9,6 +9,7 @@
     "grunt-contrib-jshint": "^0.11.2",
     "grunt-contrib-watch": "^0.6.1",
     "grunt-env": "^0.4.4",
+    "grunt-execute": "^0.2.2",
     "grunt-mocha-istanbul": "^2.4.0",
     "grunt-mocha-test": "^0.12.7",
     "grunt-nodemon": "^0.4.0",
