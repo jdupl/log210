@@ -6,9 +6,9 @@ module.exports = function(req, res, next) {
     email: Joi.string().email().required(),
     password: Joi.string().required(),
     type: Joi.string(),
-    address: Joi.string().required(),
-    birth_date: Joi.date().required(),
-    phone: Joi.string().regex(/\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/).required()
+    address: Joi.any(),
+    birth_date: Joi.any(),
+    phone: Joi.any()
   };
   var options = {
     stripUnknown: true

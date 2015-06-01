@@ -85,42 +85,36 @@ describe('/api/users', function() {
         });
       });
     });
-    it('should return 400 Bad request if wrong date format', function(done) {
+    it('should return 201 even if empty date', function(done) {
       var payload = extend(true, payload, data.client_user);
-      payload.birth_date = 'wrong';
+      payload.birth_date = '';
       client(app)
       .post('/api/users')
       .send(payload)
       .end(function(err, res) {
-        assert.equal(res.status, 400);
-        var message = JSON.parse(res.error.text);
-        assert.equal(message.details[0].path, 'birth_date');
+        assert.equal(res.status, 201);
         done();
       });
     });
-    it('should return 400 Bad request if empty address array', function(done) {
+    it('should return 201 if empty address', function(done) {
       var payload = extend(true, payload, data.client_user);
       payload.address = [];
       client(app)
       .post('/api/users')
       .send(payload)
       .end(function(err, res) {
-        assert.equal(res.status, 400);
-        var message = JSON.parse(res.error.text);
-        assert.equal(message.details[0].path, 'address');
+        assert.equal(res.status, 201);
         done();
       });
     });
-    it('should return 400 Bad request if bad phone number', function(done) {
+    it('should return 201 even if bad phone number', function(done) {
       var payload = extend(true, payload, data.client_user);
       payload.phone = '123-------';
       client(app)
       .post('/api/users')
       .send(payload)
       .end(function(err, res) {
-        assert.equal(res.status, 400);
-        var message = JSON.parse(res.error.text);
-        assert.equal(message.details[0].path, 'phone');
+        assert.equal(res.status, 201);
         done();
       });
     });
