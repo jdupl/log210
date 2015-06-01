@@ -38,12 +38,17 @@ module.exports = function(grunt) {
     },
     jshint: {
       all: ['Gruntfile.js', 'test/**/*.js']
+    },
+    execute: {
+      target: {
+        src: ['scripts/insert-admin.js']
+      }
     }
   });
   grunt.registerTask('test', ['env:test', 'mochaTest']);
   grunt.registerTask('coverage', ['env:test', 'mocha_istanbul:coverage']);
   grunt.registerTask('watch-test', ['watch:test']);
   grunt.registerTask('lint', ['jshint']);
-  grunt.registerTask('serve', ['env:dev', 'nodemon']);
+  grunt.registerTask('serve', ['env:dev', 'execute', 'nodemon']);
   grunt.registerTask('default', ['env:test', 'mocha_istanbul:coverage', 'env:dev', 'nodemon']);
 };

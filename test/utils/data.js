@@ -10,8 +10,8 @@ exports.fake_user = {
   birth_date: fake_date
 };
 exports.admin_user = {
-  email: 'admin@test.com',
-  password: 'admin-pass',
+  email: 'admin@admin.com',
+  password: 'admin',
   type: 'admin',
   name: 'admin-name',
   phone: '123-123-1234',
