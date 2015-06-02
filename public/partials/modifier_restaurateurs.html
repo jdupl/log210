@@ -2,4 +2,49 @@
   <div class="page-header">
     <h1>Modifier les restaurateurs</h1>
   </div>
+  <div class="row">
+    <button type="button" class="btn btn-default" ng-click="showAddForm = true" ng-show="!showAddForm">Ajouter des restaurateurs</button>
+    <button type="button" class="btn btn-default" ng-click="showAddForm = false" ng-show="showAddForm">Arrêter l'ajout de restaurateurs</button>
+  </div>
+
+  <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
+
+  <div ng-show="showAddForm">
+    <form class="form-horizontal" ng-model="user" name="addRestaurateur" ng-submit="submitRestaurateur()" novalidate>
+      <div class="form-group">
+        <label for="user.name" class="col-sm-4 col-md-2 control-label">Nom</label>
+        <div class="col-sm-4">
+          <input type="text" name="name" id="user.name" ng-model="user.name" class="form-control" placeholder="Nom">
+        </div>
+      </div>
+       <div class="form-group">
+        <label for="user.email" class="col-sm-4 col-md-2 control-label">Courriel</label>
+        <div class="col-md-4">
+          <input name="email" id="user.email" ng-model="user.email" class="form-control" placeholder="Courriel">
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="user.password" class="col-sm-2 control-label">Mot de passe</label>
+        <div class="col-md-4">
+          <input type="password" name="password" ng-model="user.password" class="form-control" placeholder="Mot de passe">
+        <p></p>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="user.passwordConfirm" class="col-sm-2 control-label">Confirmation du mot de passe</label>
+        <div class="col-sm-4">
+          <input type="password" name="passwordConfirm" ng-model="user.passwordConfirm" class="form-control"
+            placeholder="Mot de passe">
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+          <button type="submit" value="addRestaurateur" class="btn btn-default">Ajouter ce restaurateur</button>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div ng-show="!showAddForm" id="listeRestaurateurs" >
+    <p>ici la liste</p>
+  </div>
 <div>
