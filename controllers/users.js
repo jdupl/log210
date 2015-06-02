@@ -9,16 +9,12 @@ exports.create = function(req, res) {
     payload.type = config.types.CLIENT;
   }
 
-  if (validateBody(payload)) {
-    if (req.user.type == config.types.ANONYMOUS && payload.type != config.types.CLIENT) {
-      res.status(401).json({message: 'You cannot create a user of type ' + payload.type + ', you are a visitor'});
-    } else {
-      User.create(payload, function(err, created) {
-        res.status(201).json({user: {_id: created._id}});
-      });
-    }
+  if (req.user.type == config.types.ANONYMOUS && payload.type != config.types.CLIENT) {
+    res.status(401).json({message: 'You cannot create a user of type ' + payload.type + ', you are a visitor'});
   } else {
-    res.status(400).json({'message': 'Invalid payload'});
+    User.create(payload, function(err, created) {
+      res.status(201).json({user: {_id: created._id}});
+    });
   }
 };
 

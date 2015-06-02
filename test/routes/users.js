@@ -5,6 +5,7 @@ var assert = require('assert');
 var data = require('../utils/data');
 var User = require('../../models/user');
 var Restaurant = require('../../models/restaurant');
+var extend = require('extend');
 
 
 describe('/api/users', function() {
@@ -21,7 +22,7 @@ describe('/api/users', function() {
           });
         });
     });
-    it('should return 400 Bad Request if bad payload', function(done) {
+    it('should return 400 Bad Request if empty payload', function(done) {
       var data = {};
       client(app)
         .post('/api/users')
@@ -30,6 +31,92 @@ describe('/api/users', function() {
           assert.equal(res.status, 400);
           done();
         });
+    });
+    it('should return 400 Bad request if empty name', function(done) {
+      var payload = extend(true, payload, data.client_user);
+      payload.name = '';
+      client(app)
+      .post('/api/users')
+      .send(payload)
+      .end(function(err, res) {
+        assert.equal(res.status, 400);
+        var message = JSON.parse(res.error.text);
+        assert.equal(message.details[0].path, 'name');
+        done();
+      });
+    });
+    it('should return 400 Bad request if bad email', function(done) {
+      var payload = extend(true, payload, data.client_user);
+      payload.email = 'bad email';
+      client(app)
+      .post('/api/users')
+      .send(payload)
+      .end(function(err, res) {
+        assert.equal(res.status, 400);
+        var message = JSON.parse(res.error.text);
+        assert.equal(message.details[0].path, 'email');
+        done();
+      });
+    });
+    it('should return 400 Bad request if empty password', function(done) {
+      var payload = extend(true, payload, data.client_user);
+      payload.password = '';
+      client(app)
+      .post('/api/users')
+      .send(payload)
+      .end(function(err, res) {
+        assert.equal(res.status, 400);
+        var message = JSON.parse(res.error.text);
+        assert.equal(message.details[0].path, 'password');
+        done();
+      });
+    });
+    it('should set type to client if empty type', function(done) {
+      var payload = extend(true, payload, data.client_user);
+      delete payload.type;
+      client(app)
+      .post('/api/users')
+      .send(payload)
+      .end(function(err, res) {
+        assert.equal(res.status, 201);
+        User.findOne(res.body.user._id, function(err, user) {
+          assert.equal(user.type, 'client');
+          done();
+        });
+      });
+    });
+    it('should return 201 even if empty date', function(done) {
+      var payload = extend(true, payload, data.client_user);
+      payload.birth_date = '';
+      client(app)
+      .post('/api/users')
+      .send(payload)
+      .end(function(err, res) {
+        assert.equal(res.status, 201);
+        done();
+      });
+    });
+    it('should return 201 if empty address', function(done) {
+      var payload = extend(true, payload, data.client_user);
+      payload.address = [];
+      client(app)
+      .post('/api/users')
+      .send(payload)
+      .end(function(err, res) {
+        assert.equal(res.status, 201);
+        done();
+      });
+    });
+    it('should return 201 even if bad phone number', function(done) {
+      var payload = extend(true, payload, data.client_user);
+      payload.phone = '123-------';
+      client(app)
+      .post('/api/users')
+      .send(payload)
+      .end(function(err, res) {
+        assert.equal(res.status, 201);
+        done();
+      });
     });
     it('should return a 401 if the user is anonymous and tries to create an account with a type other than client', function(done) {
       client(app)
@@ -134,7 +221,7 @@ describe('/api/users/:id', function() {
           email: 'new@test.com',
           type: 'new-type',
           name: 'new-name',
-          phone: 'new-phone',
+          phone: '123-123-1234',
           password: 'new-password',
           birth_date: updatedDate,
           address: 'new-address'
@@ -172,10 +259,10 @@ describe('/api/users/:id', function() {
           email: 'new@test.com',
           type: 'new-type',
           name: 'new-name',
-          phone: 'new-phone',
+          phone: '123-123-1234',
           password: 'new-password',
           birth_date: updatedDate,
-          address: ['new-address1', 'new-address2', 'new-address3']
+          address: 'new-address'
         };
         request = client(app);
         request
@@ -190,6 +277,45 @@ describe('/api/users/:id', function() {
               .end(function(err, res) {
                 assert.equal(res.status, 401);
                 done();
+              });
+          });
+      });
+    });
+    it('should remove the unknown fields in the payload', function(done) {
+      User.create(data.client_user, function(err, created) {
+        var updatedDate = Date.now();
+        var updated = {
+          _id: 'unknown',
+          email: 'new@test.com',
+          type: 'new-type',
+          name: 'new-name',
+          phone: '123-123-1234',
+          password: 'new-password',
+          birth_date: updatedDate,
+          address: 'new-address'
+        };
+        request = client(app);
+        request
+          .post('/api/login')
+          .send({email: created.email, password: data.client_user.password})
+          .end(function(err, res) {
+            token = res.body.token;
+            request
+              .put('/api/users/' + created._id)
+              .set('Authorization', 'Bearer ' + token)
+              .send(updated)
+              .end(function(err, res) {
+                assert.equal(res.status, 200);
+                User.findOne({_id: created._id}, function(err, user) {
+                  assert.equal(user.email, updated.email);
+                  assert.equal(user.type, updated.type);
+                  assert.equal(user.name, updated.name);
+                  assert.equal(user.phone, updated.phone);
+                  assert.equal(user.password, updated.password);
+                  assert.equal(new Date(user.birth_date).getTime(), new Date(updated.birth_date).getTime());
+                  assert.equal(user.address, updated.address);
+                  done();
+                });
               });
           });
       });
