@@ -8,7 +8,8 @@ module.exports = function(req, res, next) {
     type: Joi.string(),
     address: Joi.any(),
     birth_date: Joi.any(),
-    phone: Joi.any()
+    phone: Joi.any(),
+    restaurants: Joi.any(),
   };
   var options = {
     stripUnknown: true

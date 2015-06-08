@@ -16,10 +16,7 @@ describe('/api/users', function() {
         .send(data.client_user)
         .end(function(err, res) {
           assert.equal(res.status, 201);
-          User.findOne({email: 'client@test.com'}, function(err, user) {
-            assert.equal(user._id, res.body.user._id);
-            done();
-          });
+          done();
         });
     });
     it('should return 400 Bad Request if empty payload', function(done) {
@@ -127,6 +124,39 @@ describe('/api/users', function() {
           assert.equal(res.body.message, 'You cannot create a user of type test-type, you are a visitor');
           done();
         });
+    });
+    it('should insert a restaurateur', function(done) {
+      var test_restaurant = {
+        _id: 1,
+        name: 'test-restaurant',
+      };
+      Restaurant.create(test_restaurant, function(err, createdRestaurant) {
+        User.create(data.admin_user, function(err, createdAdmin) {
+          var request = client(app);
+          var payload = extend(payload, data.restaurateur_user);
+          payload.restaurants = [createdRestaurant._id];
+          request
+          .post('/api/login')
+          .send({email: createdAdmin.email, password: data.admin_user.password})
+          .end(function(err, res) {
+            var token = res.body.token;
+            request
+            .post('/api/users/')
+            .set('Authorization', 'Bearer ' + token)
+            .send(payload)
+            .end(function(err, res) {
+              assert.equal(201, res.status);
+              User.findOne({_id: res.body.user})
+                .exec(function(err, user) {
+                  Restaurant.findOne({_id: user.restaurants[0]}, function(err, rest1) {
+                    assert.equal(test_restaurant.name, rest1.name);
+                    done();
+                  });
+                });
+            });
+          });
+        });
+      });
     });
   });
   describe('GET', function() {
