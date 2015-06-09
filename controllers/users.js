@@ -47,9 +47,11 @@ exports.updateUser = function(req, res) {
 };
 
 exports.getRestaurants = function(req, res) {
-  Restaurant.find({restaurateur: req.params.id}, function(err, restaurant) {
-    res.status(200).json(restaurant);
-  });
+  User.findOne({_id: req.params.id})
+    .populate('restaurants')
+    .exec(function(err, user) {
+      res.status(200).json(user.restaurants);
+    });
 };
 
 function validateBody(body) {

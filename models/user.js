@@ -11,7 +11,7 @@ var userSchema = new Schema({
   phone: {type: String},
   address: String,
   birth_date: { type: Date, default: Date.now },
-  restaurants: {type: [Schema.Types.ObjectId], ref: 'Restaurant'},
+  restaurants: [{type: Schema.Types.ObjectId, ref: 'Restaurant'}],
 });
 
 userSchema.pre('save', function(next) {
