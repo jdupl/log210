@@ -2,7 +2,7 @@ var controllers = angular.module('app.controllers.ModifierRestaurants', []);
 
 controllers.controller('ModifierRestaurants', function($scope, $http) {
   $scope.alerts = [];
-  refreshlist();
+  refreshList();
   
   $scope.submitRestaurant = function() {
     $scope.alerts = [];
@@ -27,7 +27,7 @@ controllers.controller('ModifierRestaurants', function($scope, $http) {
     $scope.alerts.splice(index, 1);
   };
   
-  function refreshlist() {
+  function refreshList() {
     $http.get('/api/restaurants', {headers: {'Authorization' : 'Bearer ' + $scope.token}})
       .success(function(data) {
         $scope.restaurants = data;
