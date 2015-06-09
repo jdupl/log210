@@ -3,6 +3,7 @@ var controllers = angular.module('app.controllers.ModifierRestaurateurs', []);
 controllers.controller('ModifierRestaurateurs', function($scope, $http) {
 
   $scope.alerts = [];
+  loadRestaurants();
   refreshList();
 
   $scope.submitRestaurateur = function() {
@@ -28,6 +29,13 @@ controllers.controller('ModifierRestaurateurs', function($scope, $http) {
   $scope.closeAlert = function(index) {
     $scope.alerts.splice(index, 1);
   };
+
+  function loadRestaurants() {
+    $http.get('/api/restaurants', {headers: {'Authorization' : 'Bearer ' + $scope.token}})
+      .success(function(data) {
+        $scope.restaurants = data;
+      });
+  }
 
   function refreshList() {
     $http.get('/api/users?type=restaurateur', {headers: {'Authorization' : 'Bearer ' + $scope.token}})

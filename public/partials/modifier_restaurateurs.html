@@ -34,7 +34,6 @@
           <label for="user.password" class="col-sm-2 control-label">Mot de passe</label>
           <div class="col-md-4">
             <input type="password" name="password" ng-model="user.password" class="form-control" placeholder="Mot de passe">
-          <p></p>
           </div>
         </div>
         <div class="form-group">
@@ -42,6 +41,12 @@
           <div class="col-sm-4">
             <input type="password" name="passwordConfirm" ng-model="user.passwordConfirm" class="form-control"
               placeholder="Mot de passe">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="user.restaurants" class="col-sm-2 control-label">Restaurants</label>
+          <div class="col-md-4">
+            <select ng-model="user.restaurants" ng-options="restaurant._id as restaurant.name for restaurant in restaurants" ng-multiple="true" multiple></select>
           </div>
         </div>
         <div class="form-group">
@@ -90,5 +95,4 @@
   <div ng-show="noRestaurateurs">
     Aucun restaurateur n'a été ajouté
   </div>
-
-<div>
+</div>
