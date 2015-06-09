@@ -1,15 +1,22 @@
 var Restaurant = require('../models/restaurant');
+var User = require('../models/user');
 var config = require('../config/config');
 
 exports.createRestaurant = function(req, res) {
     if (req.user.type === config.types.ADMIN) {
-      Restaurant.create(req.body, function(err, createdRestaurant) {
-        if (req.body.restaurateur) {
-          res.status(201).json({id: createdRestaurant._id});
-        } else {
+      if (req.body.restaurateur) {
+        restaurateur = req.body.restaurateur;
+        delete req.body.restaurateur;
+        Restaurant.create(req.body, function(err, createdRestaurant) {
+          User.update({_id: restaurateur}, {$push: {restaurants: createdRestaurant._id}}, function(err, updated) {
+            res.status(201).json({id: createdRestaurant._id});
+          });
+        });
+      } else {
+        Restaurant.create(req.body, function(err, createdRestaurant) {
           res.status(201).json({id: createdRestaurant._id, message: 'Restaurant created with no restaurateur.'});
-        }
-      });
+        });
+      }
     } else {
       res.status(401).json({message: 'You cannot create a restaurant, you are not a admin'});
     }
