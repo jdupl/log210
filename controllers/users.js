@@ -1,6 +1,7 @@
 var User = require('../models/user');
 var Restaurant = require('../models/restaurant');
 var config = require('../config/config');
+var async = require('async');
 
 exports.create = function(req, res) {
   payload = req.body;
@@ -13,7 +14,7 @@ exports.create = function(req, res) {
     res.status(401).json({message: 'You cannot create a user of type ' + payload.type + ', you are a visitor'});
   } else {
     User.create(payload, function(err, created) {
-      res.status(201).json({user: {_id: created._id}});
+      res.status(201).json({user: created._id});
     });
   }
 };
@@ -46,9 +47,11 @@ exports.updateUser = function(req, res) {
 };
 
 exports.getRestaurants = function(req, res) {
-  Restaurant.find({restaurateur: req.params.id}, function(err, restaurant) {
-    res.status(200).json(restaurant);
-  });
+  User.findOne({_id: req.params.id})
+    .populate('restaurants')
+    .exec(function(err, user) {
+      res.status(200).json(user.restaurants);
+    });
 };
 
 function validateBody(body) {

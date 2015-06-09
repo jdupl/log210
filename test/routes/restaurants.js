@@ -17,7 +17,6 @@ describe('/api/restaurants/', function() {
             .end(function(err, res) {
               var test_restaurant = {
                 name: 'test-restaurant',
-                restaurateur: createdRestaurateur._id
               };
               request
                 .post('/api/restaurants')
@@ -27,7 +26,6 @@ describe('/api/restaurants/', function() {
                   assert.equal(res.status, 201);
                   Restaurant.findOne({_id: res.body.id}, function(err, restaurant) {
                     assert.equal(restaurant.name, 'test-restaurant');
-                    assert.equal(restaurant.restaurateur.toString(), createdRestaurateur._id);
                     done();
                   });
                 });
