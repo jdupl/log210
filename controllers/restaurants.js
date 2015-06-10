@@ -24,8 +24,13 @@ exports.createRestaurant = function(req, res) {
 
 exports.deleteRestaurant = function(req, res) {
   if(req.user.type === config.types.ADMIN) {
-    Restaurant.remove({_id: req.params.id}, function(err, count) {
-      res.status(200).json({});
+
+    var restaurant_id = req.params.id;
+
+    User.update({restaurants: restaurant_id}, {$pull: {restaurants: restaurant_id}}, {multi: true}, function(err, updated) {
+      Restaurant.remove({_id: restaurant_id}, function(err, count) {
+        res.status(200).json({});
+      });
     });
   } else {
     res.status(401).json({message:'You cannot create a restaurant, you are not a admin'});

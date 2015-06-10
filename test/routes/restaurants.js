@@ -101,21 +101,30 @@ describe('/api/restaurants/:id', function() {
             name: 'test-restaurant',
             restaurateur: createdRestaurateur._id
           };
-          Restaurant.create(test_restaurant, function(err, createdRestaurant) {
-            var request = client(app);
-            request
-              .post('/api/login')
-              .send({email: data.admin_user.email, password: data.admin_user.password})
-              .end(function(err, res) {
-                request
-                .delete('/api/restaurants/' + createdRestaurant._id)
-                .set('Authorization', 'Bearer ' + res.body.token)
+          var request = client(app);
+          request
+            .post('/api/login')
+            .send({email: data.admin_user.email, password: data.admin_user.password})
+            .end(function(err, res) {
+              var token = res.body.token;
+              request
+                .post('/api/restaurants')
+                .set('Authorization', 'Bearer ' + token)
+                .send(test_restaurant)
                 .end(function(err, res) {
-                  assert.equal(res.status, 200);
-                  done();
+                  assert.equal(res.status, 201);
+                  request
+                    .delete('/api/restaurants/' + res.body.id)
+                    .set('Authorization', 'Bearer ' + token)
+                    .end(function(err, res) {
+                      assert.equal(res.status, 200);
+                      User.findOne({_id: createdRestaurateur._id}, function(err, restaurateur) {
+                        assert.equal(0, restaurateur.restaurants.length);
+                        done();
+                      });
+                    });
                 });
-              });
-          });
+            });
         });
       });
     });

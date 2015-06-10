@@ -127,7 +127,6 @@ describe('/api/users', function() {
     });
     it('should insert a restaurateur', function(done) {
       var test_restaurant = {
-        _id: 1,
         name: 'test-restaurant',
       };
       Restaurant.create(test_restaurant, function(err, createdRestaurant) {

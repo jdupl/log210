@@ -1,5 +1,3 @@
-var tungus = require('tungus');
-global.TUNGUS_DB_OPTIONS = { memStore: true };
 var mongoose = require('mongoose');
 var config = require('../../config/config');
 
