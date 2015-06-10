@@ -129,22 +129,27 @@ describe('/api/users', function() {
       var test_restaurant = {
         name: 'test-restaurant',
       };
+
       Restaurant.create(test_restaurant, function(err, createdRestaurant) {
+
         User.create(data.admin_user, function(err, createdAdmin) {
           var request = client(app);
           var payload = extend(payload, data.restaurateur_user);
           payload.restaurants = [createdRestaurant._id];
+
           request
           .post('/api/login')
           .send({email: createdAdmin.email, password: data.admin_user.password})
           .end(function(err, res) {
             var token = res.body.token;
+
             request
             .post('/api/users/')
             .set('Authorization', 'Bearer ' + token)
             .send(payload)
             .end(function(err, res) {
               assert.equal(201, res.status);
+
               User.findOne({_id: res.body.user})
                 .exec(function(err, user) {
                   Restaurant.findOne({_id: user.restaurants[0]}, function(err, rest1) {

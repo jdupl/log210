@@ -4,6 +4,7 @@ var client = require('supertest');
 var assert = require('assert');
 var app = require('../../app');
 var Restaurant = require('../../models/restaurant');
+var extend = require('extend');
 
 describe('/api/restaurants/', function() {
   describe('POST', function() {
@@ -159,30 +160,57 @@ describe('/api/restaurants/:id', function() {
   describe('PUT', function() {
     it('should modify the informations of the restaurant', function(done) {
       User.create(data.admin_user, function(err, createdAdmin) {
+
         User.create(data.restaurateur_user, function(err, createdRestaurateur) {
-          var test_restaurant = {
-            name: 'test-restaurant',
-            restaurateur: createdRestaurateur._id
-          };
-          Restaurant.create(test_restaurant, function(err, createdRestaurant) {
-            var request = client(app);
+
+          var restaurateur_user_2 = extend(restaurateur_user_2, data.restaurateur_user);
+          restaurateur_user_2.email = 'restaurateur2@test.com';
+
+          User.create(restaurateur_user_2, function(err, createdRestaurateur2) {
+
+            var test_restaurant = {
+              name: 'test-restaurant',
+              restaurateur: createdRestaurateur._id
+            };
             var updated_restaurant = {
               name: 'updated-restaurant',
-              restaurateur: '7'
+              restaurateur: createdRestaurateur2._id
             };
+
+            var request = client(app);
+
             request
             .post('/api/login')
             .send({email: data.admin_user.email, password: data.admin_user.password})
             .end(function(err, res) {
+              var token = res.body.token;
+
               request
-              .put('/api/restaurants/' + createdRestaurant._id)
-              .send(updated_restaurant)
-              .set('Authorization', 'Bearer ' + res.body.token)
-              .end(function(err, res) {
-                assert.equal(res.status, 200);
-                assert.equal(res.body.message, 'The restaurant is updated');
-                done();
-              });
+                .post('/api/restaurants')
+                .set('Authorization', 'Bearer ' + token)
+                .send(test_restaurant)
+                .end(function(err, res) {
+                  assert.equal(res.status, 201);
+                  var restaurant_id = res.body.id;
+
+                  request
+                  .put('/api/restaurants/' + res.body.id)
+                  .send(updated_restaurant)
+                  .set('Authorization', 'Bearer ' + token)
+                  .end(function(err, res) {
+                    assert.equal(res.status, 200);
+                    assert.equal(res.body.message, 'The restaurant is updated');
+
+                    User.findOne({_id: createdRestaurateur}, function(err, user1) {
+                      assert.equal(user1.restaurants.length, 0);
+
+                      User.findOne({_id: createdRestaurateur2}, function(err, user2) {
+                        assert.equal(restaurant_id, user2.restaurants[0]);
+                        done();
+                      });
+                    });
+                  });
+                });
             });
           });
         });
