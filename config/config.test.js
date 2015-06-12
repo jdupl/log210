@@ -1,6 +1,6 @@
 module.exports = {
   db: {
-    url: 'tingodb://test'
+    url: 'mongodb://localhost/test'
   },
   jwt: {
     secret: 'test'

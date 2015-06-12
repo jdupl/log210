@@ -24,7 +24,7 @@ describe('Configuration', function() {
   });
   describe('Test', function() {
     it('should contain the test configuration options', function() {
-      assert.equal(config.db.url, 'tingodb://test');
+      assert.equal(config.db.url, 'mongodb://localhost/test');
     });
   });
   describe('Private', function() {

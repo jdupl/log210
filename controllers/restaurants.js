@@ -1,15 +1,22 @@
 var Restaurant = require('../models/restaurant');
+var User = require('../models/user');
 var config = require('../config/config');
 
 exports.createRestaurant = function(req, res) {
     if (req.user.type === config.types.ADMIN) {
-      Restaurant.create(req.body, function(err, createdRestaurant) {
-        if (req.body.restaurateur) {
-          res.status(201).json({id: createdRestaurant._id});
-        } else {
+      if (req.body.restaurateur) {
+        restaurateur = req.body.restaurateur;
+        delete req.body.restaurateur;
+        Restaurant.create(req.body, function(err, createdRestaurant) {
+          User.update({_id: restaurateur}, {$push: {restaurants: createdRestaurant._id}}, function(err, updated) {
+            res.status(201).json({id: createdRestaurant._id});
+          });
+        });
+      } else {
+        Restaurant.create(req.body, function(err, createdRestaurant) {
           res.status(201).json({id: createdRestaurant._id, message: 'Restaurant created with no restaurateur.'});
-        }
-      });
+        });
+      }
     } else {
       res.status(401).json({message: 'You cannot create a restaurant, you are not a admin'});
     }
@@ -17,8 +24,13 @@ exports.createRestaurant = function(req, res) {
 
 exports.deleteRestaurant = function(req, res) {
   if(req.user.type === config.types.ADMIN) {
-    Restaurant.remove({_id: req.params.id}, function(err, count) {
-      res.status(200).json({});
+
+    var restaurant_id = req.params.id;
+
+    User.update({restaurants: restaurant_id}, {$pull: {restaurants: restaurant_id}}, {multi: true}, function(err, updated) {
+      Restaurant.remove({_id: restaurant_id}, function(err, count) {
+        res.status(200).json({});
+      });
     });
   } else {
     res.status(401).json({message:'You cannot create a restaurant, you are not a admin'});
@@ -26,14 +38,45 @@ exports.deleteRestaurant = function(req, res) {
 };
 
 exports.updateRestaurant = function(req, res) {
+  var restaurant_id = req.params.id;
   if(req.user.type === config.types.ADMIN) {
-    Restaurant.update({_id: req.params.id}, req.body, function(err, count) {
-      res.status(200).json({message: 'The restaurant is updated'});
-    });
+    if (req.body.restaurateur) {
+      var new_restaurateur_id = req.body.restaurateur;
+      delete req.body.restaurateur;
+
+      //Delete the reference to the old restaurateur
+      updateRestaurantReferenceInRestaurateur(restaurant_id, new_restaurateur_id, function(err) {
+        Restaurant.update({_id: restaurant_id}, req.body, function(err, count) {
+          res.status(200).json({message: 'The restaurant is updated'});
+        });
+      });
+    } else {
+      Restaurant.update({_id: restaurant_id}, req.body, function(err, count) {
+        res.status(200).json({message: 'The restaurant is updated'});
+      });
+    }
   } else {
     res.status(401).json({message:'You cannot modify a restaurant, you are not a admin'});
   }
 };
+
+function updateRestaurantReferenceInRestaurateur(restaurant_id, new_restaurateur_id, callback) {
+  User.findOne({restaurants: restaurant_id}, function(err, old_restaurateur) {
+    var old_restaurateur_id = old_restaurateur._id;
+    if (old_restaurateur_id === new_restaurateur_id) {
+      //Since both the old and the new restaurateur are the same, no need to update
+      callback(null);
+    } else {
+      //Remove the restaurant reference in the old restaurateur
+      User.update({_id: old_restaurateur_id}, {$pull: {restaurants: restaurant_id}}, function(err, updated) {
+        //Add the restaurant reference in the new restaurateur
+        User.update({_id: new_restaurateur_id}, {$push: {restaurants: restaurant_id}}, function(err, updated) {
+          callback(null);
+        });
+      });
+    }
+  });
+}
 
 exports.getRestaurants = function(req, res) {
   if (req.user.type == config.types.ADMIN) {
