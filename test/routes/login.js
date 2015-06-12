@@ -1,34 +1,30 @@
 var database = require('../utils/database');
 var app = require('../../app');
-var client = require('supertest');
+var client = require('supertest')(app);
 var assert = require('assert');
 var User = require('../../models/user');
 var jwt = require('jsonwebtoken');
 var fake_date = Date.now();
 var data = require('../utils/data');
 var config = require('../../config/config');
+var login = require('../utils/login');
 
 describe('/api/login', function() {
   describe('POST', function() {
     it('should get the JWT token', function(done) {
-      User.create(data.fake_user, function(err, created) {
-        client(app)
-          .post('/api/login')
-          .send({email: data.fake_user.email, password: data.fake_user.password})
-          .end(function(err, res) {
-            assert.equal(res.status, 200);
-            var token = res.body.token;
-            jwt.verify(token, config.jwt.secret, function(err, decoded) {
-              assert.notEqual(decoded, undefined);
-              assert.equal(decoded, created._id);
-              done();
-            });
+      User.create(data.client_user, function(err, created) {
+        login.getToken(data.client_user.email, data.client_user.password, client, function(err, token) {
+          jwt.verify(token, config.jwt.secret, function(err, decoded) {
+            assert.notEqual(decoded, undefined);
+            assert.equal(decoded, created._id);
+            done();
           });
+        });
       });
     });
     it('should get a 400 because of wrong email', function(done) {
       User.create(data, function(err, created) {
-        client(app)
+        client
           .post('/api/login')
           .send({email: 'wrong', password: 'wrong'})
           .end(function(err, res) {
@@ -38,8 +34,8 @@ describe('/api/login', function() {
       });
     });
     it('should get a 400 because of wrong password', function(done) {
-      User.create(data.fake_user, function(err, created) {
-        client(app)
+      User.create(data.client_user, function(err, created) {
+        client
           .post('/api/login')
           .send({email: created.email, password: 'wrong'})
           .end(function(err, res) {
@@ -53,28 +49,23 @@ describe('/api/login', function() {
 describe('/api/profile/', function() {
   describe('GET', function() {
     it("should return the logged in user's information", function(done) {
-      User.create(data.fake_user, function(err, created) {
-        var request = client(app);
-        request
-          .post('/api/login/')
-          .send({email: created.email, password: data.fake_user.password})
-          .end(function(err, res) {
-            var token = res.body.token;
-            request
-              .get('/api/profile/')
-              .set('Authorization', 'Bearer ' + token)
-              .end(function(err, res) {
-                assert.equal(res.status, 200);
-                assert.equal(res.body.email, data.fake_user.email);
-                assert.equal(res.body.type, data.fake_user.type);
-                assert.equal(res.body.name, data.fake_user.name);
-                assert.equal(res.body.phone, data.fake_user.phone);
-                assert.equal(res.body.password, undefined);
-                assert.equal(new Date(res.body.birth_date).getTime(), new Date(data.fake_user.birth_date).getTime());
-                assert.equal(res.body.address, 'test-address');
-                done();
-              });
-          });
+      User.create(data.client_user, function(err, created) {
+        login.getToken(data.client_user.email, data.client_user.password, client, function(err, token) {
+          client
+            .get('/api/profile/')
+            .set('Authorization', 'Bearer ' + token)
+            .end(function(err, res) {
+              assert.equal(res.status, 200);
+              assert.equal(res.body.email, data.client_user.email);
+              assert.equal(res.body.type, data.client_user.type);
+              assert.equal(res.body.name, data.client_user.name);
+              assert.equal(res.body.phone, data.client_user.phone);
+              assert.equal(res.body.password, undefined);
+              assert.equal(new Date(res.body.birth_date).getTime(), new Date(data.client_user.birth_date).getTime());
+              assert.equal(res.body.address, 'test-address');
+              done();
+            });
+        });
       });
     });
   });
