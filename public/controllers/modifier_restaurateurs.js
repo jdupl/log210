@@ -26,6 +26,15 @@ controllers.controller('ModifierRestaurateurs', function($scope, $http) {
       });
   };
 
+  $scope.deleteRestaurateur = function(restaurateur) {
+    $http.delete('/api/users/' + restaurateur._id, {headers: {'Authorization' : 'Bearer ' + $scope.token}})
+      .success(function(data) {
+        $scope.alerts.push({msg: "Le restaurateur a été supprimé.", type: 'success'});
+        refreshList();
+      })
+  };
+
+
   $scope.closeAlert = function(index) {
     $scope.alerts.splice(index, 1);
   };
