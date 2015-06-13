@@ -4,7 +4,7 @@ module.exports = function(req, res, next) {
   var rules = {
     name: Joi.string().required(),
     email: Joi.string().email().required(),
-    password: Joi.string().required(),
+    password: Joi.string(),
     type: Joi.string(),
     address: Joi.any(),
     birth_date: Joi.any(),
