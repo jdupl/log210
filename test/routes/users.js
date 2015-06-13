@@ -258,26 +258,27 @@ describe('/api/users/:id', function() {
         });
       });
     });
-    it('should return 401 if you try to modify the informations of another user', function(done) {
-      User.create(data.client_user, function(err, created) {
-        var updatedDate = Date.now();
-        var updated = {
-          email: 'new@test.com',
-          type: 'new-type',
-          name: 'new-name',
-          phone: '123-123-1234',
-          password: 'new-password',
-          birth_date: updatedDate,
-          address: 'new-address'
-        };
-        login.getToken(data.client_user.email, data.client_user.password, client, function(err, token) {
-          client
-            .put('/api/users/' + created._id)
+    it('should be able to modify the informations of a user only if he is admin', function(done) {
+      User.create(data.client_user, function(err, createdClient) {
+        User.create(data.admin_user, function(err, createdAdmin) {
+          var updatedDate = Date.now();
+          var updated = {
+            email: 'new@test.com',
+            type: 'new-type',
+            name: 'new-name',
+            phone: '123-123-1234',
+            password: 'new-password',
+            birth_date: updatedDate,
+            address: 'new-address'
+          };
+          login.getToken(data.admin_user.email, data.admin_user.password, client, function(err, token) {
+            client
+            .put('/api/users/' + createdClient._id)
             .set('Authorization', 'Bearer ' + token)
             .send(updated)
             .end(function(err, res) {
               assert.equal(res.status, 200);
-              User.findOne({_id: created._id}, function(err, user) {
+              User.findOne({_id: createdClient._id}, function(err, user) {
                 assert.equal(user.email, updated.email);
                 assert.equal(user.type, updated.type);
                 assert.equal(user.name, updated.name);
@@ -288,6 +289,34 @@ describe('/api/users/:id', function() {
                 done();
               });
             });
+          });
+        });
+      });
+    });
+    it('should return 401 if you try to modify the informations of another user', function(done) {
+      User.create(data.admin_user, function(err, createdAdmin) {
+        User.create(data.client_user, function(err, created) {
+          var updatedDate = Date.now();
+          var updated = {
+            email: 'new@test.com',
+            type: 'new-type',
+            name: 'new-name',
+            phone: '123-123-1234',
+            password: 'new-password',
+            birth_date: updatedDate,
+            address: 'new-address'
+          };
+          login.getToken(data.client_user.email, data.client_user.password, client, function(err, token) {
+            client
+            .put('/api/users/' + createdAdmin._id)
+            .set('Authorization', 'Bearer ' + token)
+            .send(updated)
+            .end(function(err, res) {
+              assert.equal(res.status, 401);
+              assert.equal(res.body.message, 'Unauthorized');
+              done();
+            });
+          });
         });
       });
     });

@@ -37,7 +37,7 @@ exports.getUsers = function(req, res) {
 };
 
 exports.updateUser = function(req, res) {
-  if (req.params.id == req.user._id) {
+  if (req.params.id == req.user._id || req.user.type === config.types.ADMIN) {
     User.update({_id: req.params.id}, req.body, function(err, updated) {
       res.status(200).json({message: 'User updated'});
     });
