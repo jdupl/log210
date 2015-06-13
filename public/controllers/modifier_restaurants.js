@@ -27,6 +27,27 @@ controllers.controller('ModifierRestaurants', function($scope, $http) {
     $scope.alerts.splice(index, 1);
   };
   
+  $scope.changeRestaurantInfo = function() {
+	$scope.showModifyForm = true;
+	
+	$http.get('/api/restaurants/:id', {headers: {'Authorization' : 'Bearer ' + $scope.token}})
+      .success(function(data) {
+		$scope.restaurant = data;
+		console.log(JSON.stringify(data));
+      });
+	
+    $scope.alerts.push({msg: "Vous avez commmencé la modification !", type: 'warning'});
+  };
+  
+  $scope.deleteRestaurant = function() {
+	
+	$http.delete('/api/restaurants/:id', {headers: {'Authorization' : 'Bearer ' + $scope.token}})
+      .success(function(data) {
+		$scope.alerts.push({msg: "Restaurant détruit!", type: 'warning'});
+      });
+	  refreshList();
+  };
+  
   function refreshList() {
     $http.get('/api/restaurants', {headers: {'Authorization' : 'Bearer ' + $scope.token}})
       .success(function(data) {
