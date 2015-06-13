@@ -326,6 +326,40 @@ describe('/api/users/:id', function() {
       });
     });
   });
+  describe('DELETE', function() {
+    it('should delete the user', function(done) {
+      User.create(data.client_user, function(err, createdClient) {
+        User.create(data.admin_user, function(err, createdAdmin) {
+          login.getToken(data.admin_user.email, data.admin_user.password, client, function(err, token) {
+            client
+              .delete('/api/users/' + createdClient._id)
+              .set('Authorization', 'Bearer ' + token)
+              .end(function(err, res) {
+                assert.equal(res.status, 200);
+                User.findOne({_id: createdClient._id}, function(err, user) {
+                  assert.equal(user, undefined);
+                  done();
+                });
+              });
+          });
+        });
+      });
+    });
+    it('should not be able to delete user if not admin', function(done) {
+      User.create(data.client_user, function(err, createdClient) {
+        login.getToken(data.client_user.email, data.client_user.password, client, function(err, token) {
+          client
+            .delete('/api/users/' + createdClient._id)
+            .set('Authorization', 'Bearer ' + token)
+            .end(function(err, res) {
+              assert.equal(res.status, 401);
+              assert.equal(res.body.message, 'Unauthorized');
+              done();
+            });
+        });
+      });
+    });
+  });
 });
 describe('/api/users/:id/restaurants', function() {
   describe('GET', function(done) {

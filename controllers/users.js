@@ -46,6 +46,16 @@ exports.updateUser = function(req, res) {
   }
 };
 
+exports.deleteUser = function(req, res) {
+  if (req.user.type == config.types.ADMIN) {
+    User.remove({_id: req.params.id}, function(err, deleted) {
+      res.status(200).json({message: 'User deleted'});
+    });
+  } else {
+    res.status(401).json({message: 'Unauthorized'})
+  }
+};
+
 exports.getRestaurants = function(req, res) {
   User.findOne({_id: req.params.id})
     .populate('restaurants')
