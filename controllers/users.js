@@ -63,8 +63,3 @@ exports.getRestaurants = function(req, res) {
       res.status(200).json(user.restaurants);
     });
 };
-
-function validateBody(body) {
-  return body.email && body.password && body.type && body.name && body.phone &&
-    body.address && body.birth_date;
-}
