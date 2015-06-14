@@ -2,6 +2,7 @@ var controllers = angular.module('app.controllers.ModifierRestaurants', []);
 
 controllers.controller('ModifierRestaurants', function($scope, $http) {
   $scope.alerts = [];
+  loadRestaurateurs();
   refreshList();
 
   $scope.submitRestaurant = function() {
@@ -42,6 +43,8 @@ controllers.controller('ModifierRestaurants', function($scope, $http) {
         refreshList();
       })
       .error(function(data, status) {
+        console.log(restaurant);
+        console.log(status);
         $scope.alerts.push({msg: "Malheuresement, une erreur est survenue lors de l'inscription et le restaurant n'a pas pu être modifié.", type: 'danger'});
       });
   };
@@ -54,6 +57,9 @@ controllers.controller('ModifierRestaurants', function($scope, $http) {
         $scope.restaurant = data;
         //console.log(data);
         $scope.alerts.push({msg: "Vous avez commmencé la modification !", type: 'warning'});
+      })
+      .error(function(data, status) {
+        $scope.alerts.push({msg: "Malheuresement, une erreur est survenue lors de la lecture des restaurants", type: 'danger'});
       });
   };
 
@@ -63,8 +69,18 @@ controllers.controller('ModifierRestaurants', function($scope, $http) {
         $scope.alerts.push({msg: "Restaurant détruit!", type: 'warning'});
         refreshList();
 
+      })
+      .error(function(data, status) {
+        $scope.alerts.push({msg: "Malheuresement, une erreur est survenue lors de la destruction du restaurant", type: 'danger'});
       });
   };
+
+  function loadRestaurateurs() {
+    $http.get('/api/users?type=restaurateur', {headers: {'Authorization' : 'Bearer ' + $scope.token}})
+      .success(function(data) {
+        $scope.restaurateurs = data;
+      });
+  }
 
   function refreshList() {
     $http.get('/api/restaurants', {headers: {'Authorization' : 'Bearer ' + $scope.token}})

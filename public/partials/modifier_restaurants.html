@@ -26,9 +26,12 @@
             <input type="text" name="name" id="restaurant.name" ng-model="restaurant.name" class="form-control" placeholder="Nom"></input>
           </div>
         </div>
-      <!--
-              Code for the drop down list that will contain all of the restaurateur possible
-            //-->
+        <div class="form-group">
+          <label for="restaurant.restaurateur" class="col-sm-2 control-label">Restaurateurs</label>
+          <div class="col-md-4">
+            <select ng-model="restaurant.restaurateur" ng-options="restaurateur.id as restaurateur.name for restaurateur in restaurateurs" ng-selected="restaurant.restaurateurs" ng-attr-size="restaurateurs.length" ng-multiple="false" multiple></select>
+          </div>
+        </div>
         <div class="form-group">
           <div class="col-sm-offset-2 col-sm-10">
             <button type="submit" value="modifyRestaurant" class="btn btn-success">Modifier le restaurant</button>
@@ -47,9 +50,12 @@
             <input type="text" name="name" id="restaurant.name" ng-model="restaurant.name" class="form-control" placeholder="Nom">
           </div>
         </div>
-        <!--
-              Code for the drop down list that will contain all of the restaurateur possible
-            //-->
+        <div class="form-group">
+          <label for="restaurant.restaurateur" class="col-sm-2 control-label">Restaurateurs</label>
+          <div class="col-md-4">
+            <select ng-model="restaurant.restaurateur" ng-options="restaurateur._id as restaurateur.name for restaurateur in restaurateurs" ng-selected="restaurant.restaurateurs" ng-attr-size="restaurateurs.length" ng-multiple="false" multiple></select>
+          </div>
+        </div>
         <div class="form-group">
           <div class="col-sm-offset-2 col-sm-10">
             <button type="submit" value="addRestaurant" class="btn btn-success">Ajouter ce restaurant</button>
