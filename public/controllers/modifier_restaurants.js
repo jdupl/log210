@@ -38,13 +38,17 @@ controllers.controller('ModifierRestaurants', function($scope, $http) {
 
     $http.put('/api/restaurants/' + id, restaurant, {headers: {'Authorization' : 'Bearer ' + $scope.token}})
       .success(function(data) {
+        //console.log(restaurateurs);
+        console.log(data);
+        //console.log(restaurant);
+        console.log(restaurant.restaurateur);
         delete $scope.restaurant;
         $scope.alerts.push({msg: "Le restaurant a été modifié.", type: 'success'});
         refreshList();
       })
       .error(function(data, status) {
         console.log(restaurant);
-        console.log(status); 
+        console.log(restaurant.restaurateur);
         $scope.alerts.push({msg: "Malheuresement, une erreur est survenue lors de l'inscription et le restaurant n'a pas pu être modifié.", type: 'danger'});
       });
   };

@@ -29,7 +29,7 @@
         <div class="form-group">
           <label for="restaurant.restaurateur" class="col-sm-2 control-label">Restaurateurs</label>
           <div class="col-md-4">
-            <select ng-model="restaurant.restaurateur" ng-options="restaurateur.id as restaurateur.name for restaurateur in restaurateurs" ng-selected="restaurant.restaurateurs" ng-attr-size="restaurateurs.length" ng-multiple="false" multiple></select>
+            <select ng-model="restaurant.restaurateur" ng-options="restaurateur._id as restaurateur.name for restaurateur in restaurateurs" ng-selected="restaurant.restaurateur"  ng-attr-size="restaurateurs.length"></select>
           </div>
         </div>
         <div class="form-group">
@@ -37,7 +37,7 @@
             <button type="submit" value="modifyRestaurant" class="btn btn-success">Modifier le restaurant</button>
           </div>
         </div>
-      </form> 
+      </form>
     </div>
   </div>
 
@@ -53,7 +53,7 @@
         <div class="form-group">
           <label for="restaurant.restaurateur" class="col-sm-2 control-label">Restaurateurs</label>
           <div class="col-md-4">
-            <select ng-model="restaurant.restaurateur" ng-options="restaurateur._id as restaurateur.name for restaurateur in restaurateurs" ng-selected="restaurant.restaurateurs" ng-attr-size="restaurateurs.length" ng-multiple="false" multiple></select>
+            <select ng-model="restaurant.restaurateur" ng-options="restaurateur._id as restaurateur.name for restaurateur in restaurateurs" ng-attr-size="restaurateurs.length" ></select>
           </div>
         </div>
         <div class="form-group">
