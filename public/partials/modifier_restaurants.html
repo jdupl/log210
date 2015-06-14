@@ -29,7 +29,7 @@
         <div class="form-group">
           <label for="restaurant.restaurateur" class="col-sm-2 control-label">Restaurateurs</label>
           <div class="col-md-4">
-            <select ng-model="restaurant.__v" ng-options="restaurateur._id as restaurateur.name for restaurateur in restaurateurs" ng-selected="restaurant.__v"  ng-attr-size="restaurateurs.length"></select>
+            <select ng-model="restaurant.restaurateur" ng-options="restaurateur._id as restaurateur.name for restaurateur in restaurateurs" ng-selected="restaurant.restaurateur"  ng-attr-size="restaurateurs.length"></select>
           </div>
         </div>
         <div class="form-group">
@@ -78,7 +78,7 @@
         </thead>
         <tbody>
           <tr ng-repeat="restaurant in restaurants">
-            <td style="vertical-align:middle;">{{restaurant.name}} {{restaurant.__v}}</td>
+            <td style="vertical-align:middle;">{{restaurant.name}}</td>
             <td style="text-align: center;">
               <div class="btn-group" style="white-space: nowrap;">
                 <button style="float: none;display: inline-block;" class="btn btn-info" ng-click="changeRestaurantInfo(restaurant._id)">

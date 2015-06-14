@@ -15,6 +15,7 @@ controllers.controller('ModifierRestaurants', function($scope, $http) {
 
     $http.post('/api/restaurants', restaurant, {headers: {'Authorization' : 'Bearer ' + $scope.token}})
       .success(function(data) {
+        console.log(restaurant);
         delete $scope.restaurant;
         $scope.alerts.push({msg: "Le restaurant a été ajouté.", type: 'success'});
         refreshList();
