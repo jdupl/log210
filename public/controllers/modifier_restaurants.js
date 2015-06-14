@@ -44,7 +44,7 @@ controllers.controller('ModifierRestaurants', function($scope, $http) {
       })
       .error(function(data, status) {
         console.log(restaurant);
-        console.log(status);
+        console.log(status); 
         $scope.alerts.push({msg: "Malheuresement, une erreur est survenue lors de l'inscription et le restaurant n'a pas pu être modifié.", type: 'danger'});
       });
   };
