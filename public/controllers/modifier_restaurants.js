@@ -30,19 +30,22 @@ controllers.controller('ModifierRestaurants', function($scope, $http) {
 
   $scope.submitModifiedRestaurant = function(id) {
     $scope.alerts = [];
-    var restaurant = $scope.restaurant;
 
-    if(!restaurant.restaurateur) {
+    var updatedRestaurant = $scope.restaurant;
+    updatedRestaurant.restaurateur = $scope.selectedRestaurateur[0]._id;
+
+    if(!updatedRestaurant.restaurateur) {
       $scope.alerts.push({msg: "Attention: Le restaurant n'a pas de restaurateur associé !", type: 'warning'});
     }
 
-    $http.put('/api/restaurants/' + id, restaurant, {headers: {'Authorization' : 'Bearer ' + $scope.token}})
+    $http.put('/api/restaurants/' + id, updatedRestaurant, {headers: {'Authorization' : 'Bearer ' + $scope.token}})
       .success(function(data) {
         //console.log(restaurateurs);
         console.log(restaurant);
         //console.log(restaurant);
         console.log(restaurant.restaurateur);
         delete $scope.restaurant;
+        delete $scope.selectedRestaurateur;
         $scope.alerts.push({msg: "Le restaurant a été modifié.", type: 'success'});
         refreshList();
       })
@@ -59,7 +62,6 @@ controllers.controller('ModifierRestaurants', function($scope, $http) {
     $http.get('/api/restaurants/' + id, {headers: {'Authorization' : 'Bearer ' + $scope.token}})
       .success(function(data) {
         $scope.restaurant = data;
-        //console.log(data);
         $scope.alerts.push({msg: "Vous avez commmencé la modification !", type: 'warning'});
       })
       .error(function(data, status) {
