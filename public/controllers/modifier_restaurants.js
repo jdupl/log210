@@ -39,7 +39,7 @@ controllers.controller('ModifierRestaurants', function($scope, $http) {
     $http.put('/api/restaurants/' + id, restaurant, {headers: {'Authorization' : 'Bearer ' + $scope.token}})
       .success(function(data) {
         //console.log(restaurateurs);
-        console.log(data);
+        console.log(restaurant);
         //console.log(restaurant);
         console.log(restaurant.restaurateur);
         delete $scope.restaurant;
