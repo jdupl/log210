@@ -19,6 +19,7 @@ controllers.controller('ModifierRestaurants', function($scope, $http) {
         delete $scope.restaurant;
         $scope.alerts.push({msg: "Le restaurant a été ajouté.", type: 'success'});
         refreshList();
+        loadRestaurateurs();
       })
       .error(function(data, status) {
         $scope.alerts.push({msg: "Malheuresement, une erreur est survenue lors de l'inscription et le restaurant n'a pas pu être enregistré.", type: 'danger'});
@@ -46,6 +47,7 @@ controllers.controller('ModifierRestaurants', function($scope, $http) {
         delete $scope.selectedRestaurateur;
         $scope.alerts.push({msg: "Le restaurant a été modifié.", type: 'success'});
         refreshList();
+        loadRestaurateurs();
       })
       .error(function(data, status) {
         $scope.alerts.push({msg: "Malheuresement, une erreur est survenue lors de l'inscription et le restaurant n'a pas pu être modifié.", type: 'danger'});
@@ -55,18 +57,30 @@ controllers.controller('ModifierRestaurants', function($scope, $http) {
   $scope.changeRestaurantInfo = function(id) {
     $scope.showModifyForm = true;
 
-    $http.get('/api/restaurants/' + id + '/users', {headers: {'Authorization' : 'Bearer ' + $scope.token}})
-      .success(function(data) {
-        $scope.selectedRestaurateur = data;
-      })
-      .error(function(data, status) {
-        $scope.alerts.push({msg: "Malheuresement, une erreur est survenue lors de la lecture du restaurateur du restaurant", type: 'danger'});
-      });
-
     $http.get('/api/restaurants/' + id, {headers: {'Authorization' : 'Bearer ' + $scope.token}})
       .success(function(data) {
         $scope.restaurant = data;
         $scope.alerts.push({msg: "Vous avez commmencé la modification !", type: 'warning'});
+
+        $http.get('/api/restaurants/' + id + '/users', {headers: {'Authorization' : 'Bearer ' + $scope.token}})
+          .success(function(data) {
+            var restaurant_id = $scope.restaurant._id;
+            console.log($scope.restaurateurs);
+            for (var i = 0;i < $scope.restaurateurs.length;i++) {
+              var currentRestaurateur = $scope.restaurateurs[i];
+              for (var j = 0;j < currentRestaurateur.restaurants.length;j++) {
+                var currentRestaurant = currentRestaurateur.restaurants[j];
+                if (currentRestaurant === restaurant_id) {
+                  $scope.selectedRestaurateur = currentRestaurateur._id;
+                  console.log(currentRestaurateur.name);
+                  console.log($scope.selectedRestaurateur);
+                }
+              }
+            }
+          })
+          .error(function(data, status) {
+            $scope.alerts.push({msg: "Malheuresement, une erreur est survenue lors de la lecture du restaurateur du restaurant", type: 'danger'});
+          });
       })
       .error(function(data, status) {
         $scope.alerts.push({msg: "Malheuresement, une erreur est survenue lors de la lecture des restaurants", type: 'danger'});
