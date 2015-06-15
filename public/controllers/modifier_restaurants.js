@@ -33,7 +33,10 @@ controllers.controller('ModifierRestaurants', function($scope, $http) {
     $scope.alerts = [];
 
     var updatedRestaurant = $scope.restaurant;
-    updatedRestaurant.restaurateur = $scope.selectedRestaurateur[0]._id;
+    console.log($scope.restaurant);
+    console.log($scope.selectedRestaurateur);
+    updatedRestaurant.restaurateur = $scope.selectedRestaurateur;
+    console.log(updatedRestaurant);
 
     if(!updatedRestaurant.restaurateur) {
       $scope.alerts.push({msg: "Attention: Le restaurant n'a pas de restaurateur associé !", type: 'warning'});
@@ -42,9 +45,9 @@ controllers.controller('ModifierRestaurants', function($scope, $http) {
     $http.put('/api/restaurants/' + id, updatedRestaurant, {headers: {'Authorization' : 'Bearer ' + $scope.token}})
       .success(function(data) {
         //console.log(restaurateurs);
-        console.log(restaurant);
+        console.log(updatedRestaurant);
         //console.log(restaurant);
-        console.log(restaurant.restaurateur);
+        //console.log(restaurant.restaurateur);
         delete $scope.restaurant;
         delete $scope.selectedRestaurateur;
         $scope.alerts.push({msg: "Le restaurant a été modifié.", type: 'success'});
@@ -59,6 +62,16 @@ controllers.controller('ModifierRestaurants', function($scope, $http) {
 
   $scope.changeRestaurantInfo = function(id) {
     $scope.showModifyForm = true;
+
+    $http.get('/api/restaurants/' + id + '/users', {headers: {'Authorization' : 'Bearer ' + $scope.token}})
+      .success(function(data) {
+        $scope.restaurateurPossedee = data;
+        $scope.selectedRestaurateur = $scope.restaurateurPossedee;
+        //console.log($scope.restaurateurPossedee);
+      })
+      .error(function(data, status) {
+        $scope.alerts.push({msg: "Malheuresement, une erreur est survenue lors de la lecture du restaurateur du restaurant", type: 'danger'});
+      });
 
     $http.get('/api/restaurants/' + id, {headers: {'Authorization' : 'Bearer ' + $scope.token}})
       .success(function(data) {
