@@ -22,6 +22,7 @@ module.exports = function(app) {
   //Restaurants routes
   app.get('/api/restaurants/', loginMiddleware.verify, restaurantsController.getRestaurants);
   app.get('/api/restaurants/:id', loginMiddleware.verify, restaurantsController.getRestaurant);
+  app.get('/api/restaurants/:id/users', restaurantsController.getRestaurateur);
   app.post('/api/restaurants/', loginMiddleware.verify, restaurantsController.createRestaurant);
   app.delete('/api/restaurants/:id', loginMiddleware.verify, restaurantsController.deleteRestaurant);
   app.put('/api/restaurants/:id', loginMiddleware.verify, restaurantsController.updateRestaurant);

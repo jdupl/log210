@@ -34,5 +34,6 @@ var restaurateur_user = {
   password: 'test-pass',
   type: 'restaurateur',
   name: 'test-name',
+  restaurants: []
 };
 exports.restaurateur_user = extend(restaurateur_user, common_user);
