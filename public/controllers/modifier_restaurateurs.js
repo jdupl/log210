@@ -29,7 +29,8 @@ controllers.controller('ModifierRestaurateurs', function($scope, $http) {
   $scope.modRestaurateur = function(restaurateur) {
     $scope.userModify = restaurateur;
     delete $scope.userModify.password;
-
+    $scope.showAddForm = false;
+    $scope.showList = false;
     $scope.showModifyForm = true;
   };
 
