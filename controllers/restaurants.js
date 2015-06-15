@@ -62,18 +62,20 @@ exports.updateRestaurant = function(req, res) {
 
 function updateRestaurantReferenceInRestaurateur(restaurant_id, new_restaurateur_id, callback) {
   User.findOne({restaurants: restaurant_id}, function(err, old_restaurateur) {
-    var old_restaurateur_id = old_restaurateur._id;
-    if (old_restaurateur_id === new_restaurateur_id) {
-      //Since both the old and the new restaurateur are the same, no need to update
-      callback(null);
-    } else {
-      //Remove the restaurant reference in the old restaurateur
-      User.update({_id: old_restaurateur_id}, {$pull: {restaurants: restaurant_id}}, function(err, updated) {
-        //Add the restaurant reference in the new restaurateur
-        User.update({_id: new_restaurateur_id}, {$push: {restaurants: restaurant_id}}, function(err, updated) {
-          callback(null);
+    if(old_restaurateur !== null) {
+      var old_restaurateur_id = old_restaurateur._id;
+      if (old_restaurateur_id === new_restaurateur_id) {
+        //Since both the old and the new restaurateur are the same, no need to update
+        callback(null);
+      } else {
+        //Remove the restaurant reference in the old restaurateur
+        User.update({_id: old_restaurateur_id}, {$pull: {restaurants: restaurant_id}}, function(err, updated) {
+          //Add the restaurant reference in the new restaurateur
+          User.update({_id: new_restaurateur_id}, {$push: {restaurants: restaurant_id}}, function(err, updated) {
+            callback(null);
+          });
         });
-      });
+      }
     }
   });
 }
