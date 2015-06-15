@@ -29,7 +29,7 @@
         <div class="form-group">
           <label for="restaurant.restaurateur" class="col-sm-2 control-label">Restaurateurs</label>
           <div class="col-md-4">
-            <select ng-model="selectedRestaurateur" ng-options="restaurateur._id as restaurateur.name for restaurateur in restaurateurs" ng-multiple="false" multiple></select>
+            <select ng-model="selectedRestaurateur" ng-options="restaurateur._id as restaurateur.name for restaurateur in restaurateurs" ng-init="selectedRestaurateur = selectedRestaurateur" ng-multiple="false"></select>
           </div>
         </div>
         <div class="form-group">
