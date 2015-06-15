@@ -219,6 +219,31 @@ describe('/api/restaurants/:id', function() {
         });
       });
     });
+    it('should update the restaurant with a new restaurateur', function(done) {
+      User.create(data.admin_user, function(err, createdAdmin) {
+        User.create(data.restaurateur_user, function(err, createdRestaurateur) {
+          Restaurant.create({name: 'test-restaurant'}, function(err, createdRestaurant) {
+            login.getToken(data.admin_user.email, data.admin_user.password, client, function(err, token) {
+              var updated_restaurant = {
+                name: 'updated-restaurant',
+                restaurateur: createdRestaurateur._id
+              };
+              client
+                .put('/api/restaurants/' + createdRestaurant._id)
+                .set('Authorization', 'Bearer ' + token)
+                .send(updated_restaurant)
+                .end(function(err, res) {
+                  assert.equal(res.status, 200);
+                  User.findOne({_id: createdRestaurateur._id}, function(err, restaurateur) {
+                    assert.equal(restaurateur.restaurants.length, 1);
+                    done();
+                  });
+                });
+            });
+          });
+        });
+      });
+    });
   });
 });
 describe('/api/restaurants', function() {

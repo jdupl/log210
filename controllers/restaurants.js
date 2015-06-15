@@ -76,6 +76,10 @@ function updateRestaurantReferenceInRestaurateur(restaurant_id, new_restaurateur
           });
         });
       }
+    } else {
+      User.update({_id: new_restaurateur_id}, {$push: {restaurants: restaurant_id}}, function(err, updated) {
+        callback(null);
+      });
     }
   });
 }
