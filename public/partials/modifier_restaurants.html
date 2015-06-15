@@ -4,8 +4,9 @@
   </div>
   <div class="row">
     <div class="col-sm-12">
-      <button type="button" class="btn btn-info" ng-click="showAddForm = true" ng-show="!showAddForm">Ajouter des restaurants</button>
-      <button type="button" class="btn btn-primary" ng-click="showAddForm = false" ng-show="showAddForm">Arrêter l'ajout de restaurants</button>
+      <button type="button" class="btn btn-info" ng-click="showAddForm = true" ng-show="!showAddForm && !showModifyForm">Ajouter des restaurants</button>
+      <button type="button" class="btn btn-primary" ng-click="showAddForm = false" ng-show="showAddForm && !showModifyForm">Arrêter l'ajout de restaurants</button>
+    <button type="button" class="btn btn-primary" ng-click="showModifyForm = false; restaurant = null" ng-show="showModifyForm">Retourner à la liste de restaurants</button>
     </div>
   </div>
 
@@ -14,29 +15,57 @@
       <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
     </div>
   </div>
-  
+
+  <!-- I did a new form because 2 different submit buttons for one form is usually a really bad idea -->
+  <div ng-show="showModifyForm" class="row">
+    <div class="col-sm-12">
+      <form class="form-horizontal" ng-model="restaurant" name="modifyRestaurant" ng-submit="submitModifiedRestaurant(restaurant._id); showModifyForm = false" novalidate>
+        <div class="form-group">
+          <label for="restaurant.name" class="col-sm-4 col-md-2 control-label">Nom</label>
+          <div class="col-sm-4">
+            <input type="text" name="name" id="restaurant.name" ng-model="restaurant.name" class="form-control" placeholder="Nom"></input>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="restaurant.restaurateur" class="col-sm-2 control-label">Restaurateurs</label>
+          <div class="col-md-4">
+            <select style="color: black;" ng-model="selectedRestaurateur" ng-options="restaurateur._id as restaurateur.name for restaurateur in restaurateurs" ng-init="selectedRestaurateur = selectedRestaurateur" ng-multiple="false"></select>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-offset-2 col-sm-10">
+            <button type="submit" value="modifyRestaurant" class="btn btn-success">Modifier le restaurant</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <div ng-show="showAddForm" class="row">
     <div class="col-sm-12">
-	  <form class="form-horizontal" ng-model="restaurant" name="addRestaurant" ng-submit="submitRestaurant()" novalidate>
-	    <div class="form-group">
+      <form class="form-horizontal" ng-model="restaurant" name="addRestaurant" ng-submit="submitRestaurant()" novalidate>
+        <div class="form-group">
           <label for="restaurant.name" class="col-sm-4 col-md-2 control-label">Nom</label>
           <div class="col-sm-4">
             <input type="text" name="name" id="restaurant.name" ng-model="restaurant.name" class="form-control" placeholder="Nom">
           </div>
         </div>
-		  <!--
-            Code for the drop down list that will contain all of the restaurateur possible
-          //-->
-		<div class="form-group">
+        <div class="form-group">
+          <label for="restaurant.restaurateur" class="col-sm-2 control-label">Restaurateurs</label>
+          <div class="col-md-4">
+            <select style="color: black;" ng-model="restaurant.restaurateur" ng-options="restaurateur._id as restaurateur.name for restaurateur in restaurateurs" ng-attr-size="restaurateurs.length" ></select>
+          </div>
+        </div>
+        <div class="form-group">
           <div class="col-sm-offset-2 col-sm-10">
             <button type="submit" value="addRestaurant" class="btn btn-success">Ajouter ce restaurant</button>
           </div>
         </div>
-	  </form>
-	</div>
+      </form>
+    </div>
   </div>
-  
-  <div class="row" ng-show="!showAddForm">
+
+  <div class="row" ng-show="!showAddForm && !showModifyForm">
     <div class="col-sm-12">
       <h2>Liste des restaurants</h2>
       <table class="table table-hover">
@@ -52,10 +81,10 @@
             <td style="vertical-align:middle;">{{restaurant.name}}</td>
             <td style="text-align: center;">
               <div class="btn-group" style="white-space: nowrap;">
-                <button style="float: none;display: inline-block;" class="btn btn-info">
+                <button style="float: none;display: inline-block;" class="btn btn-info" ng-click="changeRestaurantInfo(restaurant._id)">
                   <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
                 </button>
-                <button style="float: none;display: inline-block;" class="btn btn-danger">
+                <button style="float: none;display: inline-block;" class="btn btn-danger" ng-click="deleteRestaurant(restaurant._id)">
                   <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
                 </button>
               </div>
