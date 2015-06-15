@@ -4,8 +4,9 @@
   </div>
   <div class="row">
     <div class="col-sm-12">
-      <button type="button" class="btn btn-info" ng-click="showAddForm = true" ng-show="!showAddForm">Ajouter des restaurateurs</button>
-      <button type="button" class="btn btn-primary" ng-click="showAddForm = false" ng-show="showAddForm">Arrêter l'ajout de restaurateurs</button>
+      <button type="button" class="btn btn-info" ng-click="showAddForm = true; showList = false;" ng-show="!showAddForm && !showModifyForm">Ajouter des restaurateurs</button>
+      <button type="button" class="btn btn-primary" ng-click="showAddForm = false; showList = true;" ng-show="showAddForm && !showModifyForm">Arrêter l'ajout de restaurateurs</button>
+      <button type="button" class="btn btn-primary" ng-click="showModifyForm = false; showList = true;restaurateur = null" ng-show="showModifyForm">Retourner à la liste de restaurateurs</button>
     </div>
   </div>
 
@@ -15,43 +16,43 @@
     </div>
   </div>
 
-  <div ng-show="showAddForm" class="row">
+  <div ng-show="showAddForm && !showModifyForm" class="row">
     <div class="col-sm-12">
       <form class="form-horizontal" ng-model="user" name="addRestaurateur" ng-submit="submitRestaurateur()" novalidate>
         <div class="form-group">
-          <label for="user.name" class="col-sm-4 col-md-2 control-label">Nom</label>
+          <label for="user.name" class="col-sm-4 col-md-4 control-label">Nom</label>
           <div class="col-sm-4">
             <input type="text" name="name" id="user.name" ng-model="user.name" class="form-control" placeholder="Nom">
           </div>
         </div>
          <div class="form-group">
-          <label for="user.email" class="col-sm-4 col-md-2 control-label">Courriel</label>
+          <label for="user.email" class="col-sm-4 col-md-4 control-label">Courriel</label>
           <div class="col-md-4">
             <input name="email" id="user.email" ng-model="user.email" class="form-control" placeholder="Courriel">
           </div>
         </div>
         <div class="form-group">
-          <label for="user.password" class="col-sm-2 control-label">Mot de passe</label>
+          <label for="user.password" class="col-sm-4 col-md-4 control-label">Mot de passe</label>
           <div class="col-md-4">
             <input type="password" name="password" ng-model="user.password" class="form-control" placeholder="Mot de passe">
           </div>
         </div>
         <div class="form-group">
-          <label for="user.passwordConfirm" class="col-sm-2 control-label">Confirmation du mot de passe</label>
+          <label for="user.passwordConfirm" class="col-sm-4 col-md-4 control-label">Confirmation du mot de passe</label>
           <div class="col-sm-4">
             <input type="password" name="passwordConfirm" ng-model="user.passwordConfirm" class="form-control"
               placeholder="Mot de passe">
           </div>
         </div>
         <div class="form-group">
-          <label for="user.restaurants" class="col-sm-2 control-label">Restaurants</label>
+          <label for="user.restaurants" class="col-sm-4 col-md-4 control-label">Restaurants</label>
           <div class="col-md-4">
-            <select ng-model="user.restaurants" ng-options="restaurant._id as restaurant.name for restaurant in restaurants" ng-multiple="true" multiple></select>
+            <select class="form-control" style="font-size:medium" ng-model="user.restaurants" ng-options="restaurant._id as restaurant.name for restaurant in restaurants" ng-multiple="true" multiple></select>
           </div>
         </div>
         <div class="form-group">
-          <div class="col-sm-offset-2 col-sm-10">
-            <button type="submit" value="addRestaurateur" class="btn btn-success">Ajouter ce restaurateur</button>
+          <div class="col-sm-offset-4 col-sm-4 col-md-4">
+            <button type="submit" value="addRestaurateur" class="btn btn-success btn-block">Ajouter ce restaurateur</button>
           </div>
         </div>
       </form>
@@ -62,39 +63,39 @@
     <div class="col-sm-12">
       <form class="form-horizontal" ng-model="userModify" name="modifyRestaurateur" ng-submit="submitModifyRestaurateur()" novalidate>
         <div class="form-group">
-          <label for="userModify.name" class="col-sm-4 col-md-2 control-label">Nom</label>
+          <label for="userModify.name" class="col-sm-4 col-md-4 control-label">Nom</label>
           <div class="col-sm-4">
             <input type="text" name="name" id="userModify.name" ng-model="userModify.name" class="form-control" placeholder="Nom">
           </div>
         </div>
          <div class="form-group">
-          <label for="userModify.email" class="col-sm-4 col-md-2 control-label">Courriel</label>
+          <label for="userModify.email" class="col-sm-4 col-md-4 control-label">Courriel</label>
           <div class="col-md-4">
             <input name="email" id="userModify.email" ng-model="userModify.email" class="form-control" placeholder="Courriel">
           </div>
         </div>
         <div class="form-group">
-          <label for="userModify.password" class="col-sm-2 control-label">Mot de passe</label>
+          <label for="userModify.password" class="col-sm-4 col-md-4 control-label">Mot de passe</label>
           <div class="col-md-4">
             <input type="password" name="password" ng-model="userModify.password" class="form-control" placeholder="Mot de passe">
           </div>
         </div>
         <div class="form-group">
-          <label for="userModify.passwordConfirm" class="col-sm-2 control-label">Confirmation du mot de passe</label>
+          <label for="userModify.passwordConfirm" class="col-sm-4 col-md-4 control-label">Confirmation du mot de passe</label>
           <div class="col-sm-4">
             <input type="password" name="passwordConfirm" ng-model="userModify.passwordConfirm" class="form-control"
               placeholder="Mot de passe">
           </div>
         </div>
         <div class="form-group">
-          <label for="userModify.restaurants" class="col-sm-2 control-label">Restaurants</label>
+          <label for="userModify.restaurants" class="col-sm-4 col-md-4 control-label">Restaurants</label>
           <div class="col-md-4">
-            <select ng-model="userModify.restaurants" ng-options="restaurant._id as restaurant.name for restaurant in restaurants" ng-selected="userModify.restaurants" ng-attr-size="restaurants.length" ng-multiple="true" multiple></select>
+            <select class="form-control" style="font-size:medium" ng-model="userModify.restaurants" ng-options="restaurant._id as restaurant.name for restaurant in restaurants" ng-selected="userModify.restaurants" ng-attr-size="restaurants.length" ng-multiple="true" multiple></select>
           </div>
         </div>
         <div class="form-group">
-          <div class="col-sm-offset-2 col-sm-10">
-            <button type="submit" value="modifyRestaurateur" class="btn btn-success">Modifier ce restaurateur</button>
+          <div class="col-sm-offset-4 col-sm-4 col-md-4">
+            <button type="submit" value="modifyRestaurateur" class="btn btn-success btn-block">Modifier ce restaurateur</button>
           </div>
         </div>
       </form>
