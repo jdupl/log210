@@ -278,3 +278,22 @@ describe('/api/restaurants/:id', function() {
     });
   });
 });
+describe('/api/restaurants/:id/users', function() {
+  describe('GET', function() {
+    it('should get the restaurateur associated with the restaurant', function(done) {
+      Restaurant.create({name: 'test-restaurant'}, function(err, createdRestaurant) {
+        var restaurateur = extend(restaurateur, data.restaurateur_user);
+        restaurateur.restaurants.push(createdRestaurant._id);
+        User.create(restaurateur, function(err, createdRestaurateur) {
+          client
+            .get('/api/restaurants/' + createdRestaurant._id + '/users')
+            .end(function(err, res) {
+              assert.equal(res.status, 200);
+              assert.equal(res.body._id, createdRestaurateur._id);
+              done();
+            });
+        });
+      });
+    });
+  });
+});

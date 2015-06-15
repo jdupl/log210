@@ -93,3 +93,9 @@ exports.getRestaurant = function(req, res) {
     res.status(200).json(restaurant);
   });
 };
+
+exports.getRestaurateur = function(req, res) {
+  User.findOne({restaurants: req.params.id}, function(err, restaurateur) {
+    res.status(200).json(restaurateur);
+  });
+};
