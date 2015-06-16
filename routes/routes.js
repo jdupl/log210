@@ -6,6 +6,7 @@ var userPayloadValidation = require('../middleware/validation/user');
 var usersController = require('../controllers/users');
 var loginController = require('../controllers/login');
 var restaurantsController = require('../controllers/restaurants');
+var menusController = require('../controllers/menus');
 
 module.exports = function(app) {
   //Login routes
@@ -26,4 +27,7 @@ module.exports = function(app) {
   app.post('/api/restaurants/', loginMiddleware.verify, restaurantsController.createRestaurant);
   app.delete('/api/restaurants/:id', loginMiddleware.verify, restaurantsController.deleteRestaurant);
   app.put('/api/restaurants/:id', loginMiddleware.verify, restaurantsController.updateRestaurant);
+
+  //Menu routes
+  app.post('/api/menus', loginMiddleware.verify, menusController.create);
 };
