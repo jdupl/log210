@@ -59,5 +59,20 @@ describe('/api/menus', function() {
         });
       });
     });
+    it('should not be able to create a menu if the user is not a restaurateur', function(done) {
+      User.create(data.client_user, function(err, createdClient) {
+        login.getToken(data.client_user.email, data.client_user.password, client, function(err, token) {
+          client
+            .post('/api/menus')
+            .set('Authorization', 'Bearer ' + token)
+            .send(data.test_menu)
+            .end(function(err, res) {
+              assert.equal(res.status, 401);
+              assert.equal(res.body.message, 'Unauthorized');
+              done();
+            });
+        });
+      });
+    });
   });
 });
