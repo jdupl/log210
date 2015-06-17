@@ -37,3 +37,26 @@ var restaurateur_user = {
   restaurants: []
 };
 exports.restaurateur_user = extend(restaurateur_user, common_user);
+
+//Restaurant fixture data
+exports.test_restaurant = {
+  name: 'test-restaurant'
+};
+
+//Menu fixture data
+exports.test_menu = {
+  name: 'test-menu',
+  plates: [
+    {
+      name: 'test-plate',
+      description: 'test-description',
+      price: 666
+    },
+    {
+      name: 'test-plate-2',
+      description: 'test-description-2',
+      price: 6666
+    }
+  ],
+  restaurant: undefined
+};
