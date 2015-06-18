@@ -1,6 +1,8 @@
 var Restaurant = require('../models/restaurant');
 var User = require('../models/user');
+var Menu = require('../models/menu');
 var config = require('../config/config');
+var async = require('async');
 
 exports.createRestaurant = function(req, res) {
     if (req.user.type === config.types.ADMIN) {
@@ -104,4 +106,28 @@ exports.getRestaurateur = function(req, res) {
   User.findOne({restaurants: req.params.id}, function(err, restaurateur) {
     res.status(200).json(restaurateur);
   });
+};
+
+//Get all the menus and their plates
+//linked to a restaurant
+exports.getMenus = function(req, res) {
+  var restaurant_id = req.params.id;
+  //Find all the menus from the restaurant id
+  Restaurant.findOne({_id: restaurant_id})
+    .populate({path: 'menus', select: '-__v'})
+    .exec(function(err, restaurant) {
+      //Populate the plates in menu list
+      var menus = [];
+      async.eachSeries(restaurant.menus, function(menu, callback) {
+        Menu.findOne({_id: menu._id})
+          .populate({path: 'plates', select: '-__v'})
+          .exec(function(err, menu) {
+              menus.push(menu);
+              callback(err);
+          });
+      }, function(err) {
+        res.status(200).json(menus);
+      });
+
+  })
 };
