@@ -28,6 +28,11 @@ var client_user = {
 };
 exports.client_user = extend(client_user, common_user);
 
+var client_user_with_optional_addresses = {
+  optional_addresses: ['opt-address1', 'opt-address2']
+};
+exports.client_user_with_optional_addresses = extend(client_user_with_optional_addresses, client_user);
+
 //Restaurateur user fixture data
 var restaurateur_user = {
   email: 'restaurateur@test.com',

@@ -22,3 +22,10 @@ exports.getToken = function(req, res) {
 exports.getProfile = function(req, res) {
   res.status(200).json(req.user);
 };
+
+exports.getAddresses = function(req, res) {
+  var addresses = [];
+  addresses[0] = req.user.address;
+  addresses.push.apply(addresses, req.user.optional_addresses);
+  res.status(200).json(addresses);
+};
