@@ -41,7 +41,7 @@ module.exports = function(grunt) {
     },
     execute: {
       target: {
-        src: ['scripts/insert-admin.js']
+        src: ['scripts/insert-users.js']
       }
     }
   });
@@ -49,6 +49,7 @@ module.exports = function(grunt) {
   grunt.registerTask('coverage', ['env:test', 'mocha_istanbul:coverage']);
   grunt.registerTask('watch-test', ['watch:test']);
   grunt.registerTask('lint', ['jshint']);
-  grunt.registerTask('serve', ['env:dev', 'execute', 'nodemon']);
+  grunt.registerTask('serve', ['env:dev', 'nodemon']);
+  grunt.registerTask('add-users', ['env:dev', 'execute']);
   grunt.registerTask('default', ['env:test', 'mocha_istanbul:coverage', 'env:dev', 'nodemon']);
 };
