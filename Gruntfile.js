@@ -51,5 +51,6 @@ module.exports = function(grunt) {
   grunt.registerTask('lint', ['jshint']);
   grunt.registerTask('serve', ['env:dev', 'nodemon']);
   grunt.registerTask('add-users', ['env:dev', 'execute']);
+  grunt.registerTask('full-serve', ['env:dev', 'execute', 'nodemon']);
   grunt.registerTask('default', ['env:test', 'mocha_istanbul:coverage', 'env:dev', 'nodemon']);
 };
