@@ -27,6 +27,9 @@
     <ul ng-if="showModifierRestaurateurs" class="nav navbar-nav navbar-right">
       <li ng-class="{ active: isActive('/modifier_restaurateurs') }"><a href="#/modifier_restaurateurs">Modifier les restaurateurs</a></li>
     </ul>
+    <ul ng-if="showModifierMenu" class="nav navbar-nav navbar-right">
+      <li ng-class="{ active: isActive('/modifier_menu') }"><a href="#/modifier_menu">Modifier les menus</a></li>
+    </ul>
     <ul ng-if="loggedin" class="nav navbar-nav navbar-right">
       <li><a href="#/logout">Se déconnecter</a></li>
     </ul>
