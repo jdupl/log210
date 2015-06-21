@@ -24,6 +24,7 @@ module.exports = function(app) {
   app.get('/api/restaurants/', loginMiddleware.verify, restaurantsController.getRestaurants);
   app.get('/api/restaurants/:id', loginMiddleware.verify, restaurantsController.getRestaurant);
   app.get('/api/restaurants/:id/users', restaurantsController.getRestaurateur);
+  app.get('/api/restaurants/:id/menus', loginMiddleware.verify, restaurantsController.getMenus);
   app.post('/api/restaurants/', loginMiddleware.verify, restaurantsController.createRestaurant);
   app.delete('/api/restaurants/:id', loginMiddleware.verify, restaurantsController.deleteRestaurant);
   app.put('/api/restaurants/:id', loginMiddleware.verify, restaurantsController.updateRestaurant);
