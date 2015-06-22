@@ -40,7 +40,8 @@ exports.restaurateur_user = extend(restaurateur_user, common_user);
 
 //Restaurant fixture data
 exports.test_restaurant = {
-  name: 'test-restaurant'
+  name: 'test-restaurant',
+  menus: []
 };
 
 //Menu fixture data
@@ -59,4 +60,17 @@ exports.test_menu = {
     }
   ],
   restaurant: undefined
+};
+
+//Empty menu fixture data
+exports.test_empty_menu = {
+  name: 'test-menu',
+  plates: []
+};
+
+//Plate fixture data
+exports.test_plate = {
+  name: 'test-plate',
+  description: 'test-description',
+  price: 666
 };

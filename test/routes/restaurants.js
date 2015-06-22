@@ -1,5 +1,7 @@
 var User = require('../../models/user');
 var Restaurant = require('../../models/restaurant');
+var Menu = require('../../models/menu');
+var Plate = require('../../models/plate');
 
 var app = require('../../app');
 var client = require('supertest')(app);
@@ -249,35 +251,14 @@ describe('/api/restaurants/:id', function() {
 describe('/api/restaurants', function() {
   describe('GET', function() {
     it('should return all the restaurants', function(done) {
-      User.create(data.admin_user, function(err, createdAdmin) {
-        Restaurant.create({name: 'test-restaurant'}, function(err, createdRestaurant) {
-          login.getToken(data.admin_user.email, data.admin_user.password, client, function(err, token) {
-            client
-              .get('/api/restaurants/')
-              .set('Authorization', 'Bearer ' + token)
-              .end(function(err, res) {
-                assert.equal(res.status, 200);
-                assert.equal(res.body.length, 1);
-                assert.equal(res.body[0].name, 'test-restaurant');
-                done();
-              });
-          });
-        });
-      });
-    });
-    it('should get a 401 if the loggged user is not an admin', function(done) {
-      User.create(data.client_user, function(err, createdClient) {
-        Restaurant.create({name: 'test-restaurant'}, function(err, createdRestaurant) {
-          login.getToken(data.client_user.email, data.client_user.password, client, function(err, token) {
-            client
-              .get('/api/restaurants/')
-              .set('Authorization', 'Bearer ' + token)
-              .end(function(err, res) {
-                assert.equal(res.status, 401);
-                assert.equal(res.body.message, 'Unauthorized. You are not an admin user');
-                done();
-              });
-          });
+      Restaurant.create({name: 'test-restaurant'}, function(err, createdRestaurant) {
+        client
+        .get('/api/restaurants/')
+        .end(function(err, res) {
+          assert.equal(res.status, 200);
+          assert.equal(res.body.length, 1);
+          assert.equal(res.body[0].name, 'test-restaurant');
+          done();
         });
       });
     });
@@ -317,6 +298,44 @@ describe('/api/restaurants/:id/users', function() {
               assert.equal(res.body._id, createdRestaurateur._id);
               done();
             });
+        });
+      });
+    });
+  });
+});
+describe('/api/restaurants/:id/menus', function() {
+  describe('GET', function() {
+    it('should get all the menus related to that restaurant', function(done) {
+      Plate.create(data.test_plate, function(err, createdPlate) {
+        var test_menu = extend(test_menu, data.test_menu);
+        var plates = [createdPlate._id];
+        test_menu.plates = plates;
+
+        Menu.create(test_menu, function(err, createdMenu) {
+          var test_restaurant = extend(test_restaurant, data.test_restaurant);
+          var menus = [createdMenu._id];
+          test_restaurant.menus = menus;
+
+          Restaurant.create(test_restaurant, function(err, createdRestaurant) {
+            var test_restaurateur = extend(test_restaurateur, data.restaurateur_user);
+            var restaurants = [createdRestaurant._id];
+            test_restaurateur.restaurants = restaurants;
+
+            User.create(test_restaurateur, function(err, createdRestaurateur) {
+              login.getToken(test_restaurateur.email, test_restaurateur.password, client, function(err, token) {
+                client
+                  .get('/api/restaurants/' + createdRestaurant._id + '/menus')
+                  .set('Authorization', 'Bearer ' + token)
+                  .end(function(err, res) {
+                    assert.equal(res.status, 200);
+                    assert.equal(res.body.length, 1);
+                    assert.equal(res.body[0]._id, createdMenu._id);
+                    assert.equal(res.body[0].plates[0]._id, createdPlate._id);
+                    done();
+                  });
+              });
+            });
+          });
         });
       });
     });
