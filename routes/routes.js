@@ -12,7 +12,7 @@ module.exports = function(app) {
   //Login routes
   app.post('/api/login/', loginController.getToken);
   app.get('/api/profile/', loginMiddleware.verify, loginController.getProfile);
-
+  app.get('/api/profile/addresses', loginMiddleware.verify, loginController.getAddresses);
   //Users routes
   app.post('/api/users/', loginMiddleware.verify, userPayloadValidation, usersController.create);
   app.get('/api/users/', loginMiddleware.verify, usersController.getUsers);
