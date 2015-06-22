@@ -9,6 +9,7 @@ angular.module('app', [
   'app.controllers.ModifierCompte',
   'app.controllers.ModifierRestaurants',
   'app.controllers.ModifierRestaurateurs',
+  'app.controllers.Order',
   'app.controllers.Logout',
 ]).config(['$routeProvider', '$httpProvider', function($routeProvider) {
     $routeProvider.when('/', {templateUrl: 'partials/index.html', controller: 'Index'});
@@ -21,7 +22,7 @@ angular.module('app', [
     $routeProvider.when('/modifier_restaurants', {templateUrl: 'partials/modifier_restaurants.html', controller: 'ModifierRestaurants'});
     $routeProvider.when('/modifier_restaurateurs', {templateUrl: 'partials/modifier_restaurateurs.html', controller: 'ModifierRestaurateurs'});
 
-    $routeProvider.when('/order', {templateUrl: 'partials/order.html', controller: 'order'});
+    $routeProvider.when('/order', {templateUrl: 'partials/order.html', controller: 'Order'});
 
     $routeProvider.otherwise({redirectTo: '/'});
   }]).factory('Auth', function($localStorage, $rootScope, $http) {
