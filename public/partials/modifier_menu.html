@@ -1,19 +1,20 @@
 <div class="container">
   <div class="row">
-    <div class="col-sm-12">
+    <div class="col-sm-6">
       <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
     </div>
   </div>
 
+  <h2>Ajouter un menu à un restaurant</h2>
   <div class="row" ng-show="showRestaurantList">
-    <div class="col-sm-12">
-      <h2>Ajouter un menu à un restaurant</h2>
+    <div class="col-sm-3"></div>
+    <div class="col-sm-6">
       <table class="table table-hover">
         <thead>
           <th>
             Nom
           </th>
-          <th style="width: 10%;">
+          <th style="width: 30%;">
             Ajouter un menu
           </th>
         </thead>
@@ -38,11 +39,11 @@
       <h2>Ajouter un menu au restaurant {{restaurant.name}}</h2>
     </div>
     <div class="col-sm-12" ng-show="!showAddPlate">
-      <form class="form-horizontal" ng-model="menu" name="addMenu" ng-submit="submitMenu()" novalidate>
+      <form class="form-horizontal" ng-model="menu" name="addMenu" ng-submit="submitMenu()">
         <div class="form-group">
           <label for="menu.name" class="col-sm-4 col-md-4 control-label">Nom du menu</label>
           <div class="col-sm-4">
-            <input type="text" name="name" id="menu.name" ng-model="menu.name" class="form-control" placeholder="Nom">
+            <input type="text" name="name" id="menu.name" ng-model="menu.name" class="form-control" placeholder="Nom" required>
           </div>
         </div>
         <div class="form-group" ng-show="menu.plates.length > 0">
@@ -80,17 +81,17 @@
     </div>
 
     <div ng-show="showAddPlate">
-      <form class="form-horizontal" ng-model="plate" name="addPlate" ng-submit="addPlateToMenu()" novalidate>
+      <form class="form-horizontal" ng-model="plate" name="addPlate" ng-submit="addPlateToMenu()">
         <div class="form-group">
           <label for="plate.name" class="col-sm-4 col-md-4 control-label">Nom du plat</label>
           <div class="col-sm-4">
-            <input type="text" name="name" id="plate.name" ng-model="plate.name" class="form-control" placeholder="Nom du plat">
+            <input type="text" name="name" id="plate.name" ng-model="plate.name" class="form-control" placeholder="Nom du plat" required>
           </div>
         </div>
         <div class="form-group">
           <label for="plate.price" class="col-sm-4 col-md-4 control-label">Prix du plat</label>
           <div class="col-sm-4">
-            <input type="text" name="price" id="plate.price" ng-model="plate.price" class="form-control" placeholder="Prix du plat">
+            <input type="text" name="price" id="plate.price" ng-model="plate.price" class="form-control" placeholder="Prix du plat" required>
           </div>
         </div>
         <div class="form-group">

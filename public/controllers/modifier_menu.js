@@ -2,10 +2,6 @@ var controllers = angular.module('app.controllers.ModifierMenu', []);
 
 controllers.controller('ModifierMenu', function($scope, $http, Auth) {
 
-  $scope.token = Auth.isLoggedIn();
-  $scope.showRestaurantList = true;
-  $scope.alerts = [];
-
   function getCurrentUserId(cb) {
     $http.get('/api/profile', {headers: {'Authorization' : 'Bearer ' + $scope.token}})
       .success(function(data) {
@@ -33,8 +29,10 @@ controllers.controller('ModifierMenu', function($scope, $http, Auth) {
 
   $scope.addPlateToMenu = function () {
     $scope.showAddPlate = false;
-    console.log($scope.menu);
     $scope.menu.plates.push($scope.plate);
+    if (!$scope.plate.description) {
+      $scope.alerts.push({msg: "Attention le plat ne contient pas de description", type: 'warning'});
+    }
     delete $scope.plate;
   }
 
@@ -59,6 +57,10 @@ controllers.controller('ModifierMenu', function($scope, $http, Auth) {
   $scope.closeAlert = function(index) {
     $scope.alerts.splice(index, 1);
   };
+
+  $scope.token = Auth.isLoggedIn();
+  $scope.showRestaurantList = true;
+  $scope.alerts = [];
 
   $scope.getRestaurants();
 });
