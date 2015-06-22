@@ -87,13 +87,9 @@ function updateRestaurantReferenceInRestaurateur(restaurant_id, new_restaurateur
 }
 
 exports.getRestaurants = function(req, res) {
-  if (req.user.type == config.types.ADMIN) {
-    Restaurant.find(function(err, restaurants) {
-      res.status(200).json(restaurants);
-    });
-  } else {
-    res.status(401).json({message: 'Unauthorized. You are not an admin user'});
-  }
+  Restaurant.find(function(err, restaurants) {
+    res.status(200).json(restaurants);
+  });
 };
 
 exports.getRestaurant = function(req, res) {

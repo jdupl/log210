@@ -251,35 +251,14 @@ describe('/api/restaurants/:id', function() {
 describe('/api/restaurants', function() {
   describe('GET', function() {
     it('should return all the restaurants', function(done) {
-      User.create(data.admin_user, function(err, createdAdmin) {
-        Restaurant.create({name: 'test-restaurant'}, function(err, createdRestaurant) {
-          login.getToken(data.admin_user.email, data.admin_user.password, client, function(err, token) {
-            client
-              .get('/api/restaurants/')
-              .set('Authorization', 'Bearer ' + token)
-              .end(function(err, res) {
-                assert.equal(res.status, 200);
-                assert.equal(res.body.length, 1);
-                assert.equal(res.body[0].name, 'test-restaurant');
-                done();
-              });
-          });
-        });
-      });
-    });
-    it('should get a 401 if the loggged user is not an admin', function(done) {
-      User.create(data.client_user, function(err, createdClient) {
-        Restaurant.create({name: 'test-restaurant'}, function(err, createdRestaurant) {
-          login.getToken(data.client_user.email, data.client_user.password, client, function(err, token) {
-            client
-              .get('/api/restaurants/')
-              .set('Authorization', 'Bearer ' + token)
-              .end(function(err, res) {
-                assert.equal(res.status, 401);
-                assert.equal(res.body.message, 'Unauthorized. You are not an admin user');
-                done();
-              });
-          });
+      Restaurant.create({name: 'test-restaurant'}, function(err, createdRestaurant) {
+        client
+        .get('/api/restaurants/')
+        .end(function(err, res) {
+          assert.equal(res.status, 200);
+          assert.equal(res.body.length, 1);
+          assert.equal(res.body[0].name, 'test-restaurant');
+          done();
         });
       });
     });
