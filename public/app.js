@@ -21,7 +21,7 @@ angular.module('app', [
     $routeProvider.when('/modifier_restaurants', {templateUrl: 'partials/modifier_restaurants.html', controller: 'ModifierRestaurants'});
     $routeProvider.when('/modifier_restaurateurs', {templateUrl: 'partials/modifier_restaurateurs.html', controller: 'ModifierRestaurateurs'});
 
-    $routeProvider.when('/commande', {templateUrl: 'partials/commande.html', controller: 'commande'});
+    $routeProvider.when('/order', {templateUrl: 'partials/order.html', controller: 'order'});
 
     $routeProvider.otherwise({redirectTo: '/'});
   }]).factory('Auth', function($localStorage, $rootScope, $http) {
