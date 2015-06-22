@@ -79,3 +79,14 @@ exports.test_plate = {
   description: 'test-description',
   price: 666
 };
+
+exports.test_item = {
+  quantity: 2
+};
+
+//Order fixture data
+exports.test_order = {
+  delivery_date: fake_date,
+  delivery_address: 'order-address',
+  status: 1
+};

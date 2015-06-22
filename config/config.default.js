@@ -13,5 +13,10 @@ module.exports = {
     CLIENT: 'client',
     ANONYMOUS: 'anonymous',
     RESTAURATEUR: 'restaurateur'
+  },
+  status: {
+    ORDERED: 1,
+    PREPARING: 2,
+    READY: 3
   }
 };
