@@ -7,6 +7,7 @@ var usersController = require('../controllers/users');
 var loginController = require('../controllers/login');
 var restaurantsController = require('../controllers/restaurants');
 var menusController = require('../controllers/menus');
+var ordersController = require('../controllers/orders');
 
 module.exports = function(app) {
   //Login routes
@@ -31,4 +32,7 @@ module.exports = function(app) {
 
   //Menu routes
   app.post('/api/menus', loginMiddleware.verify, menusController.create);
+
+  //Order routes
+  app.post('/api/orders', loginMiddleware.verify, ordersController.create);
 };
