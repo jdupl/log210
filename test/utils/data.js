@@ -88,5 +88,4 @@ exports.test_item = {
 exports.test_order = {
   delivery_date: fake_date,
   delivery_address: 'order-address',
-  status: 1
 };
