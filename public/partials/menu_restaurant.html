@@ -1,0 +1,42 @@
+<div class="container">
+  <div class="row">
+    <div class="col-sm-12">
+      <h2>Menu de {{restaurant.name}}</h2>
+    </div>
+    <div class="col-sm-12">
+      <h3>{{menu.name}}</h3>
+    </div>
+    <div class="col-sm-12">
+      <form class="form-horizontal" ng-model="menu" name="order" ng-submit="submitOrder()">
+        <div class="form-group" ng-show="menu.plates.length > 0">
+          <label for="menu.name" class="col-sm-4 col-md-4 control-label">Listes des plats</label>
+          <div class="col-sm-4">
+            <table class="table table-hover">
+              <thead>
+                <th>
+                  Nom du plat
+                </th>
+                <th>
+                  Prix du plat
+                </th>
+              </thead>
+              <tbody>
+                <tr ng-repeat="plate in menu.plates">
+                  <td style="vertical-align:middle;">{{plate.name}}</td>
+                  <td style="vertical-align:middle;">{{plate.price}}</td>
+                  <td style="vertical-align:middle;">Quantité : <input id="{{$index}}" type="text" style="width: 8px"></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="form-group" ng-show="!showAddPlate">
+          <div class="col-sm-offset-4 col-sm-4 col-md-4">
+            <button type="button" class="btn btn-success btn-block">Passer la commande</button>
+          </div>
+        </div>
+        </div>
+      </form>
+    </div>
+  </div>
+<div>
