@@ -1,7 +1,7 @@
 var controllers = angular.module('app.controllers.Index', []);
 
 controllers.controller('Index', function($scope, $http, Auth) {
-   $scope.hello = "Bienvenue sur restaurant log210";
+  $scope.hello = "Bienvenue sur restaurant log210";
   refreshList();
 
   $scope.afficherRestaurant = function(id) {
@@ -9,7 +9,7 @@ controllers.controller('Index', function($scope, $http, Auth) {
   };
 
   function refreshList() {
-    $http.get('/api/restaurants', {headers: {'Authorization' : 'Bearer ' + $scope.token}})
+    $http.get('/api/restaurants')
       .success(function(data) {
         $scope.restaurants = data;
         if ($scope.restaurants.length === 0) {
