@@ -24,6 +24,7 @@ controllers.controller('Navbar', function($scope, $rootScope, Auth, $location) {
 
     $scope.showModifierRestaurants = permsModifierRestaurants.indexOf(userType) !== -1;
     $scope.showModifierRestaurateurs = permsModifierRestaurateurs.indexOf(userType) !== -1;
+    $scope.showModifierMenu = userType === types.RESTAURATEUR;
 
     $rootScope.token = $scope.loggedin;
   }

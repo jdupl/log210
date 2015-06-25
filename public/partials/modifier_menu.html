@@ -1,0 +1,112 @@
+<div class="container">
+  <div class="row">
+    <div class="col-sm-6">
+      <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
+    </div>
+  </div>
+
+  <h2>Ajouter un menu à un restaurant</h2>
+  <div class="row" ng-show="showRestaurantList">
+    <div class="col-sm-3"></div>
+    <div class="col-sm-6">
+      <table class="table table-hover">
+        <thead>
+          <th>
+            Nom
+          </th>
+          <th style="width: 30%;">
+            Ajouter un menu
+          </th>
+        </thead>
+        <tbody>
+          <tr ng-repeat="r in restaurants">
+            <td style="vertical-align:middle;">{{r.name}}</td>
+            <td style="text-align: center;">
+              <div class="btn-group" style="white-space: nowrap;">
+                <button style="float: none;display: inline-block;" class="btn btn-danger" ng-click="prepare(r)">
+                  <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="row" ng-show="showAddMenu">
+    <div class="col-sm-12">
+      <h2>Ajouter un menu au restaurant {{restaurant.name}}</h2>
+    </div>
+    <div class="col-sm-12" ng-show="!showAddPlate">
+      <form class="form-horizontal" ng-model="menu" name="addMenu" ng-submit="submitMenu()">
+        <div class="form-group">
+          <label for="menu.name" class="col-sm-4 col-md-4 control-label">Nom du menu</label>
+          <div class="col-sm-4">
+            <input type="text" name="name" id="menu.name" ng-model="menu.name" class="form-control" placeholder="Nom" required>
+          </div>
+        </div>
+        <div class="form-group" ng-show="menu.plates.length > 0">
+          <label for="menu.name" class="col-sm-4 col-md-4 control-label">Listes des plats</label>
+          <div class="col-sm-4">
+            <table class="table table-hover">
+              <thead>
+                <th>
+                  Nom du plat
+                </th>
+                <th>
+                  Prix du plat
+                </th>
+              </thead>
+              <tbody>
+                <tr ng-repeat="plate in menu.plates">
+                  <td style="vertical-align:middle;">{{plate.name}}</td>
+                  <td style="vertical-align:middle;">{{plate.price}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="form-group" ng-show="!showAddPlate">
+          <div class="col-sm-offset-4 col-sm-4 col-md-4">
+            <button type="button" ng-click="showAddPlate = true" class="btn btn-success btn-block">Ajouter un plat au menu</button>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-offset-4 col-sm-4 col-md-4">
+            <button type="submit" value="addMenu" class="btn btn-primary btn-block">Ajouter ce menu</button>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div ng-show="showAddPlate">
+      <form class="form-horizontal" ng-model="plate" name="addPlate" ng-submit="addPlateToMenu()">
+        <div class="form-group">
+          <label for="plate.name" class="col-sm-4 col-md-4 control-label">Nom du plat</label>
+          <div class="col-sm-4">
+            <input type="text" name="name" id="plate.name" ng-model="plate.name" class="form-control" placeholder="Nom du plat" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="plate.price" class="col-sm-4 col-md-4 control-label">Prix du plat</label>
+          <div class="col-sm-4">
+            <input type="text" name="price" id="plate.price" ng-model="plate.price" class="form-control" placeholder="Prix du plat" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="plate.description" class="col-sm-4 col-md-4 control-label">Description du plat</label>
+          <div class="col-sm-4">
+            <input type="text" name="description" id="plate.description" ng-model="plate.description" class="form-control" placeholder="Description du plat">
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-offset-4 col-sm-4 col-md-4">
+            <button type="submit" value="addPlateToMenu" class="btn btn-success btn-block">Ajouter ce plat au menu</button>
+          </div>
+        </div>
+      </form>
+    </div>
+
+  </div>
+<div>

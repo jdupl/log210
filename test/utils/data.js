@@ -28,6 +28,11 @@ var client_user = {
 };
 exports.client_user = extend(client_user, common_user);
 
+var client_user_with_optional_addresses = {
+  optional_addresses: ['opt-address1', 'opt-address2']
+};
+exports.client_user_with_optional_addresses = extend(client_user_with_optional_addresses, client_user);
+
 //Restaurateur user fixture data
 var restaurateur_user = {
   email: 'restaurateur@test.com',
@@ -73,4 +78,14 @@ exports.test_plate = {
   name: 'test-plate',
   description: 'test-description',
   price: 666
+};
+
+exports.test_item = {
+  quantity: 2
+};
+
+//Order fixture data
+exports.test_order = {
+  delivery_date: fake_date,
+  delivery_address: 'order-address',
 };

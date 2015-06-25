@@ -70,3 +70,21 @@ describe('/api/profile/', function() {
     });
   });
 });
+describe('/api/profile/addresses', function() {
+  describe('GET', function() {
+    it('should return the primary and optional addresses of the user', function(done) {
+      User.create(data.client_user_with_optional_addresses, function(err, createdUser) {
+        login.getToken(data.client_user_with_optional_addresses.email, data.client_user_with_optional_addresses.password, client, function(err, token) {
+          client
+            .get('/api/profile/addresses')
+            .set('Authorization', 'Bearer ' + token)
+            .end(function(err, res) {
+              assert.equal(res.status, 200);
+              assert.equal(res.body.length, 3);
+              done();
+            });
+        });
+      });
+    });
+  });
+});

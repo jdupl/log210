@@ -7,12 +7,13 @@ var usersController = require('../controllers/users');
 var loginController = require('../controllers/login');
 var restaurantsController = require('../controllers/restaurants');
 var menusController = require('../controllers/menus');
+var ordersController = require('../controllers/orders');
 
 module.exports = function(app) {
   //Login routes
   app.post('/api/login/', loginController.getToken);
   app.get('/api/profile/', loginMiddleware.verify, loginController.getProfile);
-
+  app.get('/api/profile/addresses', loginMiddleware.verify, loginController.getAddresses);
   //Users routes
   app.post('/api/users/', loginMiddleware.verify, userPayloadValidation, usersController.create);
   app.get('/api/users/', loginMiddleware.verify, usersController.getUsers);
@@ -31,4 +32,7 @@ module.exports = function(app) {
 
   //Menu routes
   app.post('/api/menus', loginMiddleware.verify, menusController.create);
+
+  //Order routes
+  app.post('/api/orders', loginMiddleware.verify, ordersController.create);
 };
