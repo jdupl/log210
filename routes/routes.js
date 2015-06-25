@@ -37,4 +37,5 @@ module.exports = function(app) {
 
   //Order routes
   app.post('/api/orders', loginMiddleware.verify, ordersController.create);
+  app.put('/api/orders/:id', loginMiddleware.verify, ordersController.update);
 };
