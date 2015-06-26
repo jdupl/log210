@@ -22,3 +22,10 @@ exports.create = function(req, res) {
     });
   });
 };
+
+exports.update = function(req, res) {
+  var order_id = req.params.id;
+  Order.update({_id: order_id}, req.body, function(err, updated) {
+    res.status(200).json({message: 'order updated'});
+  });
+};
