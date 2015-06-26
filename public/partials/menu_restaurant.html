@@ -1,14 +1,7 @@
 <div class="container">
    <div class="row">
-   <!--<div class="col-sm-12">
-   <h2>Menu de {{restaurant.name}}</h2>
-   </div>
-   <div class="col-sm-12">
-   <h3>{{menu.name}}</h3>
-   </div>-->
-   
       <form class="form-horizontal" ng-model="menu" id="order" name="order" ng-submit="submitOrder()">
-          <div ng-repeat="menu in menus" class="col-sm-12">
+          <div ng-repeat="menu in order" class="col-sm-12">
             <div class="col-sm-12">
                <h3>{{menu.name}}</h3>
             </div>
@@ -23,13 +16,13 @@
                            Prix du plat
                         </th>
                       </thead>
-                        <tbody>
-                           <tr ng-repeat="plate in menu.plates">
-                              <td style="vertical-align:middle;">{{plate.name}}</td>
-                              <td style="vertical-align:middle;">{{plate.price | number : 2}} $</td>
-                              <td style="vertical-align:middle;">Quantité : <input id="{{$parent.$index}}:{{$index}}" value="0" type="number" min="0" max="99" style="width: 32px"></td>
-                           </tr>
-                        </tbody>
+                      <tbody>
+                         <tr ng-repeat="plate in menu.plates">
+                            <td style="vertical-align:middle;">{{plate.name}}</td>
+                            <td style="vertical-align:middle;">{{plate.price | number : 2}} $</td>
+                            <td style="vertical-align:middle;">Quantité : <input ng-model="plate.quantite" type="number" min="0" max="99" style="width: 32px"></td>
+                         </tr>
+                      </tbody>
                   </table>
                </div>
             </div>
