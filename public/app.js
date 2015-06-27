@@ -52,6 +52,18 @@ angular.module('app', [
           return $localStorage.userType;
         }
       }
+    }).service('selectedOrder', function () {
+      // service used to save and pass the current order between the menu_restaurant and the order controller
+      var order = { order: null };
+
+      return {
+        getOrder: function () {
+          return order;
+        },
+        setOrder: function(value) {
+          order = value;
+        }
+      };
     }).directive('passwordCheck', [function () {
       return {
         restrict: 'A',

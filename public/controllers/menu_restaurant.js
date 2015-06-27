@@ -1,9 +1,38 @@
 var controllers = angular.module('app.controllers.MenuRestaurant', []);
 
-controllers.controller('MenuRestaurant', function($scope, $http, $routeParams, Auth) {
+controllers.controller('MenuRestaurant', function($scope, $http, $routeParams, Auth, selectedOrder) {
 
-  $scope.submitOrder = function () {
-    // Goto order confirmation
+  $scope.submitOrder = function (id) {
+    // the function takes the current order and store it in the service selectedOrder for the next step of the command
+
+    // we get the current order
+    var currentOrder = selectedOrder.getOrder();
+
+    // we put the current user as client of the current order
+    $http.get('/api/profile', {headers: {'Authorization' : 'Bearer ' + $scope.token}})
+      .success(function(data) {
+        currentOrder.client = data;
+      });
+
+    // we get the restaurant chosen and put it in the current order
+    $http.get('/api/restaurants/' + id, {headers: {'Authorization' : 'Bearer ' + $scope.token}})
+      .success(function(data) {
+        currentOrder.restaurant = data;
+      });
+
+    // we put the chosen items from the form in the current order
+    console.log($scope);
+    angular.forEach($scope.plates, function(plate,key) {
+      if(plate.quantite < 0){
+        currentOrder.items.add(plate);
+        console.log(plate);
+      }
+    });
+
+    // we store the new current order in the service
+    selectedOrder.setOrder(currentOrder);
+
+
   }
 
   $scope.getRestaurant =  function(id) {

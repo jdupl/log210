@@ -10,14 +10,6 @@
     </div>
   </div>
 
-  <div ng-show="showFormOrder">
-  <!-- restaurant selectbox -->
-    <div class="col-sm-12">
-      <form class="form-horizontal" name="selectBoxRestaurant" >
-      </form>
-    </div>
-  </div>
-
   <!-- Command form -->
   <div class="col-sm-12">
     <form class="form-horizontal" ng-model="order" name="ajoutCommande" ng-submit="submitOrder()" novalidate>
@@ -48,14 +40,4 @@
     </form>
   </div>
 
-  <!-- selectbox to choose a menu -->
-  <select class="form-control" style="font-size:medium" ng-model="menu" ng-options="" ng-multiple="false"></select>
-
-  <!-- plate's display -->
-  <div class="col-sm-4 col-md-4" ng-repeat="plate in plates">
-    {{plate.name}}
-    {{plate.description}}
-    {{plate.price}}
-
-  </div>
 </div>
