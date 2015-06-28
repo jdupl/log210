@@ -2,6 +2,7 @@ var User = require('../models/user');
 var Restaurant = require('../models/restaurant');
 var config = require('../config/config');
 var async = require('async');
+var extend = require('extend');
 
 exports.create = function(req, res) {
   payload = req.body;
@@ -38,8 +39,11 @@ exports.getUsers = function(req, res) {
 
 exports.updateUser = function(req, res) {
   if (req.params.id == req.user._id || req.user.type === config.types.ADMIN) {
-    User.update({_id: req.params.id}, req.body, function(err, updated) {
-      res.status(200).json({message: 'User updated'});
+    User.findOne({_id: req.params.id}).select('_id').exec(function(err, user) {
+      user = extend(user, req.body);
+      user.save(function(err, savedUser) {
+        res.status(200).json({message: 'user updated'});
+      });
     });
   } else {
     res.status(401).json({message: 'Unauthorized'});
