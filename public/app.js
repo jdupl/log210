@@ -12,6 +12,7 @@ angular.module('app', [
   'app.controllers.ModifierMenu',
   'app.controllers.Logout',
   'app.controllers.MenuRestaurant',
+  'app.controllers.ListeCommandes',
 ]).config(['$routeProvider', '$httpProvider', function($routeProvider) {
     $routeProvider.when('/', {templateUrl: 'partials/index.html', controller: 'Index'});
 
@@ -25,6 +26,8 @@ angular.module('app', [
     $routeProvider.when('/modifier_menu', {templateUrl: 'partials/modifier_menu.html', controller: 'ModifierMenu'});
 
     $routeProvider.when('/menu_restaurant/:restaurantId', {templateUrl: 'partials/menu_restaurant.html', controller: 'MenuRestaurant'});
+
+    $routeProvider.when('/liste_commandes', {templateUrl: 'partials/liste_commandes.html', controller: 'ListeCommandes'});
 
     $routeProvider.otherwise({redirectTo: '/'});
   }]).factory('Auth', function($localStorage, $rootScope, $http) {
