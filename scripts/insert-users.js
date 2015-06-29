@@ -21,9 +21,9 @@ function addRestaurateur(cb) {
   });
 }
 
-addAdmin(
+addAdmin(function() {
   addRestaurateur(function() {
     mongoose.connection.close();
     process.exit();
   });
-)
+});
