@@ -8,12 +8,6 @@ controllers.controller('MenuRestaurant', function($scope, $http, $routeParams, A
     // we get the current order
     var currentOrder = selectedOrder.getOrder();
 
-    // we put the current user as client of the current order
-    $http.get('/api/profile', {headers: {'Authorization' : 'Bearer ' + $scope.token}})
-      .success(function(data) {
-        currentOrder.client = data;
-      });
-
     // we get the restaurant chosen and put it in the current order
     $http.get('/api/restaurants/' + id, {headers: {'Authorization' : 'Bearer ' + $scope.token}})
       .success(function(data) {
@@ -21,18 +15,18 @@ controllers.controller('MenuRestaurant', function($scope, $http, $routeParams, A
       });
 
     // we put the chosen items from the form in the current order
-    console.log($scope);
     angular.forEach($scope.plates, function(plate,key) {
       if(plate.quantite < 0){
         currentOrder.items.add(plate);
-        console.log(plate);
       }
     });
 
     // we store the new current order in the service
     selectedOrder.setOrder(currentOrder);
 
-
+    // we change to the address page/part of the order
+    document.location.href = "/#/order/";
+    console.log(currentOrder);
   }
 
   $scope.getRestaurant =  function(id) {
