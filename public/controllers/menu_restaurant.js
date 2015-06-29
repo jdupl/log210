@@ -1,41 +1,56 @@
 var controllers = angular.module('app.controllers.MenuRestaurant', []);
 
-controllers.controller('MenuRestaurant', function($scope, $http, $routeParams, Auth, selectedOrder) {
+controllers.controller('MenuRestaurant', function($scope, $http, $routeParams, Auth) {
 
-  $scope.submitOrder = function (id) {
-    // the function takes the current order and store it in the service selectedOrder for the next step of the command
-
-    // we get the current order
-    var currentOrder = selectedOrder.getOrder();
-
-    // we get the restaurant chosen and put it in the current order
-    $http.get('/api/restaurants/' + id, {headers: {'Authorization' : 'Bearer ' + $scope.token}})
-      .success(function(data) {
-        currentOrder.restaurant = data;
-      });
-
-    // we put the chosen items from the form in the current order
-    angular.forEach($scope.plates, function(plate,key) {
-      if(plate.quantite < 0){
-        currentOrder.items.add(plate);
-      }
-    });
-
-    // we store the new current order in the service
-    selectedOrder.setOrder(currentOrder);
-
-    // we change to the address page/part of the order
-    document.location.href = "/#/order/";
-    console.log(currentOrder);
-  }
-
-  $scope.getRestaurant =  function(id) {
+  function getRestaurant(id) {
     $http.get('/api/restaurants/' + id + '/menus', {headers: {'Authorization' : 'Bearer ' + $scope.token}})
       .success(function(data) {
-        $scope.order = data;
+        $scope.menus = data;
       });
   }
 
+  $scope.submitPlates = function () {
+    $scope.currentOrder = {};
+    $scope.currentOrder.items = [];
+    $scope.currentOrder.restaurant = $scope.selectedRestaurantId;
+
+    // we put the chosen items from the form in the current order
+    angular.forEach($scope.menus, function(menu, key) {
+      angular.forEach(menu.plates, function(plate, key) {
+        if (plate.quantite > 0) {
+          console.log(plate);
+          $scope.currentOrder.items.push(plate);
+        }
+      });
+    });
+    $scope.showCommandForm = true;
+  }
+
+  $scope.submitOrder = function() {
+    // function triggered when the user confirm his command
+    // we get the current order
+
+    // we initiate the status
+    $scope.currentOrder.status = 0;
+
+    // we put the selected address
+    $scope.currentOrder.delivery_address = $scope.order.delivery_address;
+
+    // we put the date
+    $scope.currentOrder.delivery_date = $scope.order.delivery_date;
+
+    // we save the order in the database
+    $http.post('/api/orders', $scope.currentOrder, {headers: {'Authorization' : 'Bearer ' + $scope.token}})
+      .success(function(data) {
+        delete $scope.order;
+        $scope.alerts.push({msg: "La commande à été enregistré avec succès.", type: 'success'});
+      })
+      .error(function(data, status) {
+        $scope.alerts.push({msg: "Malheuresement, une erreur est survenue lors de l'ajout et la commande n'a pas pu être enregistré.", type: 'danger'});
+      });
+  };
+
   $scope.token = Auth.isLoggedIn();
-  $scope.getRestaurant($routeParams.restaurantId);
+  $scope.selectedRestaurantId = $routeParams.restaurantId;
+  getRestaurant($scope.selectedRestaurantId);
 });
