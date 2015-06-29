@@ -26,7 +26,6 @@ describe('/api/orders', function() {
 
             Item.create(data.test_item, function(err, createdItem) {
               var test_order = extend(test_order, data.test_order);
-              test_order.client = createdClient._id;
               test_order.restaurant = createdRestaurant._id;
               var items = [createdItem._id];
               test_order.items = items;
