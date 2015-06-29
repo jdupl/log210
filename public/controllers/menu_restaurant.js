@@ -27,9 +27,6 @@ controllers.controller('MenuRestaurant', function($scope, $http, $routeParams, A
   }
 
   $scope.submitOrder = function() {
-    // function triggered when the user confirm his command
-    // we get the current order
-
     // we initiate the status
     $scope.currentOrder.status = 0;
 
@@ -43,6 +40,7 @@ controllers.controller('MenuRestaurant', function($scope, $http, $routeParams, A
     $http.post('/api/orders', $scope.currentOrder, {headers: {'Authorization' : 'Bearer ' + $scope.token}})
       .success(function(data) {
         delete $scope.order;
+        $scope.showCommandForm = false;
         $scope.alerts.push({msg: "La commande à été enregistré avec succès.", type: 'success'});
       })
       .error(function(data, status) {
@@ -50,6 +48,7 @@ controllers.controller('MenuRestaurant', function($scope, $http, $routeParams, A
       });
   };
 
+  $scope.alerts = [];
   $scope.token = Auth.isLoggedIn();
   $scope.selectedRestaurantId = $routeParams.restaurantId;
   getRestaurant($scope.selectedRestaurantId);
