@@ -32,6 +32,15 @@ exports.getAddresses = function(req, res) {
   res.status(200).json(addresses);
 };
 
+exports.getRestaurants = function(req, res) {
+  User.findOne({_id: req.user._id})
+    .select('restaurants')
+    .populate({path: 'restaurants', select: '-__v'})
+    .exec(function(err, user) {
+      res.status(200).json(user.restaurants);
+    });
+};
+
 exports.getOrders = function(req, res) {
   if (req.user.type === config.types.CLIENT) {
     var client_id = req.user._id;

@@ -15,6 +15,7 @@ module.exports = function(app) {
   app.get('/api/profile/', loginMiddleware.verify, loginController.getProfile);
   app.get('/api/profile/addresses', loginMiddleware.verify, loginController.getAddresses);
   app.get('/api/profile/orders', loginMiddleware.verify, loginController.getOrders);
+  app.get('/api/profile/restaurants', loginMiddleware.verify, loginController.getRestaurants);
 
   //Users routes
   app.post('/api/users/', loginMiddleware.verify, userPayloadValidation, usersController.create);

@@ -3,11 +3,13 @@ var app = require('../../app');
 var client = require('supertest')(app);
 var assert = require('assert');
 var User = require('../../models/user');
+var Restaurant = require('../../models/restaurant');
 var jwt = require('jsonwebtoken');
 var fake_date = Date.now();
 var data = require('../utils/data');
 var config = require('../../config/config');
 var login = require('../utils/login');
+var extend = require('extend');
 
 describe('/api/login', function() {
   describe('POST', function() {
@@ -83,6 +85,31 @@ describe('/api/profile/addresses', function() {
               assert.equal(res.body.length, 3);
               done();
             });
+        });
+      });
+    });
+  });
+});
+describe('/api/profile/restaurants', function() {
+  describe('GET', function() {
+    it('should get the restaurants of the restaurateur', function(done) {
+      Restaurant.create(data.restaurateur_user, function(err, createdRestaurant) {
+        var test_restaurateur = extend(test_restaurateur, data.restaurateur_user);
+        var restaurants = [createdRestaurant._id];
+        test_restaurateur.restaurants = restaurants;
+
+        User.create(test_restaurateur, function(createdRestaurateur) {
+          login.getToken(data.restaurateur_user.email, data.restaurateur_user.password, client, function(err, token) {
+            client
+              .get('/api/profile/restaurants')
+              .set('Authorization', 'Bearer ' + token)
+              .end(function(err, res) {
+                assert.equal(res.status, 200);
+                assert.equal(res.body[0]._id, createdRestaurant._id);
+                assert.equal(res.body[0].name, createdRestaurant.name);
+                done();
+              });
+          });
         });
       });
     });
