@@ -249,10 +249,12 @@ describe('/api/users/:id', function() {
                 assert.equal(user.type, updated.type);
                 assert.equal(user.name, updated.name);
                 assert.equal(user.phone, updated.phone);
-                assert.equal(user.password, updated.password);
                 assert.equal(new Date(user.birth_date).getTime(), new Date(updated.birth_date).getTime());
                 assert.equal(user.address, 'new-address');
-                done();
+                user.verifyPassword(updated.password, function(err, isMatch) {
+                  assert(isMatch);
+                  done();
+                });
               });
             });
         });
@@ -283,10 +285,12 @@ describe('/api/users/:id', function() {
                 assert.equal(user.type, updated.type);
                 assert.equal(user.name, updated.name);
                 assert.equal(user.phone, updated.phone);
-                assert.equal(user.password, updated.password);
                 assert.equal(new Date(user.birth_date).getTime(), new Date(updated.birth_date).getTime());
                 assert.equal(user.address, 'new-address');
-                done();
+                user.verifyPassword(updated.password, function(err, isMatch) {
+                  assert(isMatch);
+                  done();
+                });
               });
             });
           });
@@ -345,10 +349,12 @@ describe('/api/users/:id', function() {
                 assert.equal(user.type, updated.type);
                 assert.equal(user.name, updated.name);
                 assert.equal(user.phone, updated.phone);
-                assert.equal(user.password, updated.password);
                 assert.equal(new Date(user.birth_date).getTime(), new Date(updated.birth_date).getTime());
                 assert.equal(user.address, updated.address);
-                done();
+                user.verifyPassword(updated.password, function(err, isMatch) {
+                  assert(isMatch);
+                  done();
+                });
               });
             });
         });

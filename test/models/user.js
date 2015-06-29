@@ -67,4 +67,18 @@ describe('User model', function() {
       });
     });
   });
+  describe('update', function() {
+    it('should update the password with a new hash', function(done) {
+      User.create(data.client_user, function(err, createdUser) {
+        var new_password = 'new_password';
+        createdUser.password = new_password;
+        createdUser.save(function(err, updatedUser) {
+          updatedUser.verifyPassword(new_password, function(err, isMatch) {
+            assert(isMatch);
+            done();
+          });
+        });
+      });
+    });
+  });
 });

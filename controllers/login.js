@@ -32,12 +32,28 @@ exports.getAddresses = function(req, res) {
   res.status(200).json(addresses);
 };
 
+exports.getRestaurants = function(req, res) {
+  User.findOne({_id: req.user._id})
+    .select('restaurants')
+    .populate({path: 'restaurants', select: '-__v'})
+    .exec(function(err, user) {
+      res.status(200).json(user.restaurants);
+    });
+};
+
 exports.getOrders = function(req, res) {
-  //Get the restaurants from the logged in user
-  var restaurants = req.user.restaurants;
-  getOrdersFromRestaurants(restaurants, function(err, response) {
-    res.status(200).json(response);
-  });
+  if (req.user.type === config.types.CLIENT) {
+    var client_id = req.user._id;
+    Order.find({client: client_id}, function(err, orders) {
+      res.status(200).json(orders);
+    });
+  } else if (req.user.type === config.types.RESTAURATEUR) {
+    //Get the restaurants from the logged in user
+    var restaurants = req.user.restaurants;
+    getOrdersFromRestaurants(restaurants, function(err, response) {
+      res.status(200).json(response);
+    });
+  }
 };
 
 /**

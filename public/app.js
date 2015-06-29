@@ -9,10 +9,10 @@ angular.module('app', [
   'app.controllers.ModifierCompte',
   'app.controllers.ModifierRestaurants',
   'app.controllers.ModifierRestaurateurs',
-  'app.controllers.Order',
   'app.controllers.ModifierMenu',
   'app.controllers.Logout',
   'app.controllers.MenuRestaurant',
+  'app.controllers.ListeCommandes',
 ]).config(['$routeProvider', '$httpProvider', function($routeProvider) {
     $routeProvider.when('/', {templateUrl: 'partials/index.html', controller: 'Index'});
 
@@ -27,7 +27,7 @@ angular.module('app', [
 
     $routeProvider.when('/menu_restaurant/:restaurantId', {templateUrl: 'partials/menu_restaurant.html', controller: 'MenuRestaurant'});
 
-    $routeProvider.when('/order', {templateUrl: 'partials/order.html', controller: 'Order'});
+    $routeProvider.when('/liste_commandes', {templateUrl: 'partials/liste_commandes.html', controller: 'ListeCommandes'});
 
     $routeProvider.otherwise({redirectTo: '/'});
   }]).factory('Auth', function($localStorage, $rootScope, $http) {

@@ -107,7 +107,7 @@ controllers.controller('ModifierRestaurants', function($scope, $http) {
   }
 
   function refreshList() {
-    $http.get('/api/restaurants', {headers: {'Authorization' : 'Bearer ' + $scope.token}})
+    $http.get('/api/profile/restaurants', {headers: {'Authorization' : 'Bearer ' + $scope.token}})
       .success(function(data) {
         $scope.restaurants = data;
         if ($scope.restaurants.length === 0) {
