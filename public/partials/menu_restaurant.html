@@ -1,7 +1,14 @@
 <div class="container">
    <div class="row">
-      <form class="form-horizontal" ng-model="menu" id="order" name="order" ng-submit="submitOrder()">
-          <div ng-repeat="menu in order" class="col-sm-12">
+     <h2>Passer la commande</h2>
+     <div class="row">
+       <div class="col-sm-12">
+         <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
+       </div>
+     </div>
+
+      <form class="form-horizontal" id="order" name="order" ng-submit="submitPlates()" ng-show="!showCommandForm">
+          <div ng-repeat="menu in menus" class="col-sm-12">
             <div class="col-sm-12">
                <h3>{{menu.name}}</h3>
             </div>
@@ -20,7 +27,9 @@
                          <tr ng-repeat="plate in menu.plates">
                             <td style="vertical-align:middle;">{{plate.name}}</td>
                             <td style="vertical-align:middle;">{{plate.price | number : 2}} $</td>
-                            <td style="vertical-align:middle;">Quantité : <input ng-model="plate.quantite" type="number" min="0" max="99" style="width: 32px"></td>
+                            <td style="vertical-align:middle;">Quantité :
+                              <input ng-model="plate.quantite" type="number" min="0" max="99" style="width: 32px">
+                            </td>
                          </tr>
                       </tbody>
                   </table>
@@ -33,5 +42,35 @@
             </div>
          </div>
       </form>
+
+      <!-- Command form -->
+      <div class="col-sm-12" ng-show="showCommandForm">
+        <form class="form-horizontal" ng-model="order" name="ajoutCommande" ng-submit="submitOrder()" novalidate>
+          <div class="form-group">
+            <label for="order.delivery_date" class="col-sm-4 col-md-4 control-label">Date de livraison</label>
+            <div class="col-sm-4">
+              <datepicker name="date" ng-model="order.delivery_date" show-weeks="true" class="well well-sm"
+                data-provide="datepicker"></datepicker>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="order.delivery_address" class="col-sm-4 col-md-4 control-label">Nouvelle adresse de livraison</label>
+            <div class="col-sm-4">
+              <input type="text" name="address" ng-model="order.delivery_address" class="form-control" placeholder="Adresse de livraison">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="address" class="col-sm-4 col-md-4 control-label">Autres adresses possibles</label>
+            <div class="col-md-4">
+              <select class="form-control" style="font-size:medium" ng-model="address" ng-options="" ng-multiple="false"></select>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-sm-offset-4 col-sm-4 col-md-4">
+              <button type="submit" value="addOrder" class="btn btn-success btn-block">Passer la commande</button>
+            </div>
+          </div>
+        </form>
+      </div>
    </div>
 </div>
