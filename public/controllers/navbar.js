@@ -21,9 +21,11 @@ controllers.controller('Navbar', function($scope, $rootScope, Auth, $location) {
 
     var permsModifierRestaurants = [types.ADMIN, types.RESTAURATEUR];
     var permsModifierRestaurateurs = [types.ADMIN];
+    var permsListeCommandes = [types.RESTAURATEUR];
 
     $scope.showModifierRestaurants = permsModifierRestaurants.indexOf(userType) !== -1;
     $scope.showModifierRestaurateurs = permsModifierRestaurateurs.indexOf(userType) !== -1;
+    $scope.showListeCommandes = permsListeCommandes.indexOf(userType) !== -1;
     $scope.showModifierMenu = userType === types.RESTAURATEUR;
 
     $rootScope.token = $scope.loggedin;
