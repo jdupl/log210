@@ -18,6 +18,7 @@
     "angular-bootstrap": "~0.13.0",
     "angular-ui-date": "~0.0.7",
     "jquery-ui": "~1.11.4",
-    "ngstorage": "~0.3.3"
+    "ngstorage": "~0.3.3",
+    "eonasdan-bootstrap-datetimepicker": "~4.14.30"
   }
 }
