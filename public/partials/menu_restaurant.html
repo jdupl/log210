@@ -28,7 +28,7 @@
                             <td style="vertical-align:middle;">{{plate.name}}</td>
                             <td style="vertical-align:middle;">{{plate.price | number : 2}} $</td>
                             <td style="vertical-align:middle;">Quantité :
-                              <input ng-model="plate.quantite" type="number" min="0" max="99" style="width: 32px">
+                              <input ng-model="plate.quantite" type="number" min="0" max="99" style="width: 32px" ng-init="plate.quantite = 0">
                             </td>
                          </tr>
                       </tbody>
@@ -47,10 +47,14 @@
       <div class="col-sm-12" ng-show="showCommandForm">
         <form class="form-horizontal" ng-model="order" name="ajoutCommande" ng-submit="submitOrder()" novalidate>
           <div class="form-group">
-            <label for="order.delivery_date" class="col-sm-4 col-md-4 control-label">Date de livraison</label>
+            <label for="order.date" class="col-sm-4 col-md-4 control-label">Date et heure de la livraison</label>
             <div class="col-sm-4">
-              <datepicker name="date" ng-model="order.delivery_date" show-weeks="true" class="well well-sm"
-                data-provide="datepicker"></datepicker>
+              <div class='input-group date' id='datetimepicker'>
+                <input type='text' ng-model="order.delivery_date" class="form-control" />
+                <span class="input-group-addon">
+                  <span class="glyphicon glyphicon-calendar"></span>
+                </span>
+              </div>
             </div>
           </div>
           <div class="form-group">
@@ -62,7 +66,7 @@
           <div class="form-group">
             <label for="address" class="col-sm-4 col-md-4 control-label">Autres adresses possibles</label>
             <div class="col-md-4">
-              <select class="form-control" style="font-size:medium" ng-model="address" ng-options="" ng-multiple="false"></select>
+              <select class="form-control" style="font-size:medium" ng-model="secondaryAddresses" ng-options="address as address for address in addresses" ng-multiple="false"></select>
             </div>
           </div>
           <div class="form-group">
