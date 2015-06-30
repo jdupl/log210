@@ -18,13 +18,15 @@ controllers.controller('MenuRestaurant', function($scope, $http, $routeParams, A
     $scope.currentOrder = {};
     $scope.currentOrder.items = [];
     $scope.currentOrder.restaurant = $scope.selectedRestaurantId;
+    $scope.total = 0;
 
     // we put the chosen items from the form in the current order
     angular.forEach($scope.menus, function(menu, key) {
       angular.forEach(menu.plates, function(plate, key) {
-        if (plate.quantite > 0) {
-          console.log(plate);
+        if (plate.quantity > 0) {
           $scope.currentOrder.items.push(plate);
+          $scope.total += plate.quantity * plate.price;
+          console.log(plate.quantity);
         }
       });
     });
@@ -58,6 +60,7 @@ controllers.controller('MenuRestaurant', function($scope, $http, $routeParams, A
         delete $scope.order;
         $scope.showCommandForm = false;
         $scope.alerts.push({msg: "La commande à été enregistré avec succès.", type: 'success'});
+        $scope.alerts.push({msg: "Votre numéro de confirmation est: " + $scope.currentOrder.confirmation_number, type: 'success'});
       })
       .error(function(data, status) {
         $scope.alerts.push({msg: "Malheuresement, une erreur est survenue lors de l'ajout et la commande n'a pas pu être enregistré.", type: 'danger'});

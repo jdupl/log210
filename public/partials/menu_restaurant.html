@@ -28,7 +28,7 @@
                             <td style="vertical-align:middle;">{{plate.name}}</td>
                             <td style="vertical-align:middle;">{{plate.price | number : 2}} $</td>
                             <td style="vertical-align:middle;">Quantité :
-                              <input ng-model="plate.quantite" type="number" min="0" max="99" style="width: 32px" ng-init="plate.quantite = 0">
+                              <input ng-model="plate.quantity" type="number" min="0" max="99" style="width: 32px" ng-init="plate.quantity = 0">
                             </td>
                          </tr>
                       </tbody>
@@ -46,6 +46,34 @@
       <!-- Command form -->
       <div class="col-sm-12" ng-show="showCommandForm">
         <form class="form-horizontal" ng-model="order" name="ajoutCommande" ng-submit="submitOrder()" novalidate>
+          <div class="form-group" id="sommaireInformations">
+            <div class="col-sm-offset-4 col-sm-4">
+              <table class="table table-hover">
+                <thead>
+                  <th>
+                     Nom du plat
+                  </th>
+                  <th>
+                     Prix du plat
+                  </th>
+                  <th>
+                     Quantité
+                  </th>
+                </thead>
+                <tbody>
+                  <tr ng-repeat="item in currentOrder.items">
+                     <td style="vertical-align:middle;">{{item.name}}</td>
+                     <td style="vertical-align:middle;">{{item.price | number : 2}} $</td>
+                     <td style="vertical-align:middle;">{{item.quantity}}</td>
+                  </tr>
+                  <tr>
+                    <td>Total: </td>
+                    <td>{{total}}  $</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
           <div class="form-group">
             <label for="order.date" class="col-sm-4 col-md-4 control-label">Date et heure de la livraison</label>
             <div class="col-sm-4">
