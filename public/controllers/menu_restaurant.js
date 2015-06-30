@@ -2,6 +2,11 @@ var controllers = angular.module('app.controllers.MenuRestaurant', []);
 
 controllers.controller('MenuRestaurant', function($scope, $http, $routeParams, Auth) {
 
+  loadAddresses();
+
+  // specific function call of the datepicker
+  angular.element('#datetimepicker').datetimepicker();
+
   function getRestaurant(id) {
     $http.get('/api/restaurants/' + id + '/menus', {headers: {'Authorization' : 'Bearer ' + $scope.token}})
       .success(function(data) {
@@ -26,6 +31,17 @@ controllers.controller('MenuRestaurant', function($scope, $http, $routeParams, A
     $scope.showCommandForm = true;
   }
 
+  function loadAddresses() {
+    $http.get('/api/profile/addresses', {headers: {'Authorization' : 'Bearer ' + $scope.token}})
+      .success(function(data) {
+        $scope.addresses = data;
+
+        $scope.secondaryAddresses = $scope.addresses[0];
+        $scope.order.delivery_address = $scope.addresses[0];
+
+      });
+  }
+
   $scope.submitOrder = function() {
     // we initiate the status
     $scope.currentOrder.status = 0;
@@ -46,6 +62,7 @@ controllers.controller('MenuRestaurant', function($scope, $http, $routeParams, A
       .error(function(data, status) {
         $scope.alerts.push({msg: "Malheuresement, une erreur est survenue lors de l'ajout et la commande n'a pas pu être enregistré.", type: 'danger'});
       });
+
   };
 
   $scope.alerts = [];
