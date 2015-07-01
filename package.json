@@ -15,7 +15,7 @@
     "grunt-nodemon": "^0.4.0",
     "load-grunt-tasks": "^3.1.0",
     "mockery": "^1.4.0",
-    "mongoose": "3.8",
+    "mongoose": "4.0",
     "sinon": "^1.14.1",
     "supertest": "^0.15.0",
     "tungus": "0.0.4"
@@ -29,6 +29,7 @@
     "express": "^4.12.3",
     "extend": "^2.0.1",
     "joi": "^6.4.2",
-    "jsonwebtoken": "^5.0.0"
+    "jsonwebtoken": "^5.0.0",
+    "mongoose-auto-increment": "^4.0.0"
   }
 }

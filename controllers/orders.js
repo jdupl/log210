@@ -8,18 +8,20 @@ exports.create = function(req, res) {
   var order = req.body;
   order.status = config.status.ORDERED;
   order.client = req.user._id;
-  Order.create(order, function(err, createdOrder) {
-
-    User.findOne({_id: order.client}).select('address optional_addresses').exec(function(err, user) {
-      if(user.address == order.delivery_address) {
-        res.status(201).json(createdOrder);
-      } else {
-        user.optional_addresses.push(user.address);
-        user.address = order.delivery_address;
-        user.save(function(err) {
+  Order.nextCount(function(err, count) {
+    order.confirmation_number = count;
+    Order.create(order, function(err, createdOrder) {
+      User.findOne({_id: order.client}).select('address optional_addresses').exec(function(err, user) {
+        if(user.address == order.delivery_address) {
           res.status(201).json(createdOrder);
-        });
-      }
+        } else {
+          user.optional_addresses.push(user.address);
+          user.address = order.delivery_address;
+          user.save(function(err) {
+            res.status(201).json(createdOrder);
+          });
+        }
+      });
     });
   });
 };
