@@ -49,7 +49,7 @@ controllers.controller('ModifierMenu', function($scope, $http, Auth) {
       });
   }
 
-  $scope.getRestaurants =  function() {
+  $scope.getRestaurants = function() {
     // funny api
     getCurrentUserId(getRestaurantsCb);
   }

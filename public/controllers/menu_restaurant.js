@@ -2,8 +2,6 @@ var controllers = angular.module('app.controllers.MenuRestaurant', []);
 
 controllers.controller('MenuRestaurant', function($scope, $http, $routeParams, Auth) {
 
-  loadAddresses();
-
   // specific function call of the datepicker
   angular.element('#datetimepicker').datetimepicker();
 
@@ -26,7 +24,6 @@ controllers.controller('MenuRestaurant', function($scope, $http, $routeParams, A
         if (plate.quantity > 0) {
           $scope.currentOrder.items.push(plate);
           $scope.total += plate.quantity * plate.price;
-          console.log(plate.quantity);
         }
       });
     });
@@ -40,7 +37,6 @@ controllers.controller('MenuRestaurant', function($scope, $http, $routeParams, A
 
         $scope.secondaryAddresses = $scope.addresses[0];
         $scope.order.delivery_address = $scope.addresses[0];
-
       });
   }
 
@@ -70,6 +66,8 @@ controllers.controller('MenuRestaurant', function($scope, $http, $routeParams, A
 
   $scope.alerts = [];
   $scope.token = Auth.isLoggedIn();
+
+  loadAddresses();
   $scope.selectedRestaurantId = $routeParams.restaurantId;
   getRestaurant($scope.selectedRestaurantId);
 });
