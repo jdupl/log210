@@ -14,6 +14,7 @@ var login = require('../utils/login');
 
 var extend = require('extend');
 var assert = require('assert');
+var random = require('random-js');
 
 describe('/api/orders', function() {
   describe('POST', function() {
@@ -29,6 +30,7 @@ describe('/api/orders', function() {
               test_order.restaurant = createdRestaurant._id;
               var items = [createdItem._id];
               test_order.items = items;
+              test_order.client = createdClient._id;
 
               login.getToken(data.client_user.email, data.client_user.password, client, function(err, token) {
 
@@ -43,7 +45,6 @@ describe('/api/orders', function() {
                     assert.equal(order.restaurant, createdRestaurant._id);
                     assert.equal(order.status, config.status.ORDERED);
                     assert.equal(order.client, createdClient._id);
-                    //assert.equal(order.confirmation_number, 1);
                     User.findOne({_id: createdClient._id}, function(err, user) {
                       assert.equal(user.address, order.delivery_address);
                       done();
@@ -80,25 +81,22 @@ describe('/api/profile/orders', function() {
                 test_order.restaurant = createdRestaurant._id;
                 test_order.items = items;
 
-                Order.nextCount(function(err, count) {
-                  test_order.confirmation_number = count;
+                Order.create(test_order, function(err, createdOrder) {
 
-                  Order.create(test_order, function(err, createdOrder) {
-                    login.getToken(test_restaurateur.email, test_restaurateur.password, client, function(err, token) {
-                      client
-                      .get('/api/profile/orders')
-                      .set('Authorization', 'Bearer ' + token)
-                      .end(function(err, res) {
-                        assert.equal(res.status, 200);
-                        assert.equal(res.body.length, 1);
-                        order = res.body[0];
-                        assert.equal(order.client, createdClient._id);
-                        assert.equal(order.status, config.status.ORDERED);
-                        assert.equal(order.restaurant, createdRestaurant._id);
-                        assert.equal(order.items.length, 1);
-                        assert.equal(order.items[0], createdItem._id);
-                        done();
-                      });
+                  login.getToken(test_restaurateur.email, test_restaurateur.password, client, function(err, token) {
+                    client
+                    .get('/api/profile/orders')
+                    .set('Authorization', 'Bearer ' + token)
+                    .end(function(err, res) {
+                      assert.equal(res.status, 200);
+                      assert.equal(res.body.length, 1);
+                      order = res.body[0];
+                      assert.equal(order.client, createdClient._id);
+                      assert.equal(order.status, config.status.ORDERED);
+                      assert.equal(order.restaurant, createdRestaurant._id);
+                      assert.equal(order.items.length, 1);
+                      assert.equal(order.items[0], createdItem._id);
+                      done();
                     });
                   });
                 });
@@ -129,26 +127,22 @@ describe('/api/profile/orders', function() {
                 test_order.restaurant = createdRestaurant._id;
                 test_order.items = items;
 
-                Order.nextCount(function(err, count) {
-                  test_order.confirmation_number = count;
+                Order.create(test_order, function(err, createdOrder) {
 
-                  Order.create(test_order, function(err, createdOrder) {
-
-                    login.getToken(data.client_user.email, data.client_user.password, client, function(err, token) {
-                      client
-                      .get('/api/profile/orders')
-                      .set('Authorization', 'Bearer ' + token)
-                      .end(function(err, res) {
-                        assert.equal(res.status, 200);
-                        assert.equal(res.body.length, 1);
-                        order = res.body[0];
-                        assert.equal(order.client, createdClient._id);
-                        assert.equal(order.status, config.status.ORDERED);
-                        assert.equal(order.restaurant, createdRestaurant._id);
-                        assert.equal(order.items.length, 1);
-                        assert.equal(order.items[0], createdItem._id);
-                        done();
-                      });
+                  login.getToken(data.client_user.email, data.client_user.password, client, function(err, token) {
+                    client
+                    .get('/api/profile/orders')
+                    .set('Authorization', 'Bearer ' + token)
+                    .end(function(err, res) {
+                      assert.equal(res.status, 200);
+                      assert.equal(res.body.length, 1);
+                      order = res.body[0];
+                      assert.equal(order.client, createdClient._id);
+                      assert.equal(order.status, config.status.ORDERED);
+                      assert.equal(order.restaurant, createdRestaurant._id);
+                      assert.equal(order.items.length, 1);
+                      assert.equal(order.items[0], createdItem._id);
+                      done();
                     });
                   });
                 });
@@ -183,26 +177,22 @@ describe('/api/orders/:id', function() {
                 test_order.restaurant = createdRestaurant._id;
                 test_order.items = items;
 
-                Order.nextCount(function(err, count) {
-                  test_order.confirmation_number = count;
+                Order.create(test_order, function(err, createdOrder) {
+                  var new_order = {
+                    status: config.status.PREPARING
+                  };
 
-                  Order.create(test_order, function(err, createdOrder) {
-                    var new_order = {
-                      status: config.status.PREPARING
-                    };
+                  login.getToken(test_restaurateur.email, test_restaurateur.password, client, function(err, token) {
+                    client
+                    .put('/api/orders/' + createdOrder._id)
+                    .set('Authorization', 'Bearer ' + token)
+                    .send(new_order)
+                    .end(function(err, res) {
+                      assert.equal(res.status, 200);
 
-                    login.getToken(test_restaurateur.email, test_restaurateur.password, client, function(err, token) {
-                      client
-                      .put('/api/orders/' + createdOrder._id)
-                      .set('Authorization', 'Bearer ' + token)
-                      .send(new_order)
-                      .end(function(err, res) {
-                        assert.equal(res.status, 200);
-
-                        Order.findOne({_id: createdOrder._id}, function(err, order) {
-                          assert.equal(order.status, new_order.status);
-                          done();
-                        });
+                      Order.findOne({_id: createdOrder._id}, function(err, order) {
+                        assert.equal(order.status, new_order.status);
+                        done();
                       });
                     });
                   });

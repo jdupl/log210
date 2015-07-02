@@ -1,27 +1,25 @@
 var Order = require('../models/order');
 var User = require('../models/user');
 var config = require('../config/config');
+var random = require('random-js')();
 
 var extend = require('extend');
 
 exports.create = function(req, res) {
   var order = req.body;
   order.status = config.status.ORDERED;
-  order.client = req.user._id;
-  Order.nextCount(function(err, count) {
-    order.confirmation_number = count;
-    Order.create(order, function(err, createdOrder) {
-      User.findOne({_id: order.client}).select('address optional_addresses').exec(function(err, user) {
-        if(user.address == order.delivery_address) {
+  order.confirmation_number = random.integer(1, 100);
+  Order.create(order, function(err, createdOrder) {
+    User.findOne({_id: order.client}).select('address optional_addresses').exec(function(err, user) {
+      if(user.address == order.delivery_address) {
+        res.status(201).json(createdOrder);
+      } else {
+        user.optional_addresses.push(user.address);
+        user.address = order.delivery_address;
+        user.save(function(err) {
           res.status(201).json(createdOrder);
-        } else {
-          user.optional_addresses.push(user.address);
-          user.address = order.delivery_address;
-          user.save(function(err) {
-            res.status(201).json(createdOrder);
-          });
-        }
-      });
+        });
+      }
     });
   });
 };

@@ -30,6 +30,6 @@
     "extend": "^2.0.1",
     "joi": "^6.4.2",
     "jsonwebtoken": "^5.0.0",
-    "mongoose-auto-increment": "^4.0.0"
+    "random-js": "^1.0.4"
   }
 }

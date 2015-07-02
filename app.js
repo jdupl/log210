@@ -3,11 +3,9 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var app = module.exports = express();
 var config = require('./config/config');
-var autoIncrement = require('mongoose-auto-increment');
 
 //Database
 var connection = mongoose.connect(config.db.url);
-autoIncrement.initialize(connection);
 
 //Middleware
 app.use(express.static(__dirname + '/public'));
