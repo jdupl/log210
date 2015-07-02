@@ -63,7 +63,7 @@ exports.getOrders = function(req, res) {
 function getOrdersFromRestaurants(restaurants, cbErr) {
   var response = [];
   async.eachSeries(restaurants, function(restaurant, cb) {
-    Order.find({restaurant: restaurant}, function(err, orders) {
+    Order.find({restaurant: restaurant}).populate({path: 'client', select: 'name'}).populate({path: 'restaurant', select: 'name'}).exec(function(err, orders) {
       addOrdersToResponse(response, orders, cb);
     });
   }, function(err) {
