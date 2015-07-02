@@ -77,12 +77,13 @@
           <div class="form-group">
             <label for="order.date" class="col-sm-4 col-md-4 control-label">Date et heure de la livraison</label>
             <div class="col-sm-4">
-              <div class='input-group date' id='datetimepicker'>
-                <input type='text' ng-model="order.delivery_date" class="form-control" />
-                <span class="input-group-addon">
-                  <span class="glyphicon glyphicon-calendar"></span>
+              <div class='input-group'>
+                <input class="form-control" datepicker-popup="dd-MMMM-yyyy" min-date="minDate" ng-model="delivery_date" is-open="opened" close-text="Close" />
+                <span class="input-group-btn">
+                  <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
                 </span>
               </div>
+              <timepicker ng-model="delivery_time" show-meridian="true"></timepicker>
             </div>
           </div>
           <div class="form-group">
