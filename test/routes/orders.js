@@ -86,9 +86,9 @@ describe('/api/profile/orders', function() {
                       assert.equal(res.status, 200);
                       assert.equal(res.body.length, 1);
                       order = res.body[0];
-                      assert.equal(order.client, createdClient._id);
+                      assert.equal(order.client.name, createdClient.name);
                       assert.equal(order.status, config.status.ORDERED);
-                      assert.equal(order.restaurant, createdRestaurant._id);
+                      assert.equal(order.restaurant.name, createdRestaurant.name);
                       assert.equal(order.items.length, 1);
                       assert.equal(order.items[0], createdItem._id);
                       done();
