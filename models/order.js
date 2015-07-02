@@ -6,6 +6,7 @@ var orderSchema = new Schema({
   delivery_date: Date,
   delivery_address: String,
   status: Number,
+  confirmation_number: Number,
   items: [{type: Schema.Types.ObjectId, ref: 'Item'}],
   restaurant: {type: Schema.Types.ObjectId, ref: 'Restaurant'}
 });

@@ -14,6 +14,7 @@ var login = require('../utils/login');
 
 var extend = require('extend');
 var assert = require('assert');
+var random = require('random-js');
 
 describe('/api/orders', function() {
   describe('POST', function() {
@@ -29,6 +30,7 @@ describe('/api/orders', function() {
               test_order.restaurant = createdRestaurant._id;
               var items = [createdItem._id];
               test_order.items = items;
+              test_order.client = createdClient._id;
 
               login.getToken(data.client_user.email, data.client_user.password, client, function(err, token) {
 
@@ -39,6 +41,10 @@ describe('/api/orders', function() {
                   .end(function(err, res) {
                     assert.equal(res.status, 201);
                     var order = res.body;
+                    assert.equal(order.items[0], createdItem._id);
+                    assert.equal(order.restaurant, createdRestaurant._id);
+                    assert.equal(order.status, config.status.ORDERED);
+                    assert.equal(order.client, createdClient._id);
                     User.findOne({_id: createdClient._id}, function(err, user) {
                       assert.equal(user.address, order.delivery_address);
                       done();
@@ -79,19 +85,19 @@ describe('/api/profile/orders', function() {
 
                   login.getToken(test_restaurateur.email, test_restaurateur.password, client, function(err, token) {
                     client
-                      .get('/api/profile/orders')
-                      .set('Authorization', 'Bearer ' + token)
-                      .end(function(err, res) {
-                        assert.equal(res.status, 200);
-                        assert.equal(res.body.length, 1);
-                        order = res.body[0];
-                        assert.equal(order.client, createdClient._id);
-                        assert.equal(order.status, config.status.ORDERED);
-                        assert.equal(order.restaurant, createdRestaurant._id);
-                        assert.equal(order.items.length, 1);
-                        assert.equal(order.items[0], createdItem._id);
-                        done();
-                      });
+                    .get('/api/profile/orders')
+                    .set('Authorization', 'Bearer ' + token)
+                    .end(function(err, res) {
+                      assert.equal(res.status, 200);
+                      assert.equal(res.body.length, 1);
+                      order = res.body[0];
+                      assert.equal(order.client, createdClient._id);
+                      assert.equal(order.status, config.status.ORDERED);
+                      assert.equal(order.restaurant, createdRestaurant._id);
+                      assert.equal(order.items.length, 1);
+                      assert.equal(order.items[0], createdItem._id);
+                      done();
+                    });
                   });
                 });
               });
@@ -125,19 +131,19 @@ describe('/api/profile/orders', function() {
 
                   login.getToken(data.client_user.email, data.client_user.password, client, function(err, token) {
                     client
-                      .get('/api/profile/orders')
-                      .set('Authorization', 'Bearer ' + token)
-                      .end(function(err, res) {
-                        assert.equal(res.status, 200);
-                        assert.equal(res.body.length, 1);
-                        order = res.body[0];
-                        assert.equal(order.client, createdClient._id);
-                        assert.equal(order.status, config.status.ORDERED);
-                        assert.equal(order.restaurant, createdRestaurant._id);
-                        assert.equal(order.items.length, 1);
-                        assert.equal(order.items[0], createdItem._id);
-                        done();
-                      });
+                    .get('/api/profile/orders')
+                    .set('Authorization', 'Bearer ' + token)
+                    .end(function(err, res) {
+                      assert.equal(res.status, 200);
+                      assert.equal(res.body.length, 1);
+                      order = res.body[0];
+                      assert.equal(order.client, createdClient._id);
+                      assert.equal(order.status, config.status.ORDERED);
+                      assert.equal(order.restaurant, createdRestaurant._id);
+                      assert.equal(order.items.length, 1);
+                      assert.equal(order.items[0], createdItem._id);
+                      done();
+                    });
                   });
                 });
               });
