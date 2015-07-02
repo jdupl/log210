@@ -9,7 +9,7 @@ controllers.controller('ModifierRestaurants', function($scope, $http) {
     $scope.alerts = [];
     var restaurant = $scope.restaurant;
 
-    if(!restaurant.restaurateur) {
+    if (!restaurant.restaurateur) {
       $scope.alerts.push({msg: "Attention: Le restaurant n'a pas de restaurateur associé !", type: 'warning'});
     }
 
@@ -34,10 +34,9 @@ controllers.controller('ModifierRestaurants', function($scope, $http) {
     $scope.alerts = [];
 
     var updatedRestaurant = $scope.restaurant;
-    console.log($scope.selectedRestaurateur);
     updatedRestaurant.restaurateur = $scope.selectedRestaurateur;
 
-    if(!updatedRestaurant.restaurateur) {
+    if (!updatedRestaurant.restaurateur) {
       $scope.alerts.push({msg: "Attention: Le restaurant n'a pas de restaurateur associé !", type: 'warning'});
     }
 
@@ -65,15 +64,12 @@ controllers.controller('ModifierRestaurants', function($scope, $http) {
         $http.get('/api/restaurants/' + id + '/users', {headers: {'Authorization' : 'Bearer ' + $scope.token}})
           .success(function(data) {
             var restaurant_id = $scope.restaurant._id;
-            console.log($scope.restaurateurs);
             for (var i = 0;i < $scope.restaurateurs.length;i++) {
               var currentRestaurateur = $scope.restaurateurs[i];
               for (var j = 0;j < currentRestaurateur.restaurants.length;j++) {
                 var currentRestaurant = currentRestaurateur.restaurants[j];
                 if (currentRestaurant === restaurant_id) {
                   $scope.selectedRestaurateur = currentRestaurateur._id;
-                  console.log(currentRestaurateur.name);
-                  console.log($scope.selectedRestaurateur);
                 }
               }
             }
@@ -92,7 +88,6 @@ controllers.controller('ModifierRestaurants', function($scope, $http) {
       .success(function(data) {
         $scope.alerts.push({msg: "Restaurant détruit!", type: 'warning'});
         refreshList();
-
       })
       .error(function(data, status) {
         $scope.alerts.push({msg: "Malheuresement, une erreur est survenue lors de la destruction du restaurant", type: 'danger'});
@@ -115,5 +110,4 @@ controllers.controller('ModifierRestaurants', function($scope, $http) {
         }
       });
   }
-
 });
