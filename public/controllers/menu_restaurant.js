@@ -2,6 +2,9 @@ var controllers = angular.module('app.controllers.MenuRestaurant', []);
 
 controllers.controller('MenuRestaurant', function($scope, $http, $routeParams, Auth) {
 
+  loadAddresses();
+  $scope.delivery_time = new Date(); //Set default value to avoid null value
+
   // specific function call of the datepicker
   angular.element('#datetimepicker').datetimepicker();
 
@@ -40,6 +43,13 @@ controllers.controller('MenuRestaurant', function($scope, $http, $routeParams, A
       });
   }
 
+  $scope.open = function($event) {
+    $event.preventDefault();
+    $event.stopPropagation();
+
+    $scope.opened = true;
+  };
+
   $scope.submitOrder = function() {
     // we initiate the status
     $scope.currentOrder.status = 0;
@@ -48,7 +58,8 @@ controllers.controller('MenuRestaurant', function($scope, $http, $routeParams, A
     $scope.currentOrder.delivery_address = $scope.order.delivery_address;
 
     // we put the date
-    $scope.currentOrder.delivery_date = $scope.order.delivery_date;
+    var final_date = mergeDateAndTime($scope.delivery_date, $scope.delivery_time);
+    $scope.currentOrder.delivery_date = final_date;
 
     // we save the order in the database
     $http.post('/api/orders', $scope.currentOrder, {headers: {'Authorization' : 'Bearer ' + $scope.token}})
@@ -63,6 +74,11 @@ controllers.controller('MenuRestaurant', function($scope, $http, $routeParams, A
       });
 
   };
+
+  function mergeDateAndTime(date, time) {
+    console.log(time);
+    return new Date(date.getFullYear(), date.getMonth(), date.getDate(), time.getHours(), time.getMinutes(), time.getSeconds());
+  }
 
   $scope.alerts = [];
   $scope.token = Auth.isLoggedIn();
