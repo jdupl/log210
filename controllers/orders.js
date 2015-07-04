@@ -13,11 +13,38 @@ exports.create = function(req, res) {
   var items = order.items;
   createItems(items, function(err) {
     createOrder(order, function(err, createdOrder) {
-      updateUserAddress(createdOrder, function(err) {
-        res.status(201).json(createdOrder);
+      updateUserAddress(createdOrder, function(err, user) {
+        createHtml(createdOrder, user, function(html) {
+          sendConfirmationMail(user.email, html, function(err, info) {
+            if(err) console.log(err);
+            res.status(201).json(createdOrder);
+          });
+        });
       });
     });
   });
+};
+
+function sendConfirmationMail(recipient, html, callback) {
+  var mailOptions = {
+    from: config.from,
+    to: recipient,
+    subject: 'Confirmation de la commande',
+    text: 'Confirmation message',
+    html: html
+  }
+  var transporter = config.transporter;
+  transporter.sendMail(mailOptions, function(error, info) {
+    callback(error, info);
+  });
+};
+
+function createHtml(order, user, callback) {
+  var title = '<h1>Commande ' + order.confirmation_number + "</h1>"
+  var description = "<p>La commande sera livrée le " + order.delivery_date + " au "
+    + order.delivery_address + ".</p>"
+  var html = title.concat(description);
+  callback(html);
 };
 
 /*
@@ -38,13 +65,15 @@ function createOrder(order, callback) {
 * @param order
 */
 function updateUserAddress(order, callback) {
-  User.findOne({_id: order.client}).select('address optional_addresses').exec(function(err, user) {
+  User.findOne({_id: order.client}).exec(function(err, user) {
     if(user.address == order.delivery_address) {
-      callback(err);
+      callback(err, user);
     } else {
       user.optional_addresses.push(user.address);
       user.address = order.delivery_address;
-      user.save(callback);
+      user.save(function(err) {
+        callback(err, user);
+      });
     }
   });
 }
