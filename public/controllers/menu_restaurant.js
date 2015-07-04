@@ -82,8 +82,11 @@ controllers.controller('MenuRestaurant', function($scope, $http, $routeParams, A
 
   $scope.alerts = [];
   $scope.token = Auth.isLoggedIn();
-
-  loadAddresses();
-  $scope.selectedRestaurantId = $routeParams.restaurantId;
-  getRestaurant($scope.selectedRestaurantId);
+  if($scope.token) {
+    loadAddresses();
+    $scope.selectedRestaurantId = $routeParams.restaurantId;
+    getRestaurant($scope.selectedRestaurantId);
+  } else {
+    window.location.href = "#/connexion";
+  }
 });
