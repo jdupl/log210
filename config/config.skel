@@ -1,0 +1,19 @@
+var nodemailer = require('nodemailer');
+var smtpTransport = require('nodemailer-smtp-transport');
+
+var config = {};
+
+config.from = 'noreply.restaurantlog210@gmail.com'
+
+var transportOptions = {
+  service: 'gmail',
+  auth: {
+    user: 'noreply.restaurantlog210@gmail.com',
+    pass: 'password'
+  }
+}
+
+var transporter = nodemailer.createTransport(smtpTransport(transportOptions));
+config.transporter = transporter;
+
+module.exports = config;

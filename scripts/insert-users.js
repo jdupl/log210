@@ -15,12 +15,6 @@ function addAdmin(cb) {
   })
 };
 
-function addClient(cb) {
-  User.remove({email: 'client@test.com'}, function(err, client) {
-    User.create(data.client_user, cb);
-  });
-};
-
 function addRestaurateur(cb) {
   User.remove({email: 'restaurateur@test.com'}, function(err, restaurateur) {
     addRestaurant(function(err, createdRestaurant) {
@@ -59,9 +53,7 @@ function addPlate(cb) {
 
 addAdmin(function(err, createdAdmin) {
   addRestaurateur(function(err, createdRestaurateur) {
-    addClient(function(err, createdClient) {
-      mongoose.connection.close();
-      process.exit();
-    });
+    mongoose.connection.close();
+    process.exit();
   });
 });
