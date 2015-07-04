@@ -12,6 +12,9 @@
       <table class="table table-hover">
         <thead>
           <th>
+            Numéro de confirmation
+          </th>
+          <th>
             Date
           </th>
           <th>
@@ -29,6 +32,7 @@
         </thead>
         <tbody>
           <tr ng-repeat="order in orders">
+            <td style="vertical-align:middle;">{{order.confirmation_number}}</td>
             <td style="vertical-align:middle;">{{order.delivery_date}}</td>
             <td style="vertical-align:middle;">{{order.client.name}}</td>
             <td style="vertical-align:middle;">{{order.delivery_address}}</td>
