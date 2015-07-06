@@ -2,7 +2,7 @@ var controllers = angular.module('app.controllers.ListeCommandes', []);
 
 controllers.controller('ListeCommandes', function($scope, $http, $routeParams, Auth) {
 
-  $scope.getCommandes =  function() {
+  getCommandes =  function() {
     $http.get('/api/profile/orders', {headers: {'Authorization' : 'Bearer ' + $scope.token}})
       .success(function(data) {
         $scope.orders = data;
@@ -14,8 +14,8 @@ controllers.controller('ListeCommandes', function($scope, $http, $routeParams, A
   };
 
   $scope.update = function(order) {
-    order.status.code;
-    $http.put('/api/orders/' + order._id, order, {headers: {'Authorization' : 'Bearer ' + $scope.token}})
+    var updatedOrder = {status: order.status};
+    $http.put('/api/orders/' + order._id, updatedOrder, {headers: {'Authorization' : 'Bearer ' + $scope.token}})
       .success(function(data) {
         getCommandes();
       }).error(function(data, status) {
@@ -32,5 +32,5 @@ controllers.controller('ListeCommandes', function($scope, $http, $routeParams, A
 
   $scope.alerts = [];
   $scope.token = Auth.isLoggedIn();
-  $scope.getCommandes($routeParams.restaurantId);
+  getCommandes();
 });
