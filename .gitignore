@@ -28,4 +28,4 @@ node_modules
 bower_components
 
 # Secret configuration
-backend/config/config.dev.js
+config/config.dev.js
