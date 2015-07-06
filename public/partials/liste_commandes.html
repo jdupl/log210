@@ -37,7 +37,7 @@
             <td style="vertical-align:middle;">{{order.client.name}}</td>
             <td style="vertical-align:middle;">{{order.delivery_address}}</td>
             <td style="vertical-align:middle;">{{order.restaurant.name}}</td>
-            <td style="vertical-align:middle;">
+            <td style="vertical-align:middle;color:black;">
               <select
                   ng-model="order.status" convert-to-number
                   ng-options="s.code as s.name for s in status"
