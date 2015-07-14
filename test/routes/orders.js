@@ -4,6 +4,7 @@ var Menu = require('../../models/menu');
 var Plate = require('../../models/plate');
 var Item = require('../../models/item');
 var Order = require('../../models/order');
+var Delivery = require('../../models/delivery');
 
 var app = require('../../app');
 var client = require('supertest')(app);
@@ -188,6 +189,57 @@ describe('/api/orders/:id', function() {
                       Order.findOne({_id: createdOrder._id}, function(err, order) {
                         assert.equal(order.status, new_order.status);
                         done();
+                      });
+                    });
+                  });
+                });
+              });
+            });
+          });
+        });
+      });
+    });
+    it('should update the status and create a delivery', function(done) {
+      User.create(data.client_user, function(err, createdClient) {
+
+        Plate.create(data.test_plate, function(err, createdPlate) {
+          Restaurant.create(data.test_restaurant, function(err, createdRestaurant) {
+            var restaurants = [createdRestaurant._id];
+            var test_restaurateur = extend(test_restaurateur, data.restaurateur_user);
+            test_restaurateur.restaurants = restaurants;
+
+            User.create(test_restaurateur, function(err, createdRestaurateur) {
+              plates = [createdPlate._id];
+              var test_item = extend(test_item, data.test_item);
+
+              Item.create(test_item, function(err, createdItem) {
+                var items = [createdItem._id];
+                var test_order = extend(test_order, data.test_order);
+                test_order.client = createdClient._id;
+                test_order.status = config.status.ORDERED;
+                test_order.restaurant = createdRestaurant._id;
+                test_order.items = items;
+
+                Order.create(test_order, function(err, createdOrder) {
+                  var new_order = {
+                    status: config.status.READY
+                  };
+
+                  login.getToken(test_restaurateur.email, test_restaurateur.password, client, function(err, token) {
+                    client
+                    .put('/api/orders/' + createdOrder._id)
+                    .set('Authorization', 'Bearer ' + token)
+                    .send(new_order)
+                    .end(function(err, res) {
+                      assert.equal(res.status, 200);
+
+                      Order.findOne({_id: createdOrder._id}, function(err, order) {
+                        assert.equal(order.status, new_order.status);
+
+                        Delivery.find(function(err, deliveries) {
+                          assert.equal(1, deliveries.length);
+                          done();
+                        });
                       });
                     });
                   });
