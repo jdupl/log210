@@ -96,3 +96,10 @@ exports.update = function(req, res) {
     res.status(200).json({message: 'order updated'});
   });
 };
+
+exports.getAll = function(req, res) {
+  var status = req.query.status;
+  Order.find({status: status}, function(err, orders) {
+    res.status(200).json(orders);
+  });
+};
