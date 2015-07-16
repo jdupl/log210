@@ -1,26 +1,12 @@
 <div class="container">
   {{hello}}
 <div>
-	<div class="row">
+  <div class="row">
     <div class="col-sm-12">
       <h2>Liste des restaurants</h2>
-      	<div style="cursor:pointer; float:left; vertical-align:middle;" class="imgBox col-sm-2" ng-repeat="restaurant in restaurants" ng-click="afficherRestaurant(restaurant._id);">
-      		<p class="imgText"><b>{{restaurant.name}}</b></p>
+          <div style="cursor:pointer; float:left; vertical-align:middle;" class="imgBox col-sm-2" ng-repeat="restaurant in restaurants" ng-click="afficherRestaurant(restaurant._id);">
+              <p class="imgText"><b>{{restaurant.name}}</b></p>
         </div>
     </div>
   </div>
-
-<style type="text/css">
-.imgBox  { 
-    width: 240px; height: 150px; 
-    margin-left: 20px;
-    margin-top: 20px;
-    background-image: url('../image/restaurantLogo.jpg');
-}
-.imgText { 
-    text-align: center;
-    color: black;
-    font-size: 20px;
-    margin: 0; padding: 5px 0 0 0;
-}
-</style>
+</div>
