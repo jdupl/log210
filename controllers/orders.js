@@ -101,13 +101,14 @@ function createItems(items, callback) {
 exports.update = function(req, res) {
   var order_id = req.params.id;
   var status = req.body.status;
-  Order.update({_id: order_id}, req.body, function(err, updated) {
+  Order.findOne({_id: order_id}, function(err, order) {
     if(status === config.status.READY) {
-      addOrderToDeliveryList(order_id, function() {
+      verifyOrderStatus(order, req, res);
+    } else {
+      order.status = status;
+      order.save(function(err) {
         res.status(200).json({message: 'order updated'});
       });
-    } else {
-      res.status(200).json({message: 'order updated'});
     }
   });
 };
@@ -117,6 +118,19 @@ exports.getAll = function(req, res) {
   Order.find({status: status}, function(err, orders) {
     res.status(200).json(orders);
   });
+};
+
+function verifyOrderStatus(order, req, res) {
+  if(req.body.status === order.status) {
+    res.status(409).json({message: 'You cannot update the order to the ready status two times.'})
+  } else {
+    order.status = req.body.status;
+    order.save(function(err) {
+      addOrderToDeliveryList(order._id, function() {
+        res.status(200).json({message: 'order updated'});
+      });
+    });
+  }
 };
 
 /*

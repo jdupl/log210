@@ -250,6 +250,50 @@ describe('/api/orders/:id', function() {
         });
       });
     });
+    it('should not update the order if it\'s already in a ready state', function(done) {
+      User.create(data.client_user, function(err, createdClient) {
+
+        Plate.create(data.test_plate, function(err, createdPlate) {
+          Restaurant.create(data.test_restaurant, function(err, createdRestaurant) {
+            var restaurants = [createdRestaurant._id];
+            var test_restaurateur = extend(test_restaurateur, data.restaurateur_user);
+            test_restaurateur.restaurants = restaurants;
+
+            User.create(test_restaurateur, function(err, createdRestaurateur) {
+              plates = [createdPlate._id];
+              var test_item = extend(test_item, data.test_item);
+
+              Item.create(test_item, function(err, createdItem) {
+                var items = [createdItem._id];
+                var test_order = extend(test_order, data.test_order);
+                test_order.client = createdClient._id;
+                test_order.status = config.status.READY;
+                test_order.restaurant = createdRestaurant._id;
+                test_order.items = items;
+
+                Order.create(test_order, function(err, createdOrder) {
+                  var new_order = {
+                    status: config.status.READY
+                  };
+
+                  login.getToken(test_restaurateur.email, test_restaurateur.password, client, function(err, token) {
+                    client
+                    .put('/api/orders/' + createdOrder._id)
+                    .set('Authorization', 'Bearer ' + token)
+                    .send(new_order)
+                    .end(function(err, res) {
+                      assert.equal(res.status, 409);
+                      assert.equal(res.body.message, 'You cannot update the order to the ready status two times.');
+                      done();
+                    });
+                  });
+                });
+              });
+            });
+          });
+        });
+      });
+    });
   });
 });
 describe('/api/orders/', function() {
