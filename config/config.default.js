@@ -21,6 +21,7 @@ module.exports = {
   status: {
     ORDERED: 1,
     PREPARING: 2,
-    READY: 3
+    READY: 3,
+    DELIVERING: 4
   }
 };

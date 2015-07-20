@@ -105,16 +105,26 @@ exports.update = function(req, res) {
   var order_id = req.params.id;
   var status = req.body.status;
   Order.findOne({_id: order_id}, function(err, order) {
-    if(status === config.status.READY) {
-      verifyOrderStatus(order, req, res);
+    if(order.status === req.body.status) {
+      res.status(409).json({message: 'You cannot update the order to the ready status two times.'})
     } else {
-      order.status = status;
-      order.save(function(err) {
-        var err = sendMessage(order_id);
-        if(err)
-          console.log(err);
-        res.status(201);
-      });
+      if(status === config.status.DELIVERING) {
+        order.status = req.body.status;
+        order.save(function(err) {
+          addOrderToDeliveryList(order._id, function() {
+            sendMessage(order_id, function(err, info) {
+              res.status(200).json({message: 'order updated'});
+            });
+          });
+        });
+      } else {
+        order.status = status;
+        order.save(function(err) {
+          sendMessage(order_id, function(err, info) {
+            res.status(200).json({message: 'order updated'});
+          });
+        });
+      }
     }
   });
 };
@@ -126,27 +136,9 @@ exports.getAll = function(req, res) {
   });
 };
 
-function verifyOrderStatus(order, req, res) {
-  if(req.body.status === order.status) {
-    res.status(409).json({message: 'You cannot update the order to the ready status two times.'})
-  } else {
-    order.status = req.body.status;
-    order.save(function(err) {
-      addOrderToDeliveryList(order._id, function() {
-        var err = sendMessage(order._id);
-        if(err) 
-          console.log(err);
-        res.status(201);
-      });
-    });
-  }
-};
-
-function sendMessage(order_id) {
+function sendMessage(order_id, callback) {
   Order.findOne({_id : order_id}).populate({path: 'client', select: 'phone'}).exec(function(err, ord) {
-    twilio.getInstance().sendConfirmationSMS(ord.client.phone, ord.status, function(err, info) {
-        return err;
-    });
+    twilio.getInstance().sendConfirmationSMS(ord.client.phone, ord.status, callback);
   });
 }
 /*
