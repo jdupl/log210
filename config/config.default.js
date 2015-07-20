@@ -8,6 +8,10 @@ module.exports = {
   jwt: {
     secret: 'secret'
   },
+  twilio: {
+    sid: 'AC342f063b887b150f797f30aa28ff6be5',
+    token: 'ce19ff3470b1fa984f486b1adae561b2'
+  },
   types: {
     ADMIN: 'admin',
     CLIENT: 'client',

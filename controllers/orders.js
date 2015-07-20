@@ -4,6 +4,7 @@ var Delivery = require('../models/delivery');
 var Item = require('../models/item');
 var config = require('../config/config');
 var random = require('random-js')();
+var twilio = require('./twilio');
 
 var extend = require('extend');
 var async = require('async');
@@ -17,8 +18,10 @@ exports.create = function(req, res) {
       updateUserAddress(createdOrder, function(err, user) {
         createHtml(createdOrder, user, function(html) {
           sendConfirmationMail(user.email, html, function(err, info) {
-            if(err) console.log(err);
-            res.status(201).json(createdOrder);
+            twilio.getInstance().sendConfirmationSMS(user.phone, 1, function(err, info) {
+              if(err) console.log(err);
+                res.status(201).json(createdOrder);
+            });
           });
         });
       });
@@ -107,7 +110,10 @@ exports.update = function(req, res) {
     } else {
       order.status = status;
       order.save(function(err) {
-        res.status(200).json({message: 'order updated'});
+        var err = sendMessage(order_id);
+        if(err)
+          console.log(err);
+        res.status(201);
       });
     }
   });
@@ -127,12 +133,22 @@ function verifyOrderStatus(order, req, res) {
     order.status = req.body.status;
     order.save(function(err) {
       addOrderToDeliveryList(order._id, function() {
-        res.status(200).json({message: 'order updated'});
+        var err = sendMessage(order._id);
+        if(err) 
+          console.log(err);
+        res.status(201);
       });
     });
   }
 };
 
+function sendMessage(order_id) {
+  Order.findOne({_id : order_id}).populate({path: 'client', select: 'phone'}).exec(function(err, ord) {
+    twilio.getInstance().sendConfirmationSMS(ord.client.phone, ord.status, function(err, info) {
+        return err;
+    });
+  });
+}
 /*
 * Create a devliery with the order id
 * @param order id
