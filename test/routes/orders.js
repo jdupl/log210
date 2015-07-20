@@ -216,13 +216,13 @@ describe('/api/orders/:id', function() {
                 var items = [createdItem._id];
                 var test_order = extend(test_order, data.test_order);
                 test_order.client = createdClient._id;
-                test_order.status = config.status.ORDERED;
+                test_order.status = config.status.READY;
                 test_order.restaurant = createdRestaurant._id;
                 test_order.items = items;
 
                 Order.create(test_order, function(err, createdOrder) {
                   var new_order = {
-                    status: config.status.READY
+                    status: config.status.DELIVERING
                   };
 
                   login.getToken(test_restaurateur.email, test_restaurateur.password, client, function(err, token) {

@@ -19,6 +19,7 @@ var twilio = (function() {
 
         return {
             sendConfirmationSMS: function(number, msg, callback) {
+                console.log('called');
                 var client = require('twilio')(config.twilio.sid, config.twilio.token);
                 client.sms.messages.create({
                     to: number,
