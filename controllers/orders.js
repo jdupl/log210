@@ -1,5 +1,6 @@
 var Order = require('../models/order');
 var User = require('../models/user');
+var Delivery = require('../models/delivery');
 var Item = require('../models/item');
 var config = require('../config/config');
 var random = require('random-js')();
@@ -90,10 +91,25 @@ function createItems(items, callback) {
   }, callback);
 };
 
+/*
+* Update the status of the order
+* If the request status is ready,
+* also add the order to the delivery list
+* @param req
+* @param res
+*/
 exports.update = function(req, res) {
   var order_id = req.params.id;
-  Order.update({_id: order_id}, req.body, function(err, updated) {
-    res.status(200).json({message: 'order updated'});
+  var status = req.body.status;
+  Order.findOne({_id: order_id}, function(err, order) {
+    if(status === config.status.READY) {
+      verifyOrderStatus(order, req, res);
+    } else {
+      order.status = status;
+      order.save(function(err) {
+        res.status(200).json({message: 'order updated'});
+      });
+    }
   });
 };
 
@@ -103,3 +119,28 @@ exports.getAll = function(req, res) {
     res.status(200).json(orders);
   });
 };
+
+function verifyOrderStatus(order, req, res) {
+  if(req.body.status === order.status) {
+    res.status(409).json({message: 'You cannot update the order to the ready status two times.'})
+  } else {
+    order.status = req.body.status;
+    order.save(function(err) {
+      addOrderToDeliveryList(order._id, function() {
+        res.status(200).json({message: 'order updated'});
+      });
+    });
+  }
+};
+
+/*
+* Create a devliery with the order id
+* @param order id
+*/
+function addOrderToDeliveryList(order_id, callback) {
+  var delivery = {
+    order_id: order_id
+  };
+
+  Delivery.create(delivery, callback);
+}
