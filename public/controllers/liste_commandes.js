@@ -27,7 +27,8 @@ controllers.controller('ListeCommandes', function($scope, $http, $routeParams, A
   $scope.status = [
       {code : 1, name : 'Commandé'},
       {code : 2, name : 'En préparation'},
-      {code : 3, name : 'Prêtes'}
+      {code : 3, name : 'Prêtes'},
+      {code : 4, name : 'En route'}
     ];
 
   $scope.alerts = [];

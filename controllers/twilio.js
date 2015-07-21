@@ -14,6 +14,8 @@ var twilio = (function() {
                 return "Nous préparons la commande."
             } else if (status === 3) {
                 return "La commande est prête pour la livraison."
+            } else if (status === 4) {
+                return "Nous livrons la commande."
             }
         }
 
