@@ -9,6 +9,8 @@ var twilio = require('./twilio');
 var extend = require('extend');
 var async = require('async');
 
+var orderFactory = require('./order-factory');
+
 exports.create = function(req, res) {
   var order = req.body;
   order.client = req.user._id;
@@ -56,10 +58,8 @@ function createHtml(order, user, callback) {
 * @param order
 */
 function createOrder(order, callback) {
-  order.status = config.status.ORDERED;
-  order.confirmation_number = random.integer(1, 100);
-  delete order.items;
-  Order.create(order, callback);
+  var order = orderFactory.getOrder(order);
+  order.save(callback);
 };
 
 /*
