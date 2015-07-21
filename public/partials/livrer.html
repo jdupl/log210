@@ -1,6 +1,53 @@
 <div class="container">
+  <h2>Effectuer une livraison</h2>
+  <div class="row">
+    <div class="col-sm-12">
+      <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
+    </div>
+  </div>
     <div class="row">
       <div class="col-sm-7">
+        <div ng-show="!showOrders">
+          <form class="form-horizontal" name="locationForm" ng-submit="setLocation()" novalidate>
+            <div class="form-group">
+              <label for="location" class="col-sm-4 col-md-2 control-label">Votre position </label>
+              <div class="col-sm-4">
+                <input type="text" name="location" id="location" ng-model="livreur.location" class="form-control" placeholder="Votre position">
+              </div>
+              <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                  <button type="submit" value="entrerLocation" class="btn btn-default">Entrer ma position</button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+          <table class="table table-hover" ng-show="showOrders">
+             <thead>
+                <th>
+                   Adresse de livraison
+                </th>
+                <th>
+                   Date de livraison
+                </th>
+              </thead>
+              <tbody>
+                 <tr ng-repeat="order in orders">
+                    <td style="vertical-align:middle;">{{order.delivery_address}}</td>
+                    <td style="vertical-align:middle;">{{order.delivery_date}}</td>
+                    <td style="text-align: center;">
+                      <div class="btn-group" style="white-space: nowrap;">
+                        <button style="float: none;display: inline-block;" class="btn btn-info" ng-click="viewPath(order)">
+                          <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
+                        </button>
+                        <button style="float: none;display: inline-block;" class="btn btn-info" ng-click="setLivraison(order)">
+                          <span class="glyphicon glyphicon-send" aria-hidden="true"></span>
+                        </button>
+                      </div>
+                    </td>
+                 </tr>
+              </tbody>
+          </table>
         <!-- ajouter les formulaires ici -->
       </div>
       <div class="col-sm-5">
