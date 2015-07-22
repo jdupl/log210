@@ -76,10 +76,7 @@ controllers.controller('MenuRestaurant', function($scope, $http, $routeParams, A
       // we call the createPayment paypal function
       $http.get('/api/createPayment', {headers: {'Authorization' : 'Bearer ' + $scope.token}})
         .success(function(data) {
-          $scope.addresses = data;
-
-          $scope.secondaryAddresses = $scope.addresses[0];
-          $scope.order.delivery_address = $scope.addresses[0];
+          // send a message saying succes for the creation of the payment
         });
 
   };
