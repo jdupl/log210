@@ -73,6 +73,15 @@ controllers.controller('MenuRestaurant', function($scope, $http, $routeParams, A
         $scope.alerts.push({msg: "Malheuresement, une erreur est survenue lors de l'ajout et la commande n'a pas pu être enregistré.", type: 'danger'});
       });
 
+      // we call the createPayment paypal function
+      $http.get('/api/createPayment', {headers: {'Authorization' : 'Bearer ' + $scope.token}})
+        .success(function(data) {
+          $scope.addresses = data;
+
+          $scope.secondaryAddresses = $scope.addresses[0];
+          $scope.order.delivery_address = $scope.addresses[0];
+        });
+
   };
 
   function mergeDateAndTime(date, time) {
