@@ -3,9 +3,6 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var app = module.exports = express();
 var config = require('./config/config');
-var fs = require('fs');
-
-//var routes = require('./routes'); // thing to fix later
 
 //Database
 var connection = mongoose.connect(config.db.url);
@@ -22,17 +19,6 @@ app.use(function(req, res, next) {
 });
 
 //Routing
-var routes = require('./routes/routes')(app);
+require('./routes/routes')(app);
 
-
-// paypal configuration
-try {
-  var configJSON = fs.readFileSync(__dirname + "/config.json");
-  var config = JSON.parse(configJSON.toString());
-} catch (e) {
-  console.error("File config.json not found or is invalid: " + e.message);
-  process.exit(1);
-}
-routes.init(config);
-
-app.listen(config.server.port);
+app.listen(3000);
