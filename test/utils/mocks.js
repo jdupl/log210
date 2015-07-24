@@ -6,3 +6,9 @@ exports.injectMock = function(stubModule, injectedModulePath, moduleUnderTest, c
   mockery.enable({useCleanCache: true, warnOnReplace: false, warnOnUnregistered: false});
   callback();
 };
+
+exports.cleanupMocks = function(callback) {
+  mockery.disable();
+  mockery.deregisterAll();
+  callback();
+};
