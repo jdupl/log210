@@ -17,43 +17,6 @@ var extend = require('extend');
 var assert = require('assert');
 var random = require('random-js');
 
-describe('/api/orders', function() {
-  describe('POST', function() {
-    it('should create an order', function(done) {
-      User.create(data.client_user, function(err, createdClient) {
-        Plate.create(data.test_plate, function(err, createdPlate) {
-          Restaurant.create(data.test_restaurant, function(err, createdRestaurant) {
-            var test_order = extend(test_order, data.test_order);
-            test_order.restaurant = createdRestaurant._id;
-            var test_item = extend(test_item, data.test_item);
-            test_item.plate = createdPlate._id;
-            var items = [test_item];
-            test_order.items = items;
-
-            login.getToken(data.client_user.email, data.client_user.password, client, function(err, token) {
-
-              client
-              .post('/api/orders')
-              .set('Authorization', 'Bearer ' + token)
-              .send(test_order)
-              .end(function(err, res) {
-                assert.equal(res.status, 201);
-                var order = res.body;
-                assert.equal(order.restaurant, createdRestaurant._id);
-                assert.equal(order.status, config.status.ORDERED);
-                assert.equal(order.client, createdClient._id);
-                User.findOne({_id: createdClient._id}, function(err, user) {
-                  assert.equal(user.address, order.delivery_address);
-                  done();
-                });
-              });
-            });
-          });
-        });
-      });
-    });
-  });
-});
 describe('/api/profile/orders', function() {
   describe('GET', function() {
     it('should get all the orders from all the restaurant of the logged in restaurateur', function(done) {
