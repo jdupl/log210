@@ -1,19 +1,85 @@
 var async = require('async');
 var ordersControllerModule = '../../controllers/orders';
 var mockery = require('mockery');
+var config = require('../../config/config');
 
 describe('orders controller', function() {
   describe('create', function() {
     it('should call fake methods when creating items, an order, updating the user address, sending the confirmation mail and sending the twilio text message', function(done) {
-      prepareMocks(function() {
-        var ordersController = require(ordersControllerModule);
+      async.series([mockItem,
+        mockOrderFactory,
+        mockUserModelModule,
+        mockConfigTransporter,
+        mockTwilioService],
+        function() {
+          var ordersController = require(ordersControllerModule);
+          var body = {
+            items: []
+          };
+          var req = {
+            body: body,
+            user: {
+              _id: 1
+            }
+          };
+          var res = {
+            status: function() {
+              return this;
+            },
+            json: function(){}
+          };
+          ordersController.create(req, res);
+          mockery.disable();
+          mockery.deregisterAll();
+          done();
+        });
+    });
+  });
+  describe('update', function() {
+    it('should update the order, add it to the delivery and call the fake twilio method', function(done) {
+      async.series([function(callback) {
+        var stubOrder = {
+          status: config.status.READY,
+          client: 1,
+          save: function(callback) {
+            callback();
+          }
+        };
+        var stubOrderModel = {
+          findOne: function(data, callback) {
+            if(typeof(callback) == "function") {
+              callback(null, stubOrder);
+            } else {
+              return this;
+            }
+          },
+          populate: function() {
+            return this;
+          },
+          exec: function(callback) {
+            callback(null, stubOrder);
+          }
+        };
+        var orderModulePath = '../models/order';
+        injectMock(stubOrderModel, orderModulePath, ordersControllerModule, callback);
+      }, function(callback) {
+        var stubDeliveryModel = {
+          create: function(delivery, callback) {
+            callback(null, null);
+          }
+        };
+        var deliveryModulePath = '../models/delivery';
+        injectMock(stubDeliveryModel, deliveryModulePath, ordersControllerModule, callback);
+      }, function(callback) {
+        mockTwilioService(callback);
+      }], function(err) {
         var body = {
-          items: []
+          status: config.status.DELIVERING
         };
         var req = {
           body: body,
-          user: {
-            _id: 1
+          params: {
+            id: 1
           }
         };
         var res = {
@@ -22,18 +88,18 @@ describe('orders controller', function() {
           },
           json: function(){}
         };
-        ordersController.create(req, res);
+        var ordersController = require(ordersControllerModule);
+        ordersController.update(req, res);
         mockery.disable();
         mockery.deregisterAll();
         done();
       });
     });
   });
+  it.skip('should update the order but not add it to the delivery list. Call the fake twilio serivce', function(done) {
+    done();
+  });
 });
-
-function prepareMocks(callback) {
-  async.series([mockItem, mockOrderFactory, mockUserModelModule, mockConfigTransporter, mockTwilioService], callback);
-}
 
 function mockConfigTransporter(callback) {
   var stubTransporter = {
@@ -113,7 +179,8 @@ function mockTwilioService(callback) {
       var twilio = {
         sendConfirmationSMS: function(number, msg, callback) {
           console.log('Fake twillio call');
-          callback();
+          var error = new Error('Fake error');
+          callback(error);
         }
       };
       return twilio;
