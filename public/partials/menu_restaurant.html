@@ -9,11 +9,11 @@
 
      <div class="row">
        <div class="col-sm-12">
-         <p ng-show="orderToPay" ng-click="createPayment()">Veuillez payer votre commande</p>
+         <button class="btn btn-danger" ng-show="orderToPay" ng-click="createPayment()">Veuillez payer votre commande !</button>
        </div>
      </div>
 
-      <form class="form-horizontal" id="order" name="order" ng-submit="submitPlates()" ng-show="!showCommandForm">
+      <form class="form-horizontal" id="order" name="order" ng-submit="submitPlates()" ng-show="!showCommandForm && !orderToPay">
           <div ng-repeat="menu in menus" class="col-sm-12">
             <div class="col-sm-12">
                <h3>{{menu.name}}</h3>
@@ -50,7 +50,7 @@
       </form>
 
       <!-- Command form -->
-      <div class="col-sm-12" ng-show="showCommandForm">
+      <div class="col-sm-12" ng-show="showCommandForm && !orderToPay">
         <form class="form-horizontal" ng-model="order" name="ajoutCommande" ng-submit="submitOrder()" novalidate>
           <div class="form-group" id="sommaireInformations">
             <div class="col-sm-offset-4 col-sm-4">

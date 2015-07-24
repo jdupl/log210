@@ -59,7 +59,7 @@ exports.executePayment = function(req, res){
       console.log(error);
       res.send(error);
     } else {
-      res.send("votre paiement a été accepté ! <br> <a href='log210.jduplessis.me'>Retour au site.</a>");
+      res.send("votre paiement a été accepté ! <br> <a href='/'>Retour au site.</a>");
     }
   });
 };
