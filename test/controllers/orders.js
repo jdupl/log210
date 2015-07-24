@@ -2,6 +2,7 @@ var async = require('async');
 var ordersControllerModule = '../../controllers/orders';
 var mockery = require('mockery');
 var config = require('../../config/config');
+var mockUtils = require('../utils/mocks');
 
 describe('orders controller', function() {
   describe('create', function() {
@@ -94,7 +95,7 @@ function mockDeliveryModel(callback) {
     }
   };
   var deliveryModulePath = '../models/delivery';
-  injectMock(stubDeliveryModel, deliveryModulePath, ordersControllerModule, callback);
+  mockUtils.injectMock(stubDeliveryModel, deliveryModulePath, ordersControllerModule, callback);
 }
 
 function mockOrderModel(callback) {
@@ -121,7 +122,7 @@ function mockOrderModel(callback) {
     }
   };
   var orderModulePath = '../models/order';
-  injectMock(stubOrderModel, orderModulePath, ordersControllerModule, callback);
+  mockUtils.injectMock(stubOrderModel, orderModulePath, ordersControllerModule, callback);
 }
 
 function mockConfigTransporter(callback) {
@@ -135,7 +136,7 @@ function mockConfigTransporter(callback) {
     transporter: stubTransporter
   };
   var configModulePath = '../config/config';
-  injectMock(stubConfig, configModulePath, ordersControllerModule, callback);
+  mockUtils.injectMock(stubConfig, configModulePath, ordersControllerModule, callback);
 }
 
 function mockUserModelModule(callback) {
@@ -152,7 +153,7 @@ function mockUserModelModule(callback) {
     }
   };
   var userModulePath = '../models/user';
-  injectMock(mockUserModel, userModulePath, ordersControllerModule, callback);
+  mockUtils.injectMock(mockUserModel, userModulePath, ordersControllerModule, callback);
 }
 
 function mockOrderFactory(callback) {
@@ -169,7 +170,7 @@ function mockOrderFactory(callback) {
     }
   };
   var orderFactoryModulePath = './order-factory';
-  injectMock(stubOrderFactory, orderFactoryModulePath, ordersControllerModule, callback);
+  mockUtils.injectMock(stubOrderFactory, orderFactoryModulePath, ordersControllerModule, callback);
 }
 
 function mockItem(callback) {
@@ -180,20 +181,7 @@ function mockItem(callback) {
     }
   };
   var itemModulePath = '../models/Item';
-  injectMock(stubItem, itemModulePath, ordersControllerModule, callback);
-}
-
-function injectMock(stubModule, injectedModulePath, moduleUnderTest, callback) {
-  mockery.registerAllowable(moduleUnderTest);
-  mockery.registerMock(injectedModulePath, stubModule);
-  mockery.enable({useCleanCache: true, warnOnReplace: false, warnOnUnregistered: false});
-  callback();
-}
-
-function cleanupMocks(callback) {
-  mockery.disable();
-  mockery.deregisterAll();
-  callback();
+  mockUtils.injectMock(stubItem, itemModulePath, ordersControllerModule, callback);
 }
 
 function mockTwilioService(callback) {
@@ -212,5 +200,11 @@ function mockTwilioService(callback) {
 
   var twilioModulePath = './twilio';
 
-  injectMock(stubTwilioService, twilioModulePath, ordersControllerModule, callback);
+  mockUtils.injectMock(stubTwilioService, twilioModulePath, ordersControllerModule, callback);
+}
+
+function cleanupMocks(callback) {
+  mockery.disable();
+  mockery.deregisterAll();
+  callback();
 }
