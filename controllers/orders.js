@@ -38,7 +38,7 @@ function sendConfirmationMail(recipient, html, callback) {
     subject: 'Confirmation de la commande',
     text: 'Confirmation message',
     html: html
-  }
+  };
   var transporter = config.transporter;
   transporter.sendMail(mailOptions, function(error, info) {
     callback(error, info);
