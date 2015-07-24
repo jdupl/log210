@@ -7,10 +7,4 @@ var config = {
   }
 }
 
-var stubTransporter = {
-  sendMail: function(mailOptions, callback) { callback(null, null); }
-}
-
-config.transporter = stubTransporter;
-
 module.exports = config;

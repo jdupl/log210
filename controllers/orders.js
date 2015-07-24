@@ -4,9 +4,12 @@ var Delivery = require('../models/delivery');
 var Item = require('../models/item');
 var config = require('../config/config');
 var random = require('random-js')();
+var twilio = require('./twilio');
 
 var extend = require('extend');
 var async = require('async');
+
+var orderFactory = require('./order-factory');
 
 exports.create = function(req, res) {
   var order = req.body;
@@ -17,8 +20,10 @@ exports.create = function(req, res) {
       updateUserAddress(createdOrder, function(err, user) {
         createHtml(createdOrder, user, function(html) {
           sendConfirmationMail(user.email, html, function(err, info) {
-            if(err) console.log(err);
-            res.status(201).json(createdOrder);
+            twilio.getInstance().sendConfirmationSMS(user.phone, 1, function(err, info) {
+              if(err) console.log(err);
+                res.status(201).json(createdOrder);
+            });
           });
         });
       });
@@ -33,7 +38,7 @@ function sendConfirmationMail(recipient, html, callback) {
     subject: 'Confirmation de la commande',
     text: 'Confirmation message',
     html: html
-  }
+  };
   var transporter = config.transporter;
   transporter.sendMail(mailOptions, function(error, info) {
     callback(error, info);
@@ -53,10 +58,8 @@ function createHtml(order, user, callback) {
 * @param order
 */
 function createOrder(order, callback) {
-  order.status = config.status.ORDERED;
-  order.confirmation_number = random.integer(1, 100);
-  delete order.items;
-  Order.create(order, callback);
+  var order = orderFactory.getOrder(order);
+  order.save(callback);
 };
 
 /*
@@ -102,13 +105,26 @@ exports.update = function(req, res) {
   var order_id = req.params.id;
   var status = req.body.status;
   Order.findOne({_id: order_id}, function(err, order) {
-    if(status === config.status.READY) {
-      verifyOrderStatus(order, req, res);
+    if(order.status === req.body.status) {
+      res.status(409).json({message: 'You cannot update the order to the ready status two times.'})
     } else {
-      order.status = status;
-      order.save(function(err) {
-        res.status(200).json({message: 'order updated'});
-      });
+      if(status === config.status.DELIVERING) {
+        order.status = req.body.status;
+        order.save(function(err) {
+          addOrderToDeliveryList(order._id, function() {
+            sendMessage(order_id, function(err, info) {
+              res.status(200).json({message: 'order updated'});
+            });
+          });
+        });
+      } else {
+        order.status = status;
+        order.save(function(err) {
+          sendMessage(order_id, function(err, info) {
+            res.status(200).json({message: 'order updated'});
+          });
+        });
+      }
     }
   });
 };
@@ -120,19 +136,11 @@ exports.getAll = function(req, res) {
   });
 };
 
-function verifyOrderStatus(order, req, res) {
-  if(req.body.status === order.status) {
-    res.status(409).json({message: 'You cannot update the order to the ready status two times.'})
-  } else {
-    order.status = req.body.status;
-    order.save(function(err) {
-      addOrderToDeliveryList(order._id, function() {
-        res.status(200).json({message: 'order updated'});
-      });
-    });
-  }
-};
-
+function sendMessage(order_id, callback) {
+  Order.findOne({_id : order_id}).populate({path: 'client', select: 'phone'}).exec(function(err, ord) {
+    twilio.getInstance().sendConfirmationSMS(ord.client.phone, ord.status, callback);
+  });
+}
 /*
 * Create a devliery with the order id
 * @param order id
