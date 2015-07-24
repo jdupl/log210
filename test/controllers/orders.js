@@ -37,42 +37,7 @@ describe('orders controller', function() {
   });
   describe('update', function() {
     it('should update the order, add it to the delivery and call the fake twilio method', function(done) {
-      async.series([function(callback) {
-        var stubOrder = {
-          status: config.status.READY,
-          client: 1,
-          save: function(callback) {
-            callback();
-          }
-        };
-        var stubOrderModel = {
-          findOne: function(data, callback) {
-            if(typeof(callback) == "function") {
-              callback(null, stubOrder);
-            } else {
-              return this;
-            }
-          },
-          populate: function() {
-            return this;
-          },
-          exec: function(callback) {
-            callback(null, stubOrder);
-          }
-        };
-        var orderModulePath = '../models/order';
-        injectMock(stubOrderModel, orderModulePath, ordersControllerModule, callback);
-      }, function(callback) {
-        var stubDeliveryModel = {
-          create: function(delivery, callback) {
-            callback(null, null);
-          }
-        };
-        var deliveryModulePath = '../models/delivery';
-        injectMock(stubDeliveryModel, deliveryModulePath, ordersControllerModule, callback);
-      }, function(callback) {
-        mockTwilioService(callback);
-      }], function(err) {
+      async.series([mockOrderModel, mockDeliveryModel, mockTwilioService], function(err) {
         var body = {
           status: config.status.DELIVERING
         };
@@ -96,10 +61,68 @@ describe('orders controller', function() {
       });
     });
   });
-  it.skip('should update the order but not add it to the delivery list. Call the fake twilio serivce', function(done) {
-    done();
+  it('should update the order but not add it to the delivery list. Call the fake twilio serivce', function(done) {
+    async.series([mockOrderModel, mockTwilioService], function(err) {
+      var body = {
+        status: config.status.PREPARING
+      };
+      var req = {
+        body: body,
+        params: {
+          id: 1
+        }
+      };
+      var res = {
+        status: function() {
+          return this;
+        },
+        json: function(){}
+      };
+      var ordersController = require(ordersControllerModule);
+      ordersController.update(req, res);
+      mockery.disable();
+      mockery.deregisterAll();
+      done();
+    });
   });
 });
+
+function mockDeliveryModel(callback) {
+  var stubDeliveryModel = {
+    create: function(delivery, callback) {
+      callback(null, null);
+    }
+  };
+  var deliveryModulePath = '../models/delivery';
+  injectMock(stubDeliveryModel, deliveryModulePath, ordersControllerModule, callback);
+}
+
+function mockOrderModel(callback) {
+  var stubOrder = {
+    status: config.status.READY,
+    client: 1,
+    save: function(callback) {
+      callback();
+    }
+  };
+  var stubOrderModel = {
+    findOne: function(data, callback) {
+      if(typeof(callback) == "function") {
+        callback(null, stubOrder);
+      } else {
+        return this;
+      }
+    },
+    populate: function() {
+      return this;
+    },
+    exec: function(callback) {
+      callback(null, stubOrder);
+    }
+  };
+  var orderModulePath = '../models/order';
+  injectMock(stubOrderModel, orderModulePath, ordersControllerModule, callback);
+}
 
 function mockConfigTransporter(callback) {
   var stubTransporter = {
