@@ -1,6 +1,6 @@
 var controllers = angular.module('app.controllers.MenuRestaurant', []);
 
-controllers.controller('MenuRestaurant', function($scope, $http, $routeParams, Auth) {
+controllers.controller('MenuRestaurant', function($scope, $http, $routeParams, $window, Auth) {
 
   loadAddresses();
   $scope.delivery_time = new Date(); //Set default value to avoid null value
@@ -64,6 +64,7 @@ controllers.controller('MenuRestaurant', function($scope, $http, $routeParams, A
     // we save the order in the database
     $http.post('/api/orders', $scope.currentOrder, {headers: {'Authorization' : 'Bearer ' + $scope.token}})
       .success(function(data) {
+        $scope.orderToPay = $scope.currentOrder;
         delete $scope.order;
         $scope.showCommandForm = false;
         $scope.alerts.push({msg: "La commande à été enregistré avec succès.", type: 'success'});
@@ -72,8 +73,15 @@ controllers.controller('MenuRestaurant', function($scope, $http, $routeParams, A
       .error(function(data, status) {
         $scope.alerts.push({msg: "Malheuresement, une erreur est survenue lors de l'ajout et la commande n'a pas pu être enregistré.", type: 'danger'});
       });
-
   };
+
+  $scope.createPayment = function (order) {
+    console.log($scope.orderToPay);
+    $http.post('/api/payment/', $scope.orderToPay, {headers: {'Authorization' : 'Bearer ' + $scope.token}})
+      .success(function(data) {
+        $window.location.href = data.redirect;
+      });
+  }
 
   function mergeDateAndTime(date, time) {
     console.log(time);

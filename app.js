@@ -21,4 +21,4 @@ app.use(function(req, res, next) {
 //Routing
 require('./routes/routes')(app);
 
-app.listen(config.server.port);
+app.listen(3000);

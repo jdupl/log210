@@ -23,5 +23,10 @@ module.exports = {
     PREPARING: 2,
     READY: 3,
     DELIVERING: 4
+  },
+  paypal: {
+    'mode': 'sandbox',
+    "client_id" : "Afirh9rGufGveCMm3AvxEG90aaqLSNWZrT0ln7NwSiziVE6u6O58z3czVc_pEASHgEXWMT2FCB5GOMSD",
+    "client_secret" : "EAxBzBglZGmjCKGCNaW62xNSVqWroADIokYO4uHTNUKrFYZB6jxvPQVMZ6FF-RH-1k5sFY8ZHGRaaGTP"
   }
 };

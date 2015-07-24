@@ -8,6 +8,9 @@ var loginController = require('../controllers/login');
 var restaurantsController = require('../controllers/restaurants');
 var menusController = require('../controllers/menus');
 var ordersController = require('../controllers/orders');
+var paypalController = require('../controllers/paypal');
+
+var config = {};
 
 module.exports = function(app) {
   //Login routes
@@ -40,4 +43,9 @@ module.exports = function(app) {
   app.post('/api/orders', loginMiddleware.verify, ordersController.create);
   app.put('/api/orders/:id', loginMiddleware.verify, ordersController.update);
   app.get('/api/orders', loginMiddleware.verify, ordersController.getAll);
+
+  // paypal
+  app.post('/api/payment', loginMiddleware.verify, paypalController.createPayment);
+  app.get('/api/payment/cancel', loginMiddleware.verify, paypalController.cancelPayment);
+  app.get('/api/payment/execute', paypalController.executePayment);
 };
