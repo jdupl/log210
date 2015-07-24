@@ -8,14 +8,15 @@ var loginController = require('../controllers/login');
 var restaurantsController = require('../controllers/restaurants');
 var menusController = require('../controllers/menus');
 var ordersController = require('../controllers/orders');
+var paypalController = require('../controllers/paypal');
 var paypal = require('paypal-rest-sdk');
 
 var config = {};
 
-// SDK configuration
-exports.init = function(c){
-  config = c;
-  paypal.configure(c.api);
+//SDK Configuration
+exports.init = function(c) {
+	config = c;
+	paypal.configure(c.api);
 };
 
 module.exports = function(app) {
@@ -51,7 +52,7 @@ module.exports = function(app) {
   app.get('/api/orders', loginMiddleware.verify, ordersController.getAll);
 
   // paypal
-  app.get('/api/createPayment', loginMiddleware.verify, paypalController.create);
-  app.get('/api/cancelPayment', loginMiddleware.verify, paypalController.cancel);
-  app.get('/api/executePayment', paypalController.execute);
+  app.get('/api/createPayment/:total', loginMiddleware.verify, paypalController.createPayment);
+  app.get('/api/cancelPayment', loginMiddleware.verify, paypalController.cancelPayment);
+  app.get('/api/executePayment', paypalController.executePayment);
 };

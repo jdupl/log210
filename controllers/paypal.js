@@ -1,4 +1,4 @@
-exports.createPayment = function(total, req, res){
+exports.createPayment = function( req, res){
   // we create the payment in a var for paypal
   var payment = {
     "intent": "sale",
@@ -6,12 +6,12 @@ exports.createPayment = function(total, req, res){
       "payment_method": "paypal"
     },
     "redirect_urls": {
-      "return_url": "http://yoururl.com/execute",
-      "cancel_url": "http://yoururl.com/cancel"
+      "return_url": '/api/executePayment',
+      "cancel_url": '/api/cancelPayment'
     },
     "transactions": [{
       "amount": {
-        "total": total,
+        "total": req.params.total,
         "currency": "USD"
       },
       "description": "Paiement de votre commande"

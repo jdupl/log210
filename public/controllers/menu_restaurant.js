@@ -74,9 +74,8 @@ controllers.controller('MenuRestaurant', function($scope, $http, $routeParams, A
       });
 
       // we call the createPayment paypal function
-      $http.get('/api/createPayment', {headers: {'Authorization' : 'Bearer ' + $scope.token}})
+      $http.get('/api/createPayment/' + $scope.total, {headers: {'Authorization' : 'Bearer ' + $scope.token}})
         .success(function(data) {
-          // send a message saying succes for the creation of the payment
         });
 
   };
