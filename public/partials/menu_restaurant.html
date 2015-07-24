@@ -7,6 +7,12 @@
        </div>
      </div>
 
+     <div class="row">
+       <div class="col-sm-12">
+         <p ng-show="orderToPay" ng-click="createPayment()">Veuillez payer votre commande</p>
+       </div>
+     </div>
+
       <form class="form-horizontal" id="order" name="order" ng-submit="submitPlates()" ng-show="!showCommandForm">
           <div ng-repeat="menu in menus" class="col-sm-12">
             <div class="col-sm-12">

@@ -1,4 +1,15 @@
-exports.createPayment = function( req, res){
+var paypal = require('paypal-rest-sdk');
+var config = require('../config/config');
+
+paypal.configure(config.paypal);
+
+exports.createPayment = function(req, res) {
+  console.log(req.body);
+  var total = 0;
+  for (var i = 0; i < req.body.items.length; i++) {
+    total += req.body.items[i].price * req.body.items[i].quantity;
+  }
+  console.log(total);
   // we create the payment in a var for paypal
   var payment = {
     "intent": "sale",
@@ -6,12 +17,12 @@ exports.createPayment = function( req, res){
       "payment_method": "paypal"
     },
     "redirect_urls": {
-      "return_url": '/api/executePayment',
-      "cancel_url": '/api/cancelPayment'
+      "return_url": 'http://log210.jduplessis.me/api/payment/execute',
+      "cancel_url": 'http://log210.jduplessis.me/api/payment/cancel'
     },
     "transactions": [{
       "amount": {
-        "total": req.params.total,
+        "total": total,
         "currency": "USD"
       },
       "description": "Paiement de votre commande"
@@ -22,38 +33,37 @@ exports.createPayment = function( req, res){
   paypal.payment.create(payment, function (error, payment) {
     if (error) {
       console.log(error);
+      res.send(error);
     } else {
-      if(payment.payer.payment_method === 'paypal') {
-        req.session.paymentId = payment.id;
+      if (payment.payer.payment_method === 'paypal') {
         var redirectUrl;
-        for(var i=0; i < payment.links.length; i++) {
+        for (var i=0; i < payment.links.length; i++) {
           var link = payment.links[i];
           if (link.method === 'REDIRECT') {
             redirectUrl = link.href;
           }
         }
-        res.redirect(redirectUrl);
+        res.send({'redirect': redirectUrl});
       }
     }
   });
 };
 
-// we execute the payment
 exports.executePayment = function(req, res){
-  var paymentId = req.session.paymentId;
   var payerId = req.param('PayerID');
+  var paymentId = req.param('paymentId');
 
   var details = { "payer_id": payerId };
   paypal.payment.execute(paymentId, details, function (error, payment) {
     if (error) {
       console.log(error);
+      res.send(error);
     } else {
-      res.send("Aucune erreur lors de l'execution");
+      res.send("votre paiement a été accepté !");
     }
   });
 };
 
-// when we cancel the payment
 exports.cancelPayment = function(req, res){
   res.send("Le paiement a été annulé");
 };
