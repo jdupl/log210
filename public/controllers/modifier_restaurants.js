@@ -107,7 +107,8 @@ controllers.controller('ModifierRestaurants', function($scope, $http) {
         console.log(data);
         $scope.restaurants = data;
       });
-      if($scope.restaurants != "undefined") {
+
+      if(!($scope.restaurants === undefined)) {
         if ($scope.restaurants.length === 0) {
           $scope.noRestaurants = true;
         }

@@ -11,13 +11,13 @@ exports.createRestaurant = function(req, res) {
         delete req.body.restaurateur;
         Restaurant.create(req.body, function(err, createdRestaurant) {
           User.update({_id: restaurateur}, {$push: {restaurants: createdRestaurant._id}}, function(err, updated) {
-          res.status(201).json({id: createdRestaurant._id});
+            // add to admin too
+            User.update({_id: req.user._id}, {$push: {restaurants: createdRestaurant._id}}, function(err, updated) {
+              res.status(201).json({id: createdRestaurant._id});
+            });
 
           });
-          // add to admin too
-          User.update({_id: req.user}, {$push: {restaurants: createdRestaurant._id}}, function(err, updated) {
-            res.status(201).json({id: createdRestaurant._id});
-          });
+
         });
       } else {
         Restaurant.create(req.body, function(err, createdRestaurant) {
