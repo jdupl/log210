@@ -33,12 +33,12 @@ exports.getAddresses = function(req, res) {
 };
 
 exports.getRestaurants = function(req, res) {
-  User.findOne({_id: req.user._id})
-    .select('restaurants')
-    .populate({path: 'restaurants', select: '-__v'})
-    .exec(function(err, user) {
-      res.status(200).json(user.restaurants);
-    });
+      User.findOne({_id: req.user._id})
+        .select('restaurants')
+        .populate({path: 'restaurants', select: '-__v'})
+        .exec(function(err, user) {
+          res.status(200).json(user.restaurants);
+        });
 };
 
 exports.getOrders = function(req, res) {
