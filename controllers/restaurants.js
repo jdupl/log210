@@ -13,7 +13,6 @@ exports.createRestaurant = function(req, res) {
           User.update({_id: restaurateur}, {$push: {restaurants: createdRestaurant._id}}, function(err, updated) {
             res.status(201).json({id: createdRestaurant._id});
           });
-
         });
       } else {
         Restaurant.create(req.body, function(err, createdRestaurant) {

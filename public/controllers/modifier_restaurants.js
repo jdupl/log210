@@ -108,8 +108,6 @@ controllers.controller('ModifierRestaurants', function($scope, $http) {
         $scope.restaurants = data;
         if ($scope.restaurants.length === 0) {
           $scope.noRestaurants = true;
-        } else {
-          $scope.noRestaurants = false;
         }
       });
   }
