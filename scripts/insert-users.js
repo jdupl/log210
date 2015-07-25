@@ -25,6 +25,12 @@ function addRestaurateur(cb) {
   });
 };
 
+function addDeliverer(cb) {
+  User.remove({email: 'deliverer@test.com'}, function(err, deliverer) {
+    User.create(data.deliverer_user, cb);
+  });
+};
+
 function addRestaurant(cb) {
   Restaurant.remove({name: 'test-restaurant'}, function(err, restaurant) {
     addMenu(function(err, createdMenu) {
@@ -53,7 +59,9 @@ function addPlate(cb) {
 
 addAdmin(function(err, createdAdmin) {
   addRestaurateur(function(err, createdRestaurateur) {
-    mongoose.connection.close();
-    process.exit();
+    addDeliverer(function(err, createdDeliverer) {
+      mongoose.connection.close();
+      process.exit();
+    });
   });
 });

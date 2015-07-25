@@ -1,5 +1,6 @@
 var User = require('../models/user');
 var Order = require('../models/order');
+var Restaurant = require('../models/restaurant');
 var jwt = require('jsonwebtoken');
 var config = require('../config/config');
 var async = require('async');
@@ -33,12 +34,18 @@ exports.getAddresses = function(req, res) {
 };
 
 exports.getRestaurants = function(req, res) {
-  User.findOne({_id: req.user._id})
-    .select('restaurants')
-    .populate({path: 'restaurants', select: '-__v'})
-    .exec(function(err, user) {
-      res.status(200).json(user.restaurants);
+  if(req.user.type === config.types.ADMIN) {
+    Restaurant.find(function(err, restaurants) {
+      res.status(200).json(restaurants);
     });
+  } else {
+    User.findOne({_id: req.user._id})
+      .select('restaurants')
+      .populate({path: 'restaurants', select: '-__v'})
+      .exec(function(err, user) {
+        res.status(200).json(user.restaurants);
+      });
+  }
 };
 
 exports.getOrders = function(req, res) {

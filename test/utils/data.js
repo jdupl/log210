@@ -43,6 +43,14 @@ var restaurateur_user = {
 };
 exports.restaurateur_user = extend(restaurateur_user, common_user);
 
+var deliverer_user = {
+  email: 'deliverer@test.com',
+  password: 'test-pass',
+  type: 'deliverer',
+  name: 'test-name',
+};
+exports.deliverer_user = extend(deliverer_user, common_user);
+
 //Restaurant fixture data
 exports.test_restaurant = {
   name: 'test-restaurant',
