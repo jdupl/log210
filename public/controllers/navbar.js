@@ -6,7 +6,8 @@ controllers.controller('Navbar', function($scope, $rootScope, Auth, $location) {
     ADMIN: 'admin',
     CLIENT: 'client',
     ANONYMOUS: 'anonymous',
-    RESTAURATEUR: 'restaurateur'
+    RESTAURATEUR: 'restaurateur',
+    DELIVERER: 'deliverer'
   };
 
   $scope.isActive = function(url) {
@@ -27,6 +28,7 @@ controllers.controller('Navbar', function($scope, $rootScope, Auth, $location) {
     $scope.showModifierRestaurateurs = permsModifierRestaurateurs.indexOf(userType) !== -1;
     $scope.showListeCommandes = permsListeCommandes.indexOf(userType) !== -1;
     $scope.showModifierMenu = userType === types.RESTAURATEUR;
+    $scope.showlivrerDesCommandes = userType === types.DELIVERER;
 
     $rootScope.token = $scope.loggedin;
   }

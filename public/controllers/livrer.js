@@ -24,7 +24,7 @@ controllers.controller('Livrer', function($scope, $http, Auth) {
 
   $scope.setLivraison = function(order) {
     order.status = 4;
-    $http.put('/api/orders/' + order._id, {headers: {'Authorization' : 'Bearer ' + $scope.token}})
+    $http.put('/api/orders/' + order._id, order)
       .success(function(data) {
         $scope.alerts.push({msg: "Dépêchez-vous ! La commande est en cours de livraison.", type: 'success'});
         updateOrders();

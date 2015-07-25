@@ -16,7 +16,8 @@ module.exports = {
     ADMIN: 'admin',
     CLIENT: 'client',
     ANONYMOUS: 'anonymous',
-    RESTAURATEUR: 'restaurateur'
+    RESTAURATEUR: 'restaurateur',
+    DELIVERER: 'deliverer'
   },
   status: {
     ORDERED: 1,
