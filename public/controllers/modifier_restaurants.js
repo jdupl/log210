@@ -106,16 +106,11 @@ controllers.controller('ModifierRestaurants', function($scope, $http) {
       .success(function(data) {
         console.log(data);
         $scope.restaurants = data;
-      });
-
-      if(!($scope.restaurants === undefined)) {
         if ($scope.restaurants.length === 0) {
           $scope.noRestaurants = true;
-        }
-        else
-        {
+        } else {
           $scope.noRestaurants = false;
         }
-      }
+      });
   }
 });
