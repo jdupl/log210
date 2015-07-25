@@ -22,7 +22,7 @@ controllers.controller('Navbar', function($scope, $rootScope, Auth, $location) {
 
     var permsModifierRestaurants = [types.ADMIN, types.RESTAURATEUR];
     var permsModifierRestaurateurs = [types.ADMIN];
-    var permsListeCommandes = [types.DELIVERER];
+    var permsListeCommandes = [types.RESTAURATEUR];
 
     $scope.showModifierRestaurants = permsModifierRestaurants.indexOf(userType) !== -1;
     $scope.showModifierRestaurateurs = permsModifierRestaurateurs.indexOf(userType) !== -1;
